@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jenkins
+  labels:
+    name: jenkins
+spec:
+  containers:
+    - name: jenkins
+      image: ranjithka/jenkins:latest
+      # Since the Jenkins use JAVA extensibly it have always trouble to start the service.
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      ports:
+        - name: jenkins-port
+          containerPort: 8080
+  restartPolicy: OnFailure
