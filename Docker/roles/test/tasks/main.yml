@@ -1,0 +1,4 @@
+# tasks file for test
+- name: pull an image
+  docker:
+    name: ranjithka/ansible-rk:1.01
