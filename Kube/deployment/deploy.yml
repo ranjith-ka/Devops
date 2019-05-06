@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ansible
+  labels:
+    tier: ansible
+spec:
+  containers:
+  - name: ansible
+    image: ranjithka/ansible-rk:latest
+  restartPolicy: OnFailure
