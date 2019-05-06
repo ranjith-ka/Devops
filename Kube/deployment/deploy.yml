@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jenkins
+  labels:
+    tier: jenkins
+spec:
+  containers:
+  - name: jenkins
+    image: ranjithka/jenkins:latest
+    ports:
+      - name: jenkins-port
+        containerPort: 8080 
+  restartPolicy: OnFailure  
