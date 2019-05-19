@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: jenkins
   labels:
-    tier: jenkins
+    name: jenkins
 spec:
   containers:
   - name: jenkins
