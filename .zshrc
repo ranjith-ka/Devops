@@ -24,3 +24,29 @@ alias drmi="docker rmi $1"
 
 ls='ls --color=tty'
 grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
+
+#### Kubenetes Handy commands 
+
+function kube_desc_pod() {
+    if [ $# -eq 2 ]; then
+        kubectl describe po $1 -n $2
+    else
+        kubectl describe po $1
+    fi
+}
+
+function kdex-fn() {
+    if [ $# -eq 2 ]; then
+        kubectl exec -it $1 /bin/sh -n $2
+    else
+        kubectl exec -it $1 /bin/sh
+    fi
+}
+
+alias kctl_po_all='kubectl get po --all-namespaces'
+alias kctl_po='kubectl get po'
+alias kctl_svc_all='kubectl get svc --all-namespaces'
+alias kctl_svc='kubectl get svc'
+alias kctl_ds_po='kube_desc_pod'
+alias kctl_login="kdex-fn"
+alias kctl_busybox='kubectl run -i --tty busybox --image=busybox --restart=Never -- /bin/sh; kubectl delete pod busybox'
