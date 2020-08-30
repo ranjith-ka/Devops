@@ -16,4 +16,5 @@ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 brew install github/gh/gh
 git add .
 git commit -am "just testing"
+gh pr create -f
 ```
