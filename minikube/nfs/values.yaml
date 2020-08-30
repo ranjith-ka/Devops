@@ -1,0 +1,18 @@
+## NFS Volume settings
+persistence:
+  enabled: true
+  storageClass: standard
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+image:
+  repository: quay.io/kubernetes_incubator/nfs-provisioner
+  tag: v2.3.0
+  pullPolicy: IfNotPresent
+
+storageClass:
+  provisionerName: provision/nfs
+  name: nfs
+  reclaimPolicy: Delete
+  mountOptions:
+    - vers=4.1

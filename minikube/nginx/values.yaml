@@ -1,0 +1,32 @@
+fullnameOverride: ingress-nginx
+defaultBackend:
+  enabled: true
+controller:
+  ingressClass: dev-nginx
+  resources:
+   limits:
+     cpu: 250m
+     memory: 0.5Gi
+   requests:
+     cpu: 200m
+     memory: 200Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 7
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  containerPort:
+    http: 80
+    https: 443
+    # special: 2443
+  service:
+    enabled: true
+    type: NodePort
+    nodePorts:
+      http: 32080
+      https: 31443
+      tcp:
+        2443: 32443
+tcp:
+  2443: ""
