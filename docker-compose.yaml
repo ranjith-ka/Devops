@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  canary:
+    image: ranjithka/canary:0.0.1
+    build:
+      context: .
+      args:
+        APP: canary
+    ports:
+      - "8080:8080"
+
+  production:
+    image: ranjithka/prd:0.0.1
+    build:
+      context: .
+      args:
+        APP: prd
+    ports:
+      - "8081:8080"
