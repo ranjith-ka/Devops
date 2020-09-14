@@ -1,6 +1,6 @@
 fullnameOverride: ingress-nginx
 defaultBackend:
-  enabled: true
+  enabled: false
 controller:
   ingressClass: dev-nginx
   resources:

@@ -61,3 +61,13 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create Pod Annotations
+*/}}
+
+{{- define "dev.podAnnotations" -}}
+{{- if .Values.podAnnotations }}
+{{- toYaml .Values.podAnnotations }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,15 @@
+fullnameOverride: canary-dev
+
+image:
+  repository: ranjithka/canary
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "dev-nginx"
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "30"
+    nginx.ingress.kubernetes.io/canary-by-header: "testing"
+  hosts:
+    - host: st1-dev-vnext.example.com
+      paths: [/dev(/|$)(.*)]
