@@ -5,3 +5,4 @@
 .DS_Store
 *.tgz
 *.lock
+*_tmp
