@@ -20,3 +20,16 @@ server:
       - /
   extraArgs:
     - --insecure
+
+  ingressGrpc:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: "dev-nginx"
+      nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+      nginx.ingress.kubernetes.io/http2-push-preload: "true"
+      nginx.ingress.kubernetes.io/server-snippet: |
+        listen 2443 http2;
+    hosts:
+      - st1-dev-vnext.example.com
+    paths:
+      - /

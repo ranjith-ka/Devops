@@ -19,3 +19,15 @@ password: 'copy the pod name of argo-server'
 Notes:
 
 * Ingress redirection not working as expected, hence creating other URL(any help is appreciated)
+
+## Login to Argo CLI
+
+`argocd login st1-dev-vnext.example.com:32443`
+
+username: admin
+password: 'copy the pod name of argo-server'
+
+```bash
+argocd app  list
+NAME  CLUSTER  NAMESPACE  PROJECT  STATUS  HEALTH  SYNCPOLICY  CONDITIONS  REPO  PATH  TARGET
+```
