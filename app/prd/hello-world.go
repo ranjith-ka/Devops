@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os/user"
 )
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        fmt.Println(user.Current())
 		fmt.Fprintf(w, "Welcome to my prod website!")
 	})
 
