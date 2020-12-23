@@ -6,9 +6,11 @@ nodes:
 - role: worker
   extraPortMappings:
   - containerPort: 32080
-    hostPort: 32080
+    hostPort: 80
     listenAddress: "0.0.0.0" # Optional, defaults to "0.0.0.0"
     protocol: tcp # Optional, defaults to tcp
   - containerPort: 32443
-    hostPort: 32443
+    hostPort: 2443
+  - containerPort: 31443
+    hostPort: 443
   image: kindest/node:v1.16.15@sha256:a89c771f7de234e6547d43695c7ab047809ffc71a0c3b65aa54eda051c45ed20
