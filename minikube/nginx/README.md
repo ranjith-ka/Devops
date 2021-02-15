@@ -19,14 +19,14 @@
 Add the Stable repo in local deployment machine.
 
 `helm repo list`
-`helm repo add stable https://kubernetes-charts.storage.googleapis.com`
+`helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx`
 
 NAME   URL
 stable <https://kubernetes-charts.storage.googleapis.com>
 
 ### Install the nginx chart with version
 
-`helm install nginx ingress-nginx/ingress-nginx  -f minikube/nginx/values.yaml --version 1.36.3`
+`helm install -f minikube/nginx/values.yaml nginx ingress-nginx/ingress-nginx`
 
 ### Kubernetes 1.6+
 

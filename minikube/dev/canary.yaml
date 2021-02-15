@@ -10,11 +10,7 @@ ingress:
     nginx.ingress.kubernetes.io/canary: "true"
     nginx.ingress.kubernetes.io/canary-weight: "30"
     nginx.ingress.kubernetes.io/canary-by-header: "testing"
-    cert-manager.io/cluster-issuer: letsencrypt
   hosts:
     - host: st1-dev-vnext.example.com
       paths: [/dev(/|$)(.*)]
-  tls:
-    - hosts:
-      - st1-dev-vnext.example.com
-      secretName: tls-secret
+

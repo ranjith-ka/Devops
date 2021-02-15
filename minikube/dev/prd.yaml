@@ -16,11 +16,6 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "180"
     nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-    cert-manager.io/cluster-issuer: letsencrypt
   hosts:
     - host: st1-dev-vnext.example.com
       paths: [/dev(/|$)(.*)]
-  tls:
-    - hosts:
-      - st1-dev-vnext.example.com
-      secretName: tls-secret
