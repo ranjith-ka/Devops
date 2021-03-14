@@ -1,9 +1,10 @@
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
-containerdConfigPatches:
-- |-
-  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:5000"]
-    endpoint = ["http://kind-registry:5000"]
+## Running Docker Engine in my other laptop.
+## `export DOCKER_HOST=tcp://192.168.1.24:2375` for docker to connect.
+networking:
+  apiServerAddress: "192.168.1.24"  ### Add the IP of Docker machine, to connect remote.
+  apiServerPort: 6443
 nodes:
 - role: control-plane
   image: kindest/node:v1.16.15@sha256:a89c771f7de234e6547d43695c7ab047809ffc71a0c3b65aa54eda051c45ed20
@@ -11,9 +12,12 @@ nodes:
   extraPortMappings:
   - containerPort: 32080
     hostPort: 80
+    listenAddress: "192.168.1.24" # Optional, defaults to "0.0.0.0"
     protocol: tcp
   - containerPort: 32443
     hostPort: 2443
+    listenAddress: "192.168.1.24"
   - containerPort: 31443
     hostPort: 443
+    listenAddress: "192.168.1.24"
   image: kindest/node:v1.16.15@sha256:a89c771f7de234e6547d43695c7ab047809ffc71a0c3b65aa54eda051c45ed20

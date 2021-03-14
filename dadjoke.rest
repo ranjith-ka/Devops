@@ -1,0 +1,13 @@
+## Get some random Jokes
+GET http://localhost:8080/dadjoke
+
+## Post some API thingy
+
+POST http://localhost:8080/dadjoke
+Content-Type: application/json
+{
+    "joke": "this is the joke"
+}
+
+## If any deletion
+DELETE http://localhost:8080/dadjoke/joke

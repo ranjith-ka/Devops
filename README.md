@@ -1,6 +1,6 @@
 # Docker and K8S
 
-Docker and Kube Practise session
+Golang, Docker and Kube Practise session
 
 Kubernetes 1.6+
 
@@ -69,3 +69,29 @@ Welcome to my canary website!%
 $ curl -s -H "testing: never" http://st1-dev-vnext.example.com:32080/dev
 Welcome to my prod website!%
 ```
+
+## Install Cobra
+
+### Dadjoke CLI Tool
+
+- Text tutorial: <https://divrhino.com/articles/build-command-line-tool-go-cobra>
+- Video tutorial: <https://www.youtube.com/watch?v=-tO7zSv80UY>
+
+Just trying out the tutorial
+
+```bash
+cobra init --pkg-name github.com/ranjith-ka/Docker
+go mod init github.com/ranjith-ka/Docker
+```
+
+Add new command
+
+```bash
+cobra add random
+```
+
+Used below to convert JSON To go Struct online.
+
+<https://mholt.github.io/json-to-go/>
+
+Added the Pluing REST Client for postman things.

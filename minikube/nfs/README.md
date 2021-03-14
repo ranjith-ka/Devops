@@ -5,7 +5,7 @@
 1. NFS used as shared storage for development purpose.
 2. HA for NFS not achived in this Research.
 3. Deploy NFS chart and use that Storage as Shared storage across pods.
-4. Pods can do autoprovisioning with VolumeClaim options, check rule-compiler helm chart for details.
+4. Pods can do autoprovisioning with VolumeClaim options.
 
 ### Values.yaml for NFS server provisioner
 
@@ -31,7 +31,7 @@ stable/nfs-server-provisioner |  `1.0.0`   |   `2.3.0`  |     nfs-server-provisi
 
 ### To install the Chart
 
-`hhelm install -f environment/dev/nfs/values.yaml nfs stable/nfs-server-provisioner -n namespace`
+`helm install -f minikube/dev/nfs/values.yaml nfs stable/nfs-server-provisioner -n namespace`
 
 Verifiy the Pods. You can see the Statefulset created from this Helm Deployment.
 

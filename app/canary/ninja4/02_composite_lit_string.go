@@ -3,8 +3,8 @@ package main
 import "fmt"
 
 func main() {
-	x := make([]string, 1, 36) // length and capacity min 1 and max 36 , this use case
 
+	x := make([]string, 1, 36) // length and capacity min 1 and max 36 , this use case
 	x = []string{`Andhra Pradesh`, `Arunachal Pradesh`, `Assam`, `Bihar`, `Chhattisgarh`, `Goa`, `Gujarat`, `Haryana`, `Himachal Pradesh`, `Jammu and Kashmir`, `Jharkhand`, `Karnataka`, `Kerala`, `Madhya Pradesh`, `Maharashtra`, `Manipur`, `Meghalaya`, `Mizoram`, `Nagaland`, `Odisha`, `Punjab`, `Rajasthan`, `Sikkim`, `Tamil Nadu`, `Telangana`, `Tripura`, `Uttar Pradesh`, `Uttarakhand`, `West Bengal`, `Andaman and Nicobar Islands`, `Chandigarh`, `Dadra and Nagar Haveli`, `Daman and Diu`, `National Capital Territory of Delhi`, `Lakshadweep`, `Pondicherry`}
 	fmt.Println(x)
 	fmt.Println(len(x))
@@ -14,20 +14,21 @@ func main() {
 		fmt.Println(i, x[i])
 	}
 	fmt.Println("****End of First Program****")
-	defer three() // Defer the function to run at the end
-	two()
+	defer six() // Defer the function to run at the end
+	five()
 }
 
 // Second program for range with String  composite litrals
-func two() {
+func five() {
 	xs1 := []string{"one", "two", "three"}
-	xs2 := []string{"three", "four, five", "six"}
+	xs2 := []string{"three", "four", "five", "six"}
 	fmt.Println(xs1)
 	fmt.Println(xs2)
 
 	// Slice of slice if String
 
 	xxs := [][]string{xs1, xs2}
+	fmt.Println("Lets have fun")
 	fmt.Println(xxs)
 
 	for i, xs := range xxs {
@@ -40,7 +41,7 @@ func two() {
 
 // Map introduction
 
-func three() {
+func six() {
 
 	m := map[string][]string{
 		"Ramayana":    {"Ram", "Laxman", "Bharata", "Shatrughna"},
@@ -58,10 +59,26 @@ func three() {
 		}
 	}
 
-	y := map[string][]string{
-		"a": {"ok", "any"},
-		"b": {"fine", "nok"},
+	y := map[string]map[string]byte{
+		"1gbdatablock": {
+			"addons": 0,
+			"newadd": 1,
+		},
+		"example": {
+			"test": 1,
+		},
 	}
+
+	z := map[string][]string{
+		"1gbdatablock": {
+			"addons",
+			"test",
+		},
+		"example": {
+			"test",
+		},
+	}
+	fmt.Println(z)
 	fmt.Println(y)
 	fmt.Println(len(y))
 	tm := len(m)
