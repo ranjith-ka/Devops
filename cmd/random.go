@@ -16,7 +16,10 @@ limitations under the License.
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/kyokomi/emoji/v2"
@@ -40,25 +43,51 @@ var randomCmd = &cobra.Command{
 	},
 }
 
+// getRandomJoke func use the method getJokeData to get JSON and umarshal into string to print in the screen
 func getRandomJoke() {
 	fmt.Println("Here is your Joke")
 	emoji.Println(":beer::beer:Beer!!!")
+	url := "https://icanhazdadjoke.com/"
+
+	responseBytes := getJokeData(url)
+
+	joke := RandomJoke{}
+
+	if err := json.Unmarshal(responseBytes, &joke); err != nil {
+		fmt.Printf("Could not unmarshal reponseBytes. %v", err)
+	}
+
+	fmt.Println(string(joke.Joke))
 }
 
-func getJokeData(basAPI String) []byte {
-	req, err = http.NewRequest()
+// getJokeData connect the external URL and get a JSON respose from the API
+func getJokeData(baseAPI string) []byte {
+	request, err := http.NewRequest(
+		http.MethodGet, //method
+		baseAPI,        //url
+		nil,            //body
+	)
+	if err != nil {
+		log.Printf("Could not request a dadjoke. %v", err)
+	}
+	request.Header.Add("Accept", "application/json")
+	request.Header.Add("User-Agent", "Ranjith KA (https://github.com/ranjith-ka/Docker)")
+
+	response, err := http.DefaultClient.Do(request)
+
+	if err != nil {
+		log.Printf("Could not make a request. %v", err)
+	}
+	defer response.Body.Close()
+	responseBytes, err := ioutil.ReadAll(response.Body)
+
+	if err != nil {
+		log.Printf("Could not read response body. %v", err)
+	}
+
+	return responseBytes
 }
 
 func init() {
 	rootCmd.AddCommand(randomCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// randomCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// randomCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

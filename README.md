@@ -95,3 +95,5 @@ Used below to convert JSON To go Struct online.
 <https://mholt.github.io/json-to-go/>
 
 Added the Pluing REST Client for postman things.
+
+ctrl + alt + M  -- Stop the running code.
