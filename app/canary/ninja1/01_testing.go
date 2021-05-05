@@ -1,4 +1,4 @@
-##Pus to git
+##Push to git
 package main
 
 import "fmt"
