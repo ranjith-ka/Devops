@@ -18,7 +18,7 @@ func (c *Cost) FestivalOffer(f float64) {
 }
 
 func (c Cost) AddDiscount(f float64) (float64, float64) {
-	return (c.X - f), (c.Y - f)
+	return c.X - f, c.Y - f
 }
 
 func main() {

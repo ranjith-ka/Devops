@@ -9,7 +9,7 @@ function dex-fn() {
 
 dstop() { docker stop $(docker ps -a -q); }
 
-# workarround for version 0.1.8 of gws'
+# workaround for version 0.1.8 of gws'
 alias gws="PATH=/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/gnu-sed/libexec/gnubin:$PATH gws"
 
 alias ll='ls -ahl'

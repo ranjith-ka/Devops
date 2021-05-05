@@ -1,0 +1,62 @@
+// The syntax for this file is proto3
+syntax = "proto3";
+
+// Default way to add message without nested, for nested check 02_proto_nested.proto
+
+message Date {
+    int32 year = 1;
+    int32 month = 2;
+    int32 day = 3;
+
+    // Adding enum in the message Date
+    enum DayOfWeek {
+
+        DAY_OF_WEEK_UNSPECIFIED = 0;
+        MONDAY = 1;
+        TUESDAY = 2;
+        WEDNESDAY = 3;
+        THURSDAY = 4;
+        FRIDAY = 5;
+        SATURDAY = 6;
+        SUNDAY = 7;
+    }
+
+    DayOfWeek day_of_week = 4;
+
+    // embedded in the message, reference below
+    LatLog lat_long = 5;
+}
+
+message LatLog{
+//    Type	           Storage     size	    Precision
+//    float	            4           byte	6 decimal places
+//    double	        8           byte	15 decimal places
+//    long double	    10          byte	19 decimal places
+
+    // The latitude in degrees. It must be in the range [-90.0, +90.0].
+    double latitude = 1;
+
+    // The longitude in degrees. It must be in the range [-180.0, +180.0].
+    double longitude = 2;
+}
+
+// Take away
+// Use precisely with storage, since the storage is more compression with proto files take more time and efficiency.
+
+message Money{
+    string currency = 1;
+    int64 units = 2;
+    // Number of nano (10^-9) units of the amount.
+    // The value must be between -999,999,999 and +999,999,999 inclusive.
+    // If `units` is positive, `nanos` must be positive or zero.
+    // If `units` is zero, `nanos` can be positive, zero, or negative.
+    // If `units` is negative, `nanos` must be negative or zero.
+    // For example $-1.75 is represented as `units`=-1 and `nanos`=-750,000,000.
+    int32 nanos = 3;
+}
+
+message Person{
+    string first_name = 1;
+    repeated string middle_names = 2;
+    string last_name = 3;
+}

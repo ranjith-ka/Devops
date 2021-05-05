@@ -6,11 +6,9 @@ Kubernetes 1.6+
 
 ## Helm
 
-Add the stable repo for some default service testing.
-
 ```bash
-helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-```
+brew install helm
+ ```
 
 ## Automated PR
 
@@ -25,7 +23,6 @@ gh pr create -f
 
 ```bash
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 helm repo update
 ```
 
@@ -97,3 +94,7 @@ Used below to convert JSON To go Struct online.
 Added the Pluing REST Client for postman things.
 
 ctrl + alt + M  -- Stop the running code.
+
+### Go Learning
+
+<https://github.com/StephenGrider/GoCasts>

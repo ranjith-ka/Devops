@@ -2,5 +2,18 @@
     "editor.formatOnSave": true,
     "files.associations": {
         "Vagrantfile": "ruby",
-    }
+    },
+    "go.delveConfig": {
+        "dlvLoadConfig": {
+            "followPointers": true,
+            "maxVariableRecurse": 1,
+            "maxStringLen": 64,
+            "maxArrayValues": 64,
+            "maxStructFields": -1
+        },
+        "apiVersion": 2,
+        "showGlobalVariables": false,
+        "debugAdapter": "legacy"
+    },
+    "editor.fontLigatures": null
 }

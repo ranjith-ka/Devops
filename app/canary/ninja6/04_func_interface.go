@@ -17,20 +17,20 @@ type oppo struct {
 
 // func (r receiver) identifier(parameters) (return(s)) { code }
 
-func (m moto) curentOffer() float64 {
+func (m moto) currentOffer() float64 {
 	return m.price - (m.price * 0.25)
 }
 
-func (o oppo) curentOffer() float64 {
+func (o oppo) currentOffer() float64 {
 	return o.price - (o.price * 0.15)
 }
 
 type offer interface {
-	curentOffer() float64
+	currentOffer() float64
 }
 
 func discount(o offer) {
-	fmt.Println(o.curentOffer())
+	fmt.Println(o.currentOffer())
 }
 
 // print the Interface type
@@ -67,9 +67,9 @@ func main() {
 	defer do(m2)
 	defer describe(m2)
 
-	// anonymous func
+	// anonymous func to print 1 to 10
 	func() {
-		for i := 10; i <= 10; i++ {
+		for i := 1; i <= 10; i++ {
 			fmt.Println(i)
 		}
 		fmt.Println("done")

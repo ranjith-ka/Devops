@@ -5,13 +5,13 @@ import "fmt"
 // func (r receiver) identifier(parameters) (return(s)) { code }
 
 func main() {
-	foo()
-	bar("ooi")
+	foo1()
+	bar2("ooi")
 
 	// x1 := rapper()
 	// fmt.Println(x1)
 	fmt.Println("rk")
-	fmt.Println(rapper()) // Call function direcoty without variable to assign
+	fmt.Println(rapper()) // Call function directory without variable to assign
 
 	// 2 values in return
 	x2, x3 := test()
@@ -19,13 +19,14 @@ func main() {
 
 }
 
-func foo() {
+//foo Just a function to call
+func foo1() {
 	fmt.Println("Hey this is foo")
 }
 
 // String Return
 
-func bar(s string) {
+func bar2(s string) {
 	fmt.Println("bar", s)
 }
 
@@ -33,12 +34,12 @@ func rapper2() string {
 	return "hi"
 }
 
-// Int retrun
+// Int return
 func rapper() int {
 	return 42
 }
 
-// Retrun String + int
+// Return String + int
 func test() (int, string) {
 	return 42, "testing this"
 }

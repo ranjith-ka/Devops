@@ -14,6 +14,7 @@ func main() {
 	fmt.Println(s)
 	operate()
 }
+
 func operate() {
 	x := 0
 	fmt.Println(x)
@@ -38,7 +39,7 @@ func sum(xi ...int) int {
 
 // function for call back
 
-func even(f func(xi ...int) int, vi ...int) int {
-    yi := []int
-	return yi
-}
+// func even(f func(xi ...int) int, vi ...int) int {
+//     yi := []int
+// 	return yi
+// }

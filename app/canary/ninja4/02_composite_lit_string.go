@@ -18,7 +18,7 @@ func main() {
 	five()
 }
 
-// Second program for range with String  composite litrals
+// Second program for range with String  composite literals
 func five() {
 	xs1 := []string{"one", "two", "three"}
 	xs2 := []string{"three", "four", "five", "six"}
