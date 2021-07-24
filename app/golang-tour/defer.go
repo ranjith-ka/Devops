@@ -1,7 +1,7 @@
 // https://blog.golang.org/defer-panic-and-recover
 
 // Check out the code and see the control flow here.
-package main
+package wc
 
 import "fmt"
 
