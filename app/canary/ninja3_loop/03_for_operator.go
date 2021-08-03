@@ -51,7 +51,7 @@ func four() {
 	}
 }
 
-// If else if, else statement example
+// If elseif, else statement example
 
 func five() {
 	x := 27

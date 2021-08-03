@@ -31,13 +31,26 @@ func main() {
 			"karaikal",
 		},
 	}
+    p3 := Phone{
+        Model: "Reno6",
+        Cost: 500,
+        Brand: "Oppo",
+        AvailablePlace: []string{
+            "Thrissur",
+            "pattikad",
+        },
+    }
 
-	mob := []Phone{p1, p2}
+	mob := []Phone{p1, p2, p3}
 	fmt.Println(mob)
 
 	b, err := json.Marshal(mob)
 	if err != nil {
 		fmt.Println(err)
 	}
+	//Printing the byte slice
+    fmt.Printf("%T\n", b)
+	fmt.Println(b)
+	// Just print as
 	fmt.Println(string(b))
 }
