@@ -14,8 +14,8 @@ func main() {
 	fmt.Println(rapper()) // Call function directory without variable to assign
 
 	// 2 values in return
-	x2, x3 := test()
-	fmt.Println(x2, x3)
+	// x2, x3 := test()
+	fmt.Println(test())
 
 }
 

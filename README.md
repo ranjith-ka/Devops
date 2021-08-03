@@ -1,5 +1,7 @@
 # Docker and K8S
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/ranjith-ka/Docker.svg)](https://pkg.go.dev/github.com/ranjith-ka/Docker)
+
 Golang, Docker and Kube Practise session
 
 Kubernetes 1.6+
@@ -98,3 +100,8 @@ ctrl + alt + M  -- Stop the running code.
 ### Go Learning
 
 <https://github.com/StephenGrider/GoCasts>
+
+### GIT FLOW
+
+I created GIT FLOW using the same nvie git flow, but added two release to understand better.
+![GIT FLOW (1)](https://user-images.githubusercontent.com/33622670/128872191-266329c3-47ac-40cb-9ee6-c067bb733c2c.jpeg)

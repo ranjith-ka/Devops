@@ -10,9 +10,10 @@ func main() {
 		fmt.Println("test this")
 		break
 	}
-	s := 1
+	s := 0
 	for s <= 1 {
 		fmt.Println(s)
+		s++
 		break
 	}
 }

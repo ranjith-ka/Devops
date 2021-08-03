@@ -47,8 +47,9 @@ func six() {
 		"Ramayana":    {"Ram", "Laxman", "Bharata", "Shatrughna"},
 		"Mahabharata": {"Abhimanyu", "Balarama", "Draupadi", "Madri"},
 	}
+	fmt.Println(m)
 	m["Silappatikaram"] = []string{"Kannaki", "Kovalan", "Madhavi"}
-
+    fmt.Println(m)
 	delete(m, "Mahabharata") // Delete in MAP
 
 	fmt.Println(m)

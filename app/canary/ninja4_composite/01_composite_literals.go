@@ -18,10 +18,10 @@ func main() {
 	fmt.Println("********one End*********")
 	two()
 	fmt.Println("********two End*********")
-	four()
+    three()
 	fmt.Println("********three End*********")
-	three()
-	fmt.Println("********four End*********")
+    four()
+    fmt.Println("********four End*********")
 }
 
 func two() {
