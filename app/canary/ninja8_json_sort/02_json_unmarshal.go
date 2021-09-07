@@ -1,13 +1,15 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
+    "encoding/json"
+    "fmt"
     "io"
+    "net"
     "net/http"
+    "time"
 )
 
-type product interface{} // use Interface to assume the unknown data to the structure.
+
 
 // type product struct {
 // 	Additionalfeatures string `json:"additionalFeatures"`
@@ -54,10 +56,31 @@ type product interface{} // use Interface to assume the unknown data to the stru
 // 	} `json:"storage"`
 // }
 
+type idp struct {
+    Realm           string `json:"realm"`
+    PublicKey       string `json:"public_key"`
+    TokenService    string `json:"token-service"`
+    AccountService  string `json:"account-service"`
+    TokensNotBefore int    `json:"tokens-not-before"`
+}
+
+// Adding the DailContext for Keycloak response and TLS timeout condition
+var netTransport = &http.Transport{
+    DialContext: (&net.Dialer{
+        Timeout:   15 * time.Second,
+        KeepAlive: 30 * time.Second,
+    }).DialContext,
+    TLSHandshakeTimeout: 5 * time.Second,
+}
+var netClient = &http.Client{
+    Timeout: time.Second * 10,
+    Transport: netTransport,
+}
+
 // getContent to copy the data from
-func getContent(target interface{}) error {
-	url := `https://gist.githubusercontent.com/vivekjuneja/5369525/raw/88a6291fa9aa700868724751b4e7485c073e0289/product.json`
-	res, err := http.Get(url)
+func getContent(target *idp) error {
+	url := `http://localhost:8080/auth/realms/Rule`
+	res, err := netClient.Get(url)
 	if err != nil {
 		panic(err)
 	}
@@ -67,18 +90,18 @@ func getContent(target interface{}) error {
 
         }
     }(res.Body)
-	return json.NewDecoder(res.Body).Decode(target)
+	return json.NewDecoder(res.Body).Decode(&target)
 }
 
 func main() {
 
-	AllProduct := new(product)
+    AllProduct := new(idp)
     err := getContent(AllProduct)
     if err != nil {
         return
     }
-	fmt.Println(*AllProduct)
 
+    fmt.Println(AllProduct.PublicKey)
 	// Create a JSON structure type and convert the go type and print using the tags.
 
 	// fmt.Println(AllProduct)
