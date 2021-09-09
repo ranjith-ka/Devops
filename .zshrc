@@ -6,6 +6,10 @@ function dex-fn {
 	docker exec -it $1 /bin/sh
 }
 
+function docker-rm {
+	docker rmi $(docker images | awk '{print $1":"$2}' | tail +2 | grep -i $1 | xargs)
+}
+
 dstop() { docker stop $(docker ps -a -q); }
 dimage() { docker rmi $(docker images -a -q) }
 drun () { docker container run -it $1 /bin/sh }
@@ -19,13 +23,13 @@ alias docker-rk-stop-rm='docker stop $(docker ps -a -q) && docker rm $(docker ps
 alias dpa="docker ps -a"
 alias docker-rm-images='dimage'
 alias docker-rk-run='drun'
-alias dmi='docker images'
-alias drmi="docker rmi $1"
+alias dim='docker images'
+alias drmi="docker-rm $1"
 
 ls='ls --color=tty'
 grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 
-#### Kubenetes Handy commands 
+#### Kubenetes Handy commands
 
 function kube_desc_pod() {
     if [ $# -eq 2 ]; then
