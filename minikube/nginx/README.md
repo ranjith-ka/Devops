@@ -27,6 +27,7 @@ stable <https://kubernetes-charts.storage.googleapis.com>
 ### Install the nginx chart with version
 
 `helm install -f minikube/nginx/values.yaml nginx ingress-nginx/ingress-nginx`
+`helm install -f minikube/nginx/values.yaml nginx ingress-nginx/ingress-nginx --version 3.36.0`
 
 ### Kubernetes 1.6+
 

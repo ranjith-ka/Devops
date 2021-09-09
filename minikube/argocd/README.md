@@ -5,16 +5,28 @@ To install ArgoCD in Kind/minikube with Nginx
 ```bash
 brew install kind
 kind create cluster --config environment/kind/config.yaml --name agro
-helm install nginx stable/nginx-ingress -f minikube/nginx/values.yaml --version 1.36.3
+helm install -f minikube/nginx/values.yaml nginx ingress-nginx/ingress-nginx --version 3.36.0
 helm install -f minikube/argocd/values.yaml argo  argo/argo-cd
+```
+
+Just to update the version tested here in this demo.
+
+```bash
+✗ helm ls
+NAME  NAMESPACE REVISION UPDATED                              STATUS   CHART                APP VERSION
+argo  default   1        2021-09-07 21:03:59.591332 +0530 IST deployed argo-cd-3.17.5       2.1.1
+nginx default   1        2021-09-07 21:02:50.596626 +0530 IST deployed ingress-nginx-3.36.0 0.49.0
 ```
 
 ## Login to the ArgoCD UI
 
-<http://st2-dev-vnext.example.com:32080>
+<http://st2-dev-vnext.example.com>
 
 username: admin
-password: 'copy the pod name of argo-server'
+password: 'get password'
+
+example:
+'kubectl  get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d'
 
 Notes:
 
@@ -22,7 +34,7 @@ Notes:
 
 ## Login to Argo CLI
 
-`argocd login st1-dev-vnext.example.com:32443`
+`argocd login st1-dev-vnext.example.com`
 
 username: admin
 password: 'copy the pod name of argo-server'
