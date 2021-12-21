@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-    const f = "%T(%v)\n"
+    const f = "%T(%v)"
 	x := 42
 	y := "James Bond"
 	z := true
