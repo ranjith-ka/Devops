@@ -35,6 +35,7 @@ func discount(o offer) {
 
 // print the Interface type
 func describe(i offer) {
+    fmt.Println("Printing interface")
 	fmt.Printf("(%v, %T)\n", i, i)
 }
 
