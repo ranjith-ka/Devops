@@ -17,7 +17,7 @@ func main() {
 	fmt.Println("Printing this")
 
 	// de-reference the double pointer reference
-    fmt.Println(**y)
+	fmt.Println(**y)
 	// change the value via pointer reference
 	*p = "Change me"
 
