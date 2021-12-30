@@ -11,7 +11,7 @@ func main() {
 	x = 12
 	fmt.Println(x)
 	fmt.Printf("%T\n", x)
-	y = int(x)
+	y := mat(x)
 	fmt.Println(y)
 	fmt.Printf("%T\n", y)
 }
