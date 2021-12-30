@@ -4,10 +4,9 @@ import "fmt"
 
 type mat int
 
-var x mat
-var y int
-
 func main() {
+	var x mat
+	var y int
 	x = 12
 	fmt.Println(x)
 	fmt.Printf("%T\n", x)
