@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-    const f = "%T(%v)"
+	const f = "%T(%v)"
 	x := 42
 	y := "James Bond"
 	z := true
@@ -12,5 +12,5 @@ func main() {
 	r := fmt.Sprintf("%v score is %v", y, x)
 	fmt.Println(s)
 	fmt.Println(r)
-    fmt.Printf(f, x, x)
+	fmt.Printf(f, x, x)
 }
