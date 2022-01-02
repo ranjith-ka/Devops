@@ -6,6 +6,12 @@ Golang, Docker and Kube Practise session
 
 Kubernetes 1.6+
 
+## Quotes to spice my work
+
+“What's measured improves”
+    ― Peter Drucker 
+         <https://en.wikipedia.org/wiki/Peter_Drucker> 
+
 ## Helm
 
 ```bash
