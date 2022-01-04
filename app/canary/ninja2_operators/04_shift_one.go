@@ -10,6 +10,7 @@ func main() {
 	fmt.Printf("%d\n", a)                       // decimal
 	fmt.Printf("%#x\n", a)                      // Hexadecimal
 	fmt.Printf("%T\t%b\t%d\t%#x\n", a, a, a, a) // Type of variable
-	b := a << 1
+	// Shifting 2^3 + 2^2 + 2^1 (left shift to add and right shift to reduce it)
+	b := a >> 1
 	fmt.Printf("%T\t%b\t%d\t%#x\n", b, b, b, b)
 }
