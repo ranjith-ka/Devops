@@ -16,8 +16,6 @@ func main() {
 	}
 	fmt.Println("****End of First Program****")
 
-	defer six() // Defer the function to run at the end
-
 	five()
 }
 
@@ -39,55 +37,5 @@ func five() {
 		for j, val := range xs {
 			fmt.Printf("Index Position: %d \t value: \t %s \n", j, val)
 		}
-	}
-}
-
-// Map introduction
-
-func six() {
-
-	m := map[string][]string{
-		"Ramayana":    {"Ram", "Laxman", "Bharata", "Shatrughna"},
-		"Mahabharata": {"Abhimanyu", "Balarama", "Draupadi", "Madri"},
-	}
-	fmt.Println(m)
-	m["Silappatikaram"] = []string{"Kannaki", "Kovalan", "Madhavi"}
-	fmt.Println(m)
-	delete(m, "Mahabharata") // Delete in MAP
-
-	fmt.Println(m)
-	for k, v := range m {
-		fmt.Println(k)
-		for j, v2 := range v {
-			fmt.Printf("\t%d \t  %s \n", j, v2)
-		}
-	}
-
-	y := map[string]map[string]byte{
-		"1gbdatablock": {
-			"addons": 0,
-			"newadd": 1,
-		},
-		"example": {
-			"test": 1,
-		},
-	}
-
-	z := map[string][]string{
-		"1gbdatablock": {
-			"addons",
-			"test",
-		},
-		"example": {
-			"test",
-		},
-	}
-	fmt.Println(z)
-	fmt.Println(y)
-	fmt.Println(len(y))
-	tm := len(m)
-	for tm <= 2 {
-		fmt.Println(y)
-		tm++
 	}
 }

@@ -70,6 +70,7 @@ func six() {
 	switch {
 	case true:
 		fmt.Println("print")
+
 	case false:
 		fmt.Println("skip")
 	}

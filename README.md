@@ -9,14 +9,14 @@ Kubernetes 1.6+
 ## Quotes to spice my work
 
 “What's measured improves”
-    ― Peter Drucker 
-         <https://en.wikipedia.org/wiki/Peter_Drucker> 
+― Peter Drucker
+<https://en.wikipedia.org/wiki/Peter_Drucker>
 
 ## Helm
 
 ```bash
 brew install helm
- ```
+```
 
 ## Automated PR
 
@@ -79,8 +79,8 @@ Welcome to my prod website!%
 
 ### Dadjoke CLI Tool
 
-- Text tutorial: <https://divrhino.com/articles/build-command-line-tool-go-cobra>
-- Video tutorial: <https://www.youtube.com/watch?v=-tO7zSv80UY>
+-   Text tutorial: <https://divrhino.com/articles/build-command-line-tool-go-cobra>
+-   Video tutorial: <https://www.youtube.com/watch?v=-tO7zSv80UY>
 
 Just trying out the tutorial
 
@@ -101,7 +101,7 @@ Used below to convert JSON To go Struct online.
 
 Added the Pluing REST Client for postman things.
 
-ctrl + alt + M  -- Stop the running code.
+ctrl + alt + M -- Stop the running code.
 
 ### Go Learning
 
