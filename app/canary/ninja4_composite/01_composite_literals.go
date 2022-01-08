@@ -1,27 +1,29 @@
 package main
 
 import (
-    "fmt"
+	"fmt"
 )
 
 func main() {
-	x := []int{1, 5, 3, 4, 2} // Slice
+	x := [5]int{1, 5, 3, 4, 2} // Slice
 
 	// x := [5]int{0, 1, 4, 3, 2}  //  Array
 	fmt.Println(x)
 	for i, v := range x {
 		fmt.Println(i, v)
+
 	}
 	// [5]int is Array []int is Slice is the value or type of this
 	fmt.Printf("%T\n", x)
+	fmt.Println(len(x)) // Print the length of the slice using len()
 
 	fmt.Println("********one End*********")
 	two()
 	fmt.Println("********two End*********")
-    three()
+	three()
 	fmt.Println("********three End*********")
-    four()
-    fmt.Println("********four End*********")
+	four()
+	fmt.Println("********four End*********")
 }
 
 func two() {
@@ -39,7 +41,7 @@ func four() {
 	fmt.Println(x)
 
 	y := []int{8, 9, 10}
-	y = append(y, x[:2]...)
+	y = append(y, x[2:]...)
 	fmt.Println(y)
 
 	z := []int{11, 12, 13}
