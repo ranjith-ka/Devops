@@ -3,8 +3,7 @@
 config.yaml is for kube 1.16.15 version
 
 <https://sookocheff.com/post/kubernetes/local-kubernetes-development-with-kind/>
-<https://kind.sigs.k8s.io/docs/user/local-registry/>
-    - Hope this works after years.
+<https://kind.sigs.k8s.io/docs/user/local-registry/> - Hope this works after years.
 
 ## Pre-requsites
 
