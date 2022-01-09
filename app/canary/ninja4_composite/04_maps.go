@@ -9,14 +9,13 @@ import (
 
 func main() {
 
-	// six()
+	six()
 	seven()
 }
 
 func six() {
 
 	m := map[string][]string{
-
 		"Ramayana":    {"Ram", "Laxman", "Bharata", "Shatrughna"},
 		"Mahabharata": {"Abhimanyu", "Balarama", "Draupadi", "Madri"},
 	}
@@ -37,7 +36,7 @@ func six() {
 		}
 	}
 
-	y := map[string]map[string]rune{
+	y := map[string]map[string]int32{
 		"1gbdatablock": {
 			"addons": 0,
 			"newadd": 1,
