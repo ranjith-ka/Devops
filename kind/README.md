@@ -18,7 +18,7 @@ To Install the version, check out the release documentation.
 <https://github.com/kubernetes-sigs/kind/releases>
 
 ```bash
-kind create cluster --config kind/config.yaml --name openfaas
+kind create cluster --config kind/config.yaml --name k8s
 ```
 
 If we need a local registry, then connect the docker host with Kind
@@ -39,3 +39,22 @@ curl -X GET http://localhost:5000/v2/myimage/tags/list
 Note:
 Running registry means we need to build local and push to localhost:5000
 Follow the above documentation.
+
+## Makefile
+
+Just run the make command to run the k8s and install nginx and sample application.
+
+```bash
+$ make build-image
+$ make kind-cluster
+$ make load-image
+$ make ingress
+$ make install-app
+```
+
+```bash
+$ curl -s -H "testing: always" http://st1-dev-vnext.example.com/dev
+Welcome to my canary website!%
+$ curl -s -H "testing: never" http://st1-dev-vnext.example.com/dev
+Welcome to my prod website!%
+```

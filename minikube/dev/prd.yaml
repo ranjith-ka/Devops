@@ -1,5 +1,6 @@
 fullnameOverride: prd-dev
 
+## Instead running other version of image, i just used the other image only
 image:
   repository: ranjithka/prd
 

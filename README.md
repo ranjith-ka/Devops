@@ -58,6 +58,10 @@ curl http://st1-dev-vnext.example.com:32080/dev
 Testing in kind cluster, port mapping required for docker image of Kube worker node. So please make sure extraport mappings are added in the kind/config.yaml
 Remember to add in /etc/hosts (to nginx to work)
 
+Follow the document
+
+<https://github.com/ranjith-ka/Docker/tree/master/kind#kubernetes-in-docker-kind>
+
 ```bash
 CONTAINER ID        IMAGE                   COMMAND                  CREATED             STATUS              PORTS                       NAMES
 89c1110261bb        kindest/node:v1.16.15   "/usr/local/bin/entr…"   13 minutes ago      Up 13 minutes       127.0.0.1:65273->6443/tcp   openfaas-control-plane
@@ -68,10 +72,10 @@ CONTAINER ID        IMAGE                   COMMAND                  CREATED    
 $ helm install -f minikube/dev/canary.yaml canary-dev charts/dev
 $ helm install -f minikube/dev/prd.yaml prd-dev charts/dev
 
-$ curl -s -H "testing: always" http://st1-dev-vnext.example.com:32080/dev
+$ curl -s -H "testing: always" http://st1-dev-vnext.example.com/dev
 Welcome to my canary website!%
 
-$ curl -s -H "testing: never" http://st1-dev-vnext.example.com:32080/dev
+$ curl -s -H "testing: never" http://st1-dev-vnext.example.com/dev
 Welcome to my prod website!%
 ```
 
