@@ -23,7 +23,6 @@ PROTOLOC ?=  $(HOME)/.protobuf
 export PATH := $(PATH):$(HOME)/.protobuf/bin
 endif
 
-
 default: build
 
 install: install-protoc
@@ -94,3 +93,34 @@ ifneq ($(DIRTY),)
 else
 	@echo 'clean'
 endif
+
+build-image:
+	@echo Build canary docker image
+	@docker build --build-arg APP="canary" -t ranjithka/canary:0.0.1 .
+	@echo Build production docker image
+	@docker build --build-arg APP="prd" -t ranjithka/prd:0.0.1 .
+
+kind-cluster:
+	@echo Creating Kind environment
+	@kind create cluster --config kind/config.yaml --name k8s-1.21.1
+
+load-image:
+	@kind load docker-image  ranjithka/canary:0.0.1  --name k8s-1.21.1
+	@kind load docker-image  ranjithka/prd:0.0.1  --name k8s-1.21.1
+
+ingress:
+	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+	@echo Installing Ingress Helm Chart
+	@helm install -f minikube/nginx/values.yaml nginx ingress-nginx/ingress-nginx --version 4.0.13
+
+install-app:
+	@helm install -f minikube/dev/canary.yaml canary-dev charts/dev
+	@helm install -f minikube/dev/prd.yaml prd-dev charts/dev
+
+delete-app:
+	@helm delete prd-dev canary-dev
+
+delete: delete-kind
+
+delete-kind:
+	@kind delete cluster --name k8s-1.21.1

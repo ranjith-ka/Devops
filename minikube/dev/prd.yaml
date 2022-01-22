@@ -1,10 +1,11 @@
-
 fullnameOverride: prd-dev
+
+image:
+  repository: ranjithka/prd
 
 ingress:
   enabled: true
   annotations:
-    kubernetes.io/ingress.class: "dev-nginx"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
@@ -18,4 +19,6 @@ ingress:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
   hosts:
     - host: st1-dev-vnext.example.com
-      paths: [/dev(/|$)(.*)]
+      paths:
+        - path: /dev(/|$)(.*)
+          pathType: Prefix

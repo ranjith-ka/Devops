@@ -1,4 +1,4 @@
-FROM golang:1.16 as builder
+FROM golang:1.17 as builder
 
 ENV USER=user1
 ENV UID=1001
@@ -31,5 +31,5 @@ WORKDIR /app
 COPY --from=builder --chown=user1:user1 /build/logs /app/logs
 COPY --from=builder --chown=user1:user1 /build/hello-world /app/
 EXPOSE 8080
-ARG APP
+
 ENTRYPOINT ["./hello-world"]
