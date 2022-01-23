@@ -10,9 +10,9 @@ spec:
     privateKeySecretRef:
       name: letsencrypt
     solvers:
-    - http01:
-       ingress:
-         class: dev-nginx
+      - http01:
+          ingress:
+            class: dev-nginx
 ---
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
@@ -25,4 +25,4 @@ spec:
     name: letsencrypt
   commonName: st1-dev-vnext.example.com
   dnsNames:
-  - st1-dev-vnext.example.com
+    - st1-dev-vnext.example.com
