@@ -1,22 +1,25 @@
 package main
 
-import "fmt"
+import (
+    "fmt"
+)
 
 func main() {
-	x := []int{1, 2, 3, 4, 5} // Slice
+	x := []int{1, 5, 3, 4, 2} // Slice
 
-	// x := [5]int{0, 1, 2, 3, 4}  //  Array
+	// x := [5]int{0, 1, 4, 3, 2}  //  Array
 	fmt.Println(x)
 	for i, v := range x {
 		fmt.Println(i, v)
 	}
+	// [5]int is Array []int is Slice is the value or type of this
 	fmt.Printf("%T\n", x)
 
 	fmt.Println("********one End*********")
 	two()
 	fmt.Println("********two End*********")
 	four()
-	fmt.Println("********threee End*********")
+	fmt.Println("********three End*********")
 	three()
 	fmt.Println("********four End*********")
 }

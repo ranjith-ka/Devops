@@ -10,7 +10,6 @@ type mobile struct {
 }
 
 func main() {
-
 	m1 := mobile{
 		Brand:  "Oppo",
 		colour: "Black",

@@ -16,6 +16,6 @@ func (b Brand) Phone() string {
 
 func main() {
 	var v Brand // To ignore the error in vscode, but this is the defined type
-	v = Brand{"moto", "return me if moto in first feild"}
+	v = Brand{"moto", "return me if moto in first field"}
 	fmt.Println(v.Phone())
 }

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option go_package = "./proto;proto";
+
+package City;
+
+message City {
+    string  name = 1;
+    string zip_code = 2;
+    string country_code = 3;
+}

@@ -23,7 +23,7 @@ func main() {
 	fmt.Println(j())
 }
 
-// Func retrun int
+// Func return int
 func foo() func() int {
 	return func() int {
 		return 43
@@ -38,7 +38,7 @@ func bar() func() string {
 	}
 }
 
-// Clouser example, scope of the variable in the functions
+// Closer example, scope of the variable in the functions
 
 func scope() int {
 	var x int
@@ -46,7 +46,7 @@ func scope() int {
 	return x
 }
 
-// function retrun a func for a incrementor
+// function return a func for a incrementor
 func incrementor() func() int {
 	var y int
 	return func() int {

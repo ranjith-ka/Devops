@@ -1,29 +1,15 @@
-/*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
+// Package cmd /*
 package cmd
 
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 
-	"github.com/kyokomi/emoji/v2"
-
+	"github.com/kyokomi/emoji"
 	"github.com/spf13/cobra"
 )
 
@@ -43,10 +29,13 @@ var randomCmd = &cobra.Command{
 	},
 }
 
-// getRandomJoke func use the method getJokeData to get JSON and umarshal into string to print in the screen
+// getRandomJoke func use the method getJokeData to get JSON and unmarshal into string to print in the screen
 func getRandomJoke() {
 	fmt.Println("Here is your Joke")
-	emoji.Println(":beer::beer:Beer!!!")
+	_, err := emoji.Println(":beer::beer:Beer!!!")
+	if err != nil {
+		return
+	}
 	url := "https://icanhazdadjoke.com/"
 
 	responseBytes := getJokeData(url)
@@ -60,12 +49,12 @@ func getRandomJoke() {
 	fmt.Println(string(joke.Joke))
 }
 
-// getJokeData connect the external URL and get a JSON respose from the API
+// getJokeData connect the external URL and get a JSON response from the API
 func getJokeData(baseAPI string) []byte {
 	request, err := http.NewRequest(
-		http.MethodGet, //method
-		baseAPI,        //url
-		nil,            //body
+		http.MethodGet, // method
+		baseAPI,        // url
+		nil,            // body
 	)
 	if err != nil {
 		log.Printf("Could not request a dadjoke. %v", err)
@@ -74,13 +63,16 @@ func getJokeData(baseAPI string) []byte {
 	request.Header.Add("User-Agent", "Ranjith KA (https://github.com/ranjith-ka/Docker)")
 
 	response, err := http.DefaultClient.Do(request)
-
 	if err != nil {
 		log.Printf("Could not make a request. %v", err)
 	}
-	defer response.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			fmt.Println("Error here")
+		}
+	}(response.Body)
 	responseBytes, err := ioutil.ReadAll(response.Body)
-
 	if err != nil {
 		log.Printf("Could not read response body. %v", err)
 	}

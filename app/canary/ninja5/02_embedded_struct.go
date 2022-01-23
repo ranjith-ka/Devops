@@ -4,24 +4,24 @@ package main
 
 import "fmt"
 
-type vechile struct {
+type vehicle struct {
 	doors int
 	color string
 }
 
 type truck struct {
-	vechile
+    vehicle
 	fourWheel bool
 }
 
 type sedan struct {
-	vechile
+    vehicle
 	luxury bool
 }
 
 func main() {
 	t := truck{
-		vechile: vechile{
+		vehicle: vehicle{
 			doors: 2,
 			color: "Grey",
 		},
@@ -30,7 +30,7 @@ func main() {
 	fmt.Println(t)
 
 	s := sedan{
-		vechile: vechile{ // embedding the structs in other structs.
+		vehicle: vehicle{ // embedding the structs in other structs.
 			doors: 4,
 			color: "black",
 		},
