@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"log"
+)
 
 type Employee struct {
 	Name string
@@ -12,11 +14,11 @@ func print(data interface{}) {
 	switch val := data.(type) {
 
 	case string:
-		fmt.Println(val, "is a string")
+		log.Println(val, "is a string")
 	case int:
-		fmt.Println(val, "int")
+		log.Println(val, "int")
 	case Employee: // Checking the struct via interface type casting(not a casting)
-		fmt.Println(val.Name)
+		log.Println(val.Name)
 	}
 }
 

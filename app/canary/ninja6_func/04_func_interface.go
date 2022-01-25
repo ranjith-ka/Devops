@@ -75,4 +75,8 @@ func main() {
 		}
 		fmt.Println("done")
 	}() // ending
+
+	func(x int) {
+		fmt.Printf("Just print this anonymus function value is %d\n", x)
+	}(int(m1.price))
 }

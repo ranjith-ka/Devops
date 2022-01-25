@@ -1,7 +1,3 @@
-// passing the function as an Argument to other function
-
-// callback
-
 package main
 
 import (
@@ -9,9 +5,20 @@ import (
 )
 
 func main() {
+
+	// function expression to print total, assing the func to the variable
+	TotalSum := func(xi ...int) int {
+		total := 0
+		for _, v := range xi {
+			total += v
+		}
+		return total
+	}
 	ii := []int{1, 2, 3, 4, 5, 6, 7, 8}
-	s := sum(ii...)
-	fmt.Println(s)
+	s := TotalSum(ii...)
+	h := sum(ii...)
+	fmt.Printf("Sum is %d\n", s)
+	fmt.Printf("Sum is %d\n", h)
 	operate()
 }
 
@@ -34,12 +41,5 @@ func sum(xi ...int) int {
 	for _, v := range xi {
 		total += v
 	}
-	return total
+	return total + 1
 }
-
-// function for call back
-
-// func even(f func(xi ...int) int, vi ...int) int {
-//     yi := []int
-// 	return yi
-// }

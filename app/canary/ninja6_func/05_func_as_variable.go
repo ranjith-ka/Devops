@@ -11,7 +11,6 @@ func main() {
 	// g()
 
 	// Assign the function to a variable
-
 	f := g
 	f()
 }
