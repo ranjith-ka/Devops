@@ -1,15 +1,13 @@
 package main
 
 import (
-    "encoding/json"
-    "fmt"
-    "io"
-    "net"
-    "net/http"
-    "time"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net"
+	"net/http"
+	"time"
 )
-
-
 
 // type product struct {
 // 	Additionalfeatures string `json:"additionalFeatures"`
@@ -57,24 +55,24 @@ import (
 // }
 
 type idp struct {
-    Realm           string `json:"realm"`
-    PublicKey       string `json:"public_key"`
-    TokenService    string `json:"token-service"`
-    AccountService  string `json:"account-service"`
-    TokensNotBefore int    `json:"tokens-not-before"`
+	Realm           string `json:"realm"`
+	PublicKey       string `json:"public_key"`
+	TokenService    string `json:"token-service"`
+	AccountService  string `json:"account-service"`
+	TokensNotBefore int    `json:"tokens-not-before"`
 }
 
 // Adding the DailContext for Keycloak response and TLS timeout condition
 var netTransport = &http.Transport{
-    DialContext: (&net.Dialer{
-        Timeout:   15 * time.Second,
-        KeepAlive: 30 * time.Second,
-    }).DialContext,
-    TLSHandshakeTimeout: 5 * time.Second,
+	DialContext: (&net.Dialer{
+		Timeout:   15 * time.Second,
+		KeepAlive: 30 * time.Second,
+	}).DialContext,
+	TLSHandshakeTimeout: 5 * time.Second,
 }
 var netClient = &http.Client{
-    Timeout: time.Second * 10,
-    Transport: netTransport,
+	Timeout:   time.Second * 10,
+	Transport: netTransport,
 }
 
 // getContent to copy the data from
@@ -85,23 +83,23 @@ func getContent(target *idp) error {
 		panic(err)
 	}
 	defer func(Body io.ReadCloser) {
-        err := Body.Close()
-        if err != nil {
+		err := Body.Close()
+		if err != nil {
 
-        }
-    }(res.Body)
+		}
+	}(res.Body)
 	return json.NewDecoder(res.Body).Decode(&target)
 }
 
 func main() {
 
-    AllProduct := new(idp)
-    err := getContent(AllProduct)
-    if err != nil {
-        return
-    }
+	AllProduct := new(idp)
+	err := getContent(AllProduct)
+	if err != nil {
+		return
+	}
 
-    fmt.Println(AllProduct.PublicKey)
+	fmt.Println(AllProduct.PublicKey)
 	// Create a JSON structure type and convert the go type and print using the tags.
 
 	// fmt.Println(AllProduct)
