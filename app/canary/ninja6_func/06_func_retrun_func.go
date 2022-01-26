@@ -3,24 +3,21 @@ package main
 import "fmt"
 
 func main() {
-	f := foo()
-	// g := f()
-	// fmt.Println(g)
-	fmt.Println(f())
+	fmt.Println("Print the func retrun int:", foo())
 
-	h := bar()
-	fmt.Println(h())
-	i := scope()
-	fmt.Println(i)
-	fmt.Println(i)
+	// h := bar()
+	// fmt.Println(h())
+	// i := scope()
+	// fmt.Println(i)
+	// fmt.Println(i)
 
-	// incrementor with function scope variable defined at the top
+	// // incrementor with function scope variable defined at the top
 
-	j := incrementor()
-	fmt.Println(j())
-	fmt.Println(j())
-	fmt.Println(j())
-	fmt.Println(j())
+	// j := incrementor()
+	// fmt.Println(j())
+	// fmt.Println(j())
+	// fmt.Println(j())
+	// fmt.Println(j())
 }
 
 // Func return int
