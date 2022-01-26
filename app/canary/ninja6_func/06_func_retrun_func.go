@@ -13,9 +13,9 @@ func main() {
 
 	// // incrementor with function scope variable defined at the top
 
-	// j := incrementor()
-	// fmt.Println(j())
-	// fmt.Println(j())
+	j := incrementor()
+	fmt.Println("Incrementor starts", j())
+	fmt.Println(j())
 	// fmt.Println(j())
 	// fmt.Println(j())
 }

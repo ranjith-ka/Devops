@@ -7,6 +7,7 @@ type mobile struct {
 	colour   string
 	Model    string
 	location []string
+	xi       []int
 }
 
 func main() {
@@ -18,6 +19,7 @@ func main() {
 			"India",
 			"China",
 		},
+		xi: []int{1, 2},
 	}
 
 	m2 := mobile{
@@ -32,7 +34,7 @@ func main() {
 	}
 	fmt.Println(m1.Brand)
 	fmt.Println(m1.Model)
-	for i, v := range m1.location {
+	for i, v := range m1.xi {
 		fmt.Println(i, v)
 	}
 

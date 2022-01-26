@@ -15,9 +15,8 @@ func main() {
 		return total
 	}
 	ii := []int{1, 2, 3, 4, 5, 6, 7, 8}
-	s := TotalSum(ii...)
 	h := sum(ii...)
-	fmt.Printf("Sum is %d\n", s)
+	fmt.Printf("Sum is %d\n", TotalSum(ii...))
 	fmt.Printf("Sum is %d\n", h)
 	operate()
 }
@@ -41,5 +40,5 @@ func sum(xi ...int) int {
 	for _, v := range xi {
 		total += v
 	}
-	return total + 1
+	return total
 }

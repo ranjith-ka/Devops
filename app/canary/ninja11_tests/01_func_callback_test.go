@@ -1,7 +1,3 @@
-// passing the function as an Argument to other function
-
-// callback
-
 package main
 
 import (
@@ -17,7 +13,8 @@ func Test_sum(t *testing.T) {
 		args args
 		want int
 	}{
-		// TODO: Add test cases.
+		{"sum test", args{xi: []int{1, 2}}, 3},
+		{"sum test", args{xi: []int{1, 4}}, 5},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

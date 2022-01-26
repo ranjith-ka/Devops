@@ -10,12 +10,12 @@ type vehicle struct {
 }
 
 type truck struct {
-    vehicle
+	vehicle
 	fourWheel bool
 }
 
 type sedan struct {
-    vehicle
+	vehicle
 	luxury bool
 }
 
