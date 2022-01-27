@@ -5,17 +5,19 @@ import "fmt"
 func main() {
 	fmt.Println("Print the func retrun int:", foo())
 
-	// h := bar()
-	// fmt.Println(h())
-	// i := scope()
-	// fmt.Println(i)
-	// fmt.Println(i)
+	h := bar()
+	fmt.Println(h())
+	i := scope()
+	fmt.Println(i)
+	fmt.Println(i)
 
 	// // incrementor with function scope variable defined at the top
+	j := incrementor()() // retrun int, so J will be int
+	gdf := incrementor() // retrun func() int{}, so the type of gdf will be incrementor func
 
-	j := incrementor()
-	fmt.Println("Incrementor starts", j())
-	fmt.Println(j())
+	fmt.Println("value", j)
+	fmt.Println("value of gdf", gdf())
+	fmt.Println("value of gdf", gdf())
 	// fmt.Println(j())
 	// fmt.Println(j())
 }
