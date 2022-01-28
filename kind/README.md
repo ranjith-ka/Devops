@@ -10,7 +10,7 @@ config.yaml is for kube 1.16.15 version
 Assuming Docker already running.
 
 ```zsh
-brew install kind
+brew install kind helm
 ```
 
 To Install the version, check out the release documentation.
