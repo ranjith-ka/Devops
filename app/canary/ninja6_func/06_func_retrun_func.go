@@ -53,3 +53,13 @@ func incrementor() func() int {
 		return y
 	}
 }
+
+func mycar() func(x int) int {
+	g := 23
+	fmt.Println(g)
+	return func(y int) int {
+		n := y + 1
+		fmt.Println(n)
+		return n
+	}
+}
