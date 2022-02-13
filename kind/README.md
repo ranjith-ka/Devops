@@ -53,8 +53,8 @@ $ make install-app
 ```
 
 ```bash
-$ curl -s -H "testing: always" http://st1-dev-vnext.example.com/dev
+$ curl -s -H "testing: always" http://awesome-http.example.com/dev
 Welcome to my canary website!%
-$ curl -s -H "testing: never" http://st1-dev-vnext.example.com/dev
+$ curl -s -H "testing: never" http://awesome-http.example.com/dev
 Welcome to my prod website!%
 ```

@@ -47,10 +47,10 @@ http://192.168.99.100:31443
 http://192.168.99.100:32443
 ```
 
-Add st1-dev-vnext.example.com in /etc/hosts to connect local
+Add awesome-http.example.com in /etc/hosts to connect local
 
 ```bash
-curl http://st1-dev-vnext.example.com:32080/dev
+curl http://awesome-http.example.com:32080/dev
 ```
 
 ## Kind environment
@@ -72,10 +72,10 @@ CONTAINER ID        IMAGE                   COMMAND                  CREATED    
 $ helm install -f minikube/dev/canary.yaml canary-dev charts/dev
 $ helm install -f minikube/dev/prd.yaml prd-dev charts/dev
 
-$ curl -s -H "testing: always" http://st1-dev-vnext.example.com/dev
+$ curl -s -H "testing: always" http://awesome-http.example.com/dev
 Welcome to my canary website!%
 
-$ curl -s -H "testing: never" http://st1-dev-vnext.example.com/dev
+$ curl -s -H "testing: never" http://awesome-http.example.com/dev
 Welcome to my prod website!%
 ```
 
@@ -110,6 +110,10 @@ ctrl + alt + M -- Stop the running code.
 ### Go Learning
 
 <https://github.com/StephenGrider/GoCasts>
+
+### YAML remove comments
+
+Remove all comments <https://marketplace.visualstudio.com/items?itemName=plibither8.remove-comments>
 
 ### GIT FLOW
 

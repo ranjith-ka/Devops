@@ -7,7 +7,7 @@ ingress:
     nginx.ingress.kubernetes.io/canary-weight: "30"
     nginx.ingress.kubernetes.io/canary-by-header: "testing"
   hosts:
-    - host: st1-dev-vnext.example.com
+    - host: awesome-http.example.com
       paths:
         - path: /dev(/|$)(.*)
           pathType: Prefix

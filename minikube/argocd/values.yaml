@@ -15,7 +15,7 @@ server:
       nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     hosts:
-      - st2-dev-vnext.example.com
+      - argohttp.example.com
     paths:
       - /
   extraArgs:
@@ -30,6 +30,6 @@ server:
       nginx.ingress.kubernetes.io/server-snippet: |
         listen 2443 http2;
     hosts:
-      - st1-dev-vnext.example.com
+      - argogrpc.example.com
     paths:
       - /

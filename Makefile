@@ -100,6 +100,8 @@ build-image:
 	@echo Build production docker image
 	@docker build --build-arg APP="prd" -t ranjithka/prd:0.0.1 .
 
+cluster: kind-cluster
+
 kind-cluster:
 	@echo Creating Kind environment
 	@kind create cluster --config kind/config.yaml --name k8s-1.21.1
@@ -116,6 +118,12 @@ ingress:
 install-app:
 	@helm install -f minikube/dev/canary.yaml canary-dev charts/dev
 	@helm install -f minikube/dev/prd.yaml prd-dev charts/dev
+
+monitoring:
+	@helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+	@helm install prometheus prometheus-community/prometheus
+	@helm repo add grafana https://grafana.github.io/helm-charts
+	@helm install grafana grafana/grafana
 
 delete-app:
 	@helm delete prd-dev canary-dev

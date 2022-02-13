@@ -20,21 +20,21 @@ nginx default   1        2021-09-07 21:02:50.596626 +0530 IST deployed ingress-n
 
 ## Login to the ArgoCD UI
 
-<http://st2-dev-vnext.example.com>
+<http://awesome-tcp.example.com>
 
 username: admin
 password: 'get password'
 
 example:
-'kubectl  get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d'
+'kubectl get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d'
 
 Notes:
 
-* Ingress redirection not working as expected, hence creating other URL(any help is appreciated)
+-   Ingress redirection not working as expected, hence creating other URL(any help is appreciated)
 
 ## Login to Argo CLI
 
-`argocd login st1-dev-vnext.example.com`
+`argocd login awesome-http.example.com`
 
 username: admin
 password: 'copy the pod name of argo-server'

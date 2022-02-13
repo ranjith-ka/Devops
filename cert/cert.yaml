@@ -23,6 +23,6 @@ spec:
   issuerRef:
     kind: Issuer
     name: letsencrypt
-  commonName: st1-dev-vnext.example.com
+  commonName: awesome-http.example.com
   dnsNames:
-    - st1-dev-vnext.example.com
+    - awesome-http.example.com

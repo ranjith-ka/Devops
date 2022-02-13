@@ -19,7 +19,7 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
   hosts:
-    - host: st1-dev-vnext.example.com
+    - host: awesome-http.example.com
       paths:
         - path: /dev(/|$)(.*)
           pathType: Prefix

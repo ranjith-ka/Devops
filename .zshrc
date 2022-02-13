@@ -47,10 +47,12 @@ function kdex-fn() {
     fi
 }
 
-alias kctl_po_all='kubectl get po --all-namespaces'
-alias kctl_po='kubectl get po'
-alias kctl_svc_all='kubectl get svc --all-namespaces'
-alias kctl_svc='kubectl get svc'
-alias kctl_ds_po='kube_desc_pod'
-alias kctl_login="kdex-fn"
-alias kctl_busybox='kubectl run -i --tty busybox --image=busybox --restart=Never -- /bin/sh; kubectl delete pod busybox'
+alias k='kubectl'
+alias k_po_all='kubectl get po --all-namespaces'
+alias k_po='kubectl get po'
+alias kpo='kubectl get po'
+alias k_svc_all='kubectl get svc --all-namespaces'
+alias k_svc='kubectl get svc'
+alias k_ds_po='kube_desc_pod'
+alias k_login="kdex-fn"
+alias k_busybox='kubectl run -i --tty busybox --image=busybox --restart=Never -- /bin/sh; kubectl delete pod busybox'
