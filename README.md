@@ -119,3 +119,16 @@ Remove all comments <https://marketplace.visualstudio.com/items?itemName=plibith
 
 I created GIT FLOW using the same nvie git flow, but added two release to understand better.
 ![GIT FLOW (1)](https://user-images.githubusercontent.com/33622670/128872191-266329c3-47ac-40cb-9ee6-c067bb733c2c.jpeg)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    Alice->>John: Hello John, how are you?
+    loop Healthcheck
+        John->>John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts!
+    John-->>Alice: Great!
+    John->>Bob: How about you?
+    Bob-->>John: Jolly good!
+```
