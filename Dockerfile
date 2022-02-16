@@ -16,8 +16,6 @@ RUN addgroup \
     "$USER"
 ARG APP
 WORKDIR /build
-RUN mkdir logs
-RUN touch logs/stdout.log && touch logs/stderr.log
 COPY . /build
 RUN CGO_ENABLED=0 go build -a -ldflags '-extldflags "-static"' app/$APP/hello-world.go
 
@@ -28,7 +26,6 @@ COPY --from=builder /etc/group /etc/group
 
 USER user1:user1
 WORKDIR /app
-COPY --from=builder --chown=user1:user1 /build/logs /app/logs
 COPY --from=builder --chown=user1:user1 /build/hello-world /app/
 EXPOSE 8080
 
