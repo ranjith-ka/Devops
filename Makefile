@@ -94,21 +94,18 @@ else
 	@echo 'clean'
 endif
 
+include make/kind.mk
+include make/minikube.mk
+
+#### Run this command once minikube available
+## eval $(minikube -p minikube docker-env)
+####
+
 build-image:
 	@echo Build canary docker image
 	@docker build --build-arg APP="canary" -t ranjithka/canary:0.0.1 .
 	@echo Build production docker image
 	@docker build --build-arg APP="prd" -t ranjithka/prd:0.0.1 .
-
-cluster: kind-cluster
-
-kind-cluster:
-	@echo Creating Kind environment
-	@kind create cluster --config kind/config.yaml --name k8s-1.21.1
-
-load-image:
-	@kind load docker-image  ranjithka/canary:0.0.1  --name k8s-1.21.1
-	@kind load docker-image  ranjithka/prd:0.0.1  --name k8s-1.21.1
 
 ingress:
 	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
@@ -121,14 +118,9 @@ install-app:
 
 monitoring:
 	@helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-	@helm install prometheus prometheus-community/prometheus
+	@helm install -f minikube/prometheus/values.yaml prometheus prometheus-community/prometheus
 	@helm repo add grafana https://grafana.github.io/helm-charts
 	@helm install grafana grafana/grafana
 
 delete-app:
-	@helm delete prd-dev canary-dev
-
-delete: delete-kind
-
-delete-kind:
-	@kind delete cluster --name k8s-1.21.1
+	@helm delete prd-dev canary-dev grafana prometheus
