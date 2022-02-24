@@ -18,3 +18,8 @@ brew install helm
 make cluster
 make monitoring
 ```
+
+Dashboard to import
+
+1860 - Node Exporter
+9614 - Nginx Ingress

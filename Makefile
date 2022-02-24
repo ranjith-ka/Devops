@@ -120,7 +120,7 @@ monitoring:
 	@helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	@helm install -f minikube/prometheus/values.yaml prometheus prometheus-community/prometheus
 	@helm repo add grafana https://grafana.github.io/helm-charts
-	@helm install grafana grafana/grafana
+	@helm install -f minikube/grafana/values.yaml grafana grafana/grafana
 
 delete-app:
 	@helm delete prd-dev canary-dev grafana prometheus

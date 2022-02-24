@@ -1,5 +1,5 @@
 alertmanager:
-  enabled: true
+  enabled: false
 
   ingress:
     enabled: false
@@ -13,9 +13,9 @@ alertmanager:
   resources:
     requests:
       cpu: "100m"
-      memory: "512M"
+      memory: "256M"
     limits:
-      cpu: "1000m"
+      cpu: "500m"
       memory: "512M"
 
 configmapReload:
@@ -25,16 +25,16 @@ configmapReload:
     enabled: false
 
 kubeStateMetrics:
-  enabled: true
+  enabled: false
 
 nodeExporter:
   enabled: true
   resources:
     requests:
       cpu: "100m"
-      memory: "512M"
+      memory: "256M"
     limits:
-      cpu: "1000m"
+      cpu: "500m"
       memory: "512M"
 
 server:
@@ -71,12 +71,28 @@ server:
 
   resources:
     requests:
-      cpu: "100m"
-      memory: "512M"
+      cpu: "200m"
+      memory: "400M"
     limits:
       cpu: "1000m"
       memory: "512M"
-  retention: "15d"
+  retention: "3d"
 
 pushgateway:
   enabled: false
+
+extraScrapeConfigs:
+  # - job_name: 'prometheus-blackbox-exporter'
+  #   metrics_path: /probe
+  #   params:
+  #     module: [http_2xx]
+  #   static_configs:
+  #     - targets:
+  #       - https://example.com
+  #   relabel_configs:
+  #     - source_labels: [__address__]
+  #       target_label: __param_target
+  #     - source_labels: [__param_target]
+  #       target_label: instance
+  #     - target_label: __address__
+  #       replacement: prometheus-blackbox-exporter:9115
