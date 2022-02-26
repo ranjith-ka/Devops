@@ -1,3 +1,4 @@
+### Not yet planned to use the Promethus alert manager using grafana things now, will invesigate this later
 alertmanager:
   enabled: false
 
@@ -25,7 +26,8 @@ configmapReload:
     enabled: false
 
 kubeStateMetrics:
-  enabled: true
+  enabled: false   ## Kube metrics for SRE team, will work on devops topics
+
 kube-state-metrics:
   resources:
     limits:
@@ -36,7 +38,7 @@ kube-state-metrics:
       memory: 32Mi
 
 nodeExporter:
-  enabled: true
+  enabled: false
   resources:
     requests:
       cpu: "100m"

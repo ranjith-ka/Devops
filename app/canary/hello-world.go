@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func hello(w http.ResponseWriter, r *http.Request) {
@@ -36,5 +38,6 @@ func main() {
 	})
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
+	http.Handle("/metrics", promhttp.Handler())
 	log.Print(http.ListenAndServe(":8080", nil))
 }
