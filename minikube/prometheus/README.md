@@ -23,3 +23,4 @@ Dashboard to import
 
 1860 - Node Exporter
 9614 - Nginx Ingress
+13332 - kube metrics (if enabled)
