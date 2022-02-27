@@ -9,35 +9,33 @@ import (
 )
 
 func hello(w http.ResponseWriter, r *http.Request) {
-	n, err := fmt.Fprint(w, "Here is my first http program")
+	_, err := fmt.Fprint(w, "Here is my first http program")
 	if err != nil {
 		fmt.Printf("%v", err)
 	}
-	fmt.Println(n)
 }
 
 func headers(w http.ResponseWriter, req *http.Request) {
 	for name, headers := range req.Header {
 		for _, h := range headers {
-			n, err := fmt.Fprintf(w, "%v: %v\n", name, h)
+			_, err := fmt.Fprintf(w, "%v: %v\n", name, h)
 			if err != nil {
 				fmt.Printf("%v", err)
 			}
-			fmt.Println(n)
 		}
 	}
 }
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		n, err := fmt.Fprintf(w, "Welcome to my canary website!")
+		_, err := fmt.Fprintf(w, "Welcome to my canary website!")
 		if err != nil {
 			fmt.Printf("%v", err)
 		}
-		fmt.Println(n)
 	})
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
 	http.Handle("/metrics", promhttp.Handler())
+	fmt.Println("Server up and running....")
 	log.Print(http.ListenAndServe(":8080", nil))
 }

@@ -13,4 +13,4 @@ minikube:
 ## eval $(minikube -p minikube docker-env)
 ####
 
-mapp: ingress build-image install-app monitoring
+mapp: ingress snapshot install-app monitoring

@@ -101,11 +101,12 @@ include make/minikube.mk
 ## eval $(minikube -p minikube docker-env)
 ####
 
-build-image:
+snapshot:
 	@echo Build canary docker image
-	@docker build --build-arg APP="canary" -t ranjithka/canary:0.0.1 .
+	@docker build --build-arg APP="canary" -t ranjithka/canary:latest .
+image:
 	@echo Build production docker image
-	@docker build --build-arg APP="prd" -t ranjithka/prd:0.0.1 .
+	@docker build --build-arg APP="prd" -t ranjithka/canary:0.0.1 .
 
 ingress:
 	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx

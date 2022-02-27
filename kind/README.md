@@ -45,7 +45,7 @@ Follow the above documentation.
 Just run the make command to run the k8s and install nginx and sample application.
 
 ```bash
-$ make build-image
+$ make snapshot
 $ make kind-cluster
 $ make load-image
 $ make ingress
