@@ -28,7 +28,7 @@ func headers(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		_, err := fmt.Fprintf(w, "Welcome to my canary website!")
+		_, err := fmt.Fprintf(w, "Welcome to my website!")
 		if err != nil {
 			fmt.Printf("%v", err)
 		}

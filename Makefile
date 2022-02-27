@@ -104,17 +104,18 @@ include make/minikube.mk
 snapshot:
 	@echo Build canary docker image
 	@docker build --build-arg APP="canary" -t ranjithka/canary:latest .
+
 image:
 	@echo Build production docker image
-	@docker build --build-arg APP="prd" -t ranjithka/canary:0.0.1 .
+	@docker build --build-arg APP="canary" -t ranjithka/canary:0.0.1 .
 
 ingress:
 	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 	@echo Installing Ingress Helm Chart
 	@helm install -f minikube/nginx/values.yaml nginx ingress-nginx/ingress-nginx --version 4.0.13
 
-install-app:
-	@helm install -f minikube/dev/canary.yaml canary-dev charts/dev
+install-canary-app:
+	@helm install -f minikube/dev/staging.yaml canary-dev charts/dev
 	@helm install -f minikube/dev/prd.yaml prd-dev charts/dev
 
 monitoring:

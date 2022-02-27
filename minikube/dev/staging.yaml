@@ -1,4 +1,4 @@
-fullnameOverride: canary-dev
+fullnameOverride: staging-dev
 
 podAnnotations:
   prometheus.io/path: "/metrics"
@@ -13,7 +13,7 @@ ingress:
   enabled: true
   annotations:
     nginx.ingress.kubernetes.io/canary: "true"
-    nginx.ingress.kubernetes.io/canary-weight: "30"
+    nginx.ingress.kubernetes.io/canary-weight: "100"
     nginx.ingress.kubernetes.io/canary-by-header: "testing"
   hosts:
     - host: awesome-http.example.com

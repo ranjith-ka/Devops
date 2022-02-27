@@ -10,7 +10,7 @@ kind-cluster:
 
 load-image:
 	@kind load docker-image  ranjithka/canary:0.0.1  --name k8s-1.21.1
-	@kind load docker-image  ranjithka/prd:0.0.1  --name k8s-1.21.1
+	@kind load docker-image  ranjithka/canary:latest --name k8s-1.21.1
 
 delete-kind:
 	@kind delete cluster --name k8s-1.21.1
