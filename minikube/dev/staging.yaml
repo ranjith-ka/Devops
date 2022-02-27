@@ -7,8 +7,13 @@ podAnnotations:
 
 image:
   tag: latest
-  pullPolicy: Always
-  
+  # pullPolicy: Always
+
+livenessProbe:
+  enabled: true
+readinessProbe:
+  enabled: true
+
 ingress:
   enabled: true
   annotations:

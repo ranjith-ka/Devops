@@ -86,17 +86,17 @@ affinity: {}
 
 livenessProbe:
   enabled: false
-  initialDelaySeconds: 200
-  periodSeconds: 10
+  initialDelaySeconds: 3
+  periodSeconds: 2
   successThreshold: 1
-  timeoutSeconds: 100
+  timeoutSeconds: 3
 readinessProbe:
   enabled: false
-  initialDelaySeconds: 200
-  periodSeconds: 10
+  initialDelaySeconds: 3
+  periodSeconds: 2
   successThreshold: 1
-  timeoutSeconds: 100
+  timeoutSeconds: 3
 
 env:
-  devEnv:
+  open:
 secrets:

@@ -35,7 +35,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-          {{- range $name, $value := .Values.env.devEnv }}
+          {{- range $name, $value := .Values.env.open }}
               {{- if not (empty $value) }}
             - name: {{ $name | quote }}
               value: {{ $value | quote }}
@@ -56,21 +56,21 @@ spec:
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path | default "/" }}
-              port: {{ .Values.service.port | default 80 }}
+              port: {{ .Values.service.port | default 8080 }}
             failureThreshold: {{ .Values.livenessProbe.periodSeconds | default 1 }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds | default 180 }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 20 }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds | default 5 }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 3 }}
             successThreshold: {{ .Values.livenessProbe.successThreshold | default 1 }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 5 }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 3 }}
 {{- end }}
 {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.path | default "/" }}
-              port: {{ .Values.service.port | default 80 }}
+              port: {{ .Values.service.port | default 8080 }}
             failureThreshold: {{ .Values.readinessProbe.periodSeconds | default 1 }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds | default 60 }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 20 }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds | default 3 }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 5 }}
             successThreshold: {{ .Values.readinessProbe.successThreshold | default 1 }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 5 }}
 {{- end }}
