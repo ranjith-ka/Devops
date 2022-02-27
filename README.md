@@ -50,7 +50,8 @@ http://192.168.99.100:32443
 Add awesome-http.example.com in /etc/hosts to connect local
 
 ```bash
-curl http://awesome-http.example.com:32080/dev
+curl http://awesome-http.example.com/dev
+curl http://awesome-http.example.com/dev/metrics
 ```
 
 ## Kind environment

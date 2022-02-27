@@ -1,5 +1,10 @@
 fullnameOverride: canary-dev
 
+podAnnotations:
+  prometheus.io/path: "/metrics"
+  prometheus.io/port: "8080"
+  prometheus.io/scrape: "true"
+
 image:
   tag: latest
   pullPolicy: Always

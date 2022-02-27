@@ -1,5 +1,10 @@
 fullnameOverride: prd-dev
 
+podAnnotations:
+  prometheus.io/path: "/metrics"
+  prometheus.io/port: "8080"
+  prometheus.io/scrape: "true"
+
 image:
   tag: 0.0.1
 
