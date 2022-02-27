@@ -1,5 +1,9 @@
 fullnameOverride: canary-dev
 
+image:
+  tag: latest
+  pullPolicy: Always
+  
 ingress:
   enabled: true
   annotations:
