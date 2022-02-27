@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       annotations:
-      {{- if eq .Chart.AppVersion "latest" }}
+      {{- if or (eq .Chart.AppVersion "latest") ( eq .Values.image.tag "latest") }}
         rollme: {{ randAlphaNum 5 | quote }}
         {{- end }}
       {{- include "dev.podAnnotations" . | nindent 8 }}
