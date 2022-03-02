@@ -1,0 +1,26 @@
+nodeGroup: "client"
+
+replicas: 1
+
+clusterHealthCheckParams: 'wait_for_status=yellow&timeout=1s'
+
+roles:
+  master: "false"
+  ingest: "false"
+  data: "false"
+  ml: "false"
+  remote_cluster_client: "false"
+
+persistence:
+  enabled: false
+
+esJavaOpts: "-Xmx128m -Xms128m"
+
+# Allocate smaller chunks of memory per pod.
+resources:
+  requests:
+    cpu: "100m"
+    memory: "512M"
+  limits:
+    cpu: "1000m"
+    memory: "512M"

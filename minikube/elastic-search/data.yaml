@@ -1,0 +1,36 @@
+nodeGroup: "data"
+
+replicas: 1
+
+## Add status Yellow if cluster turns into yellow and if problem with Readiness probe
+clusterHealthCheckParams: 'wait_for_status=yellow&timeout=1s'
+
+roles:
+  master: "false"
+  ingest: "true"
+  data: "true"
+  ml: "false"
+  remote_cluster_client: "false"
+
+# Permit co-located instances for solitary minikube virtual machines.
+antiAffinity: "soft"
+
+# Shrink default JVM heap.
+esJavaOpts: "-Xmx200m -Xms200m"
+
+# Allocate smaller chunks of memory per pod.
+resources:
+  requests:
+    cpu: "100m"
+    memory: "512M"
+  limits:
+    cpu: "1000m"
+    memory: "512M"
+
+# Request smaller persistent volumes.
+volumeClaimTemplate:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: "standard"
+  resources:
+    requests:
+      storage: 100M

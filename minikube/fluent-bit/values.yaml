@@ -1,0 +1,67 @@
+on_minikube: true
+
+testFramework:
+  enabled: false
+
+image:
+  fluent_bit:
+    tag: 1.6.3
+
+backend:
+  type: es
+  es:
+    host: elasticsearch-master
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 10m
+    memory: 8Mi
+
+podAnnotations:
+  fluentbit.io/exclude: "true"
+
+input:
+  tail:
+    # exclude_path: ""
+    dockerMode: true
+
+# extraEntries:
+#   input: |-
+#       Multiline           On
+#      Parser_Firstline    docker
+
+  # Ignore logs from containers in kube-system namespace
+  # Exclude_Path      /var/log/containers/*_kube-system_*.log, /var/log/containers/*_default_*.log
+  # filter: |-
+  #     Regex_Parser        k8s-custom-tag
+
+rawConfig: |-
+  @INCLUDE fluent-bit-service.conf
+  @INCLUDE fluent-bit-input.conf
+  @INCLUDE fluent-bit-filter.conf
+  @INCLUDE fluent-bit-output.conf
+  [FILTER]
+    Name                nest
+    Match               *
+    Wildcard            pod_name
+    Operation           lift
+    Nested_under        kubernetes
+    Add_prefix          kubernetes_
+
+  [FILTER]
+    Name                grep
+    Match               kube.*
+    Regex               kubernetes_pod_name canary
+
+# parsers:
+#   enabled: true
+#   json:
+#     - name: docker
+#   regex:
+#     - name: MULTILINE_MATCH
+#       regex: /^(?<date>\d{2}-\d{2}-\d{4})\s(?<timestamp>\d{2}:\d{2}:\d{2}\.\d{3})\s+(?<class>\[(.*?)\])\s+(?<loglevel>\w+)\s+(?<message>.*)/
+
+### Add one namespace only at the moment
