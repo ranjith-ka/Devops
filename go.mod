@@ -9,6 +9,8 @@ require (
 	github.com/prometheus/client_golang v1.12.1
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.10.1
+	go.elastic.co/apm v1.15.0 // indirect
+	go.elastic.co/apm/module/apmhttp v1.15.0
 	golang.org/x/tour v0.1.0
 	google.golang.org/protobuf v1.27.1
 )
