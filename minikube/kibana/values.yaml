@@ -1,15 +1,16 @@
 ingress:
   enabled: true
+  className: dev-nginx
   annotations:
-    kubernetes.io/ingress.class: "dev-nginx"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
-  path: /kibana(/|$)(.*)
   hosts:
     - kibana.example.com
+  path: /kibana(/|$)(.*)
+  pathType: Prefix
+  
 extraEnvs:
   - name: SERVER_BASEPATH
     value: "/kibana"

@@ -1,6 +1,6 @@
 ingress:
   enabled: true
-  ingressClassName: dev-nginx
+  className: dev-nginx
   annotations:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/enable-rewrite-log: "true"

@@ -124,5 +124,10 @@ monitoring:
 	@helm repo add grafana https://grafana.github.io/helm-charts
 	@helm install -f minikube/grafana/values.yaml grafana grafana/grafana
 
+log:
+	@helm install -f minikube/elastic-search/master.yaml elasticsearch-master elastic/elasticsearch
+	@helm install -f minikube/elastic-search/data.yaml elasticsearch-data elastic/elasticsearch
+	@helm install -f minikube/kibana/values.yaml kibana elastic/kibana
+
 delete-app:
 	@helm delete prd-dev canary-dev grafana prometheus

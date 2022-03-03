@@ -1,7 +1,7 @@
 # Install Kibana in Minikube
 
 ```bash
-helm install -f environment/minikube/apps/kibana/values.yaml kibana elastic/kibana
+helm install -f minikube/kibana/values.yaml kibana elastic/kibana
 ```
 
 If you try in minikube, sync time is required.
