@@ -20,3 +20,8 @@ $ kubectl get po --watch
 ```bash
 minikube delete
 ```
+
+```
+minikube start --docker-env HTTP_PROXY=http://192.168.1.9:10809 --docker-env HTTPS_PROXY=http://192.168.1.9:10809 --docker-env NO_PROXY=192.168.99.0/24
+export no_proxy=$no_proxy,$(minikube ip)
+```
