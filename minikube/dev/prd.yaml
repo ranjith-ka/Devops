@@ -7,6 +7,7 @@ podAnnotations:
 
 image:
   tag: 0.0.1
+  pullPolicy: Always
 
 ingress:
   enabled: true

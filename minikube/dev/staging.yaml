@@ -7,7 +7,7 @@ podAnnotations:
 
 image:
   tag: latest
-  # pullPolicy: Always
+  pullPolicy: Always
 
 livenessProbe:
   enabled: true

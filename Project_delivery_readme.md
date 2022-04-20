@@ -66,7 +66,7 @@ Example: v3.1.17 version with Project changes should be tagged as v3.1.67
 
 #### Create Release/Tag
 
-Add this alias in `~/.giconfig`
+Add this alias in `~/.gitconfig`
 
 ```bash
 

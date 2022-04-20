@@ -36,8 +36,6 @@ func main() {
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
 	http.Handle("/metrics", promhttp.Handler())
-	// mux := http.NewServeMux()
 	fmt.Println("Server up and running....")
-	// http.ListenAndServe(":8080", apmhttp.Wrap(mux))
 	log.Print(http.ListenAndServe(":8080", nil))
 }

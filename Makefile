@@ -109,6 +109,12 @@ image:
 	@echo Build production docker image
 	@docker build --build-arg APP="canary" -t ranjithka/canary:0.0.1 .
 
+push:
+	@echo Publish the docker images
+	@docker push ranjithka/canary:latest
+	@echo Publish Tagged image
+	@docker push ranjithka/canary:0.0.1
+
 ingress:
 	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 	@echo Installing Ingress Helm Chart
