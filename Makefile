@@ -124,6 +124,11 @@ install-canary-app:
 	@helm install -f minikube/dev/staging.yaml canary-dev charts/dev
 	@helm install -f minikube/dev/prd.yaml prd-dev charts/dev
 
+mongo:
+	@helm repo add mongodb https://mongodb.github.io/helm-charts
+	@helm install community-operator mongodb/community-operator
+	@kubectl apply -f minikube/mongo-community-operator/mongo.yaml
+
 monitoring:
 	@helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	@helm install -f minikube/prometheus/values.yaml prometheus prometheus-community/prometheus

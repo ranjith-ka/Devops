@@ -7,4 +7,4 @@
 *.lock
 *_tmp
 Docker
-.vscode/settings.json
+.vscode/*

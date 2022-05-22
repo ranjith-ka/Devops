@@ -1,0 +1,15 @@
+### TODO 
+
+operator:
+  # Resources allocated to Operator Pod
+  resources:
+    limits:
+      cpu: 1100m
+      memory: 600Mi
+    requests:
+      cpu: 500m
+      memory: 200Mi
+
+### Kind cluster to run the 2 node cluster.
+resource:
+  members: 2
