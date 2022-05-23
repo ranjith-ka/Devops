@@ -17,4 +17,6 @@ nodes:
         hostPort: 2443
       - containerPort: 31443
         hostPort: 443
+      - containerPort: 31697
+        hostPort: 27017
     image: kindest/node:v1.21.1@sha256:fae9a58f17f18f06aeac9772ca8b5ac680ebbed985e266f711d936e91d113bad
