@@ -7,6 +7,6 @@ option go_package = "github.com/ranjith-ka/Docker/proto;proto";
 import "proto/03_city_message.proto";
 
 message Street {
-    string name = 1;
-    City.City city = 2;
+  string name = 1;
+  City.City city = 2;
 }
