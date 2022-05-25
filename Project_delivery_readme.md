@@ -6,7 +6,7 @@ For Project delivery, we added upstream for this repo.
 
 <https://stefanbauer.me/articles/how-to-keep-your-git-fork-up-to-date>
 
-#### How to add a upstream for Backoffice SPA
+#### How to add an upstream
 
 1. Add remote upstream for this repo,
 
@@ -48,9 +48,9 @@ $ git merge upstream/master master
 
 ```
 
-#### Note: You will be always rebase the upstream release branch with local release branch
+#### Note: You will be always rebase the upstream release/master branch with local release branch
 
-Always rebase with the release branch,
+Always rebase with the master branch,
 
 ```bash
 
@@ -59,11 +59,6 @@ $ git checkout  release/2020_Q4_3.1
 $ git rebase upstream/release/2020/Q4
 
 ```
-
-### New tag: Always 50+ with Product version
-
-Example: v3.1.17 version with Project changes should be tagged as v3.1.67
-
 #### Create Release/Tag
 
 Add this alias in `~/.gitconfig`
@@ -82,7 +77,7 @@ dtags = "!f() { git tag -d $1 && git push origin :refs/tags/$1; } ; f"
 
 `git ptags v3.1.67`
 
-### Note: Keep the commit message with Spark to pull commits to other release branch if required later
+### Note: Keep the commit message starting with keyword to move across release
 
 Example:
 
