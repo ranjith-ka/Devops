@@ -29,6 +29,8 @@ var randomCmd = &cobra.Command{
 	},
 }
 
+const url = "https://icanhazdadjoke.com/"
+
 // getRandomJoke func use the method getJokeData to get JSON and unmarshal into string to print in the screen
 func getRandomJoke() {
 	fmt.Println("Here is your Joke")
@@ -36,7 +38,6 @@ func getRandomJoke() {
 	if err != nil {
 		return
 	}
-	url := "https://icanhazdadjoke.com/"
 
 	responseBytes := getJokeData(url)
 
@@ -82,5 +83,5 @@ func getJokeData(baseAPI string) []byte {
 
 // responseSize
 func init() {
-	rootCmd.AddCommand(randomCmd)
+	rootCmd.AddCommand(randomCmd, verifyCmd)
 }
