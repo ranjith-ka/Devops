@@ -12,6 +12,9 @@ Kubernetes 1.6+
 ― Peter Drucker
 <https://en.wikipedia.org/wiki/Peter_Drucker>
 
+Red Green Refactor
+<https://quii.gitbook.io/learn-go-with-tests/>
+
 ## Helm
 
 ```bash

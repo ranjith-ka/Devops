@@ -18,15 +18,17 @@ var verifyCmd = &cobra.Command{
 	Short: "To verify the source URL for random joke",
 	Long:  `Just try to verify the URL to check the source or knowloedge databse, so make sure we run something`,
 	Run: func(cmd *cobra.Command, args []string) {
-		verfiyRandomJoke()
+		verfiyRandomJoke(url)
 	},
 }
 
-func verfiyRandomJoke() {
-	resp, err := http.Head(url)
+func verfiyRandomJoke(Scopedurl string) string {
+	resp, err := http.Head(Scopedurl)
 	if err != nil {
-		log.Println("Error", url, err)
+		log.Println("Error", Scopedurl, err)
+		return "404 NOK"
 	}
-	fmt.Println(resp.Status, url)
+	fmt.Println(resp.Status, Scopedurl)
 	resp.Body.Close()
+	return resp.Status
 }
