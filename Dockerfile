@@ -9,7 +9,7 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY  . .
 
-RUN CGO_ENABLED=0 go build app/$APP/hello-world.go
+RUN CGO_ENABLED=0 go build .
 
 FROM alpine
 
@@ -30,7 +30,7 @@ RUN addgroup \
 
 USER user1:user1
 WORKDIR /app
-COPY --from=builder --chown=user1:user1 /build/hello-world /app/
+COPY --from=builder --chown=user1:user1 /build/Docker /app/
 EXPOSE 8080
 
-ENTRYPOINT ["./hello-world"]
+ENTRYPOINT ["./Docker serve"]

@@ -6,7 +6,10 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	"net/http"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/cobra"
 )
 
@@ -21,8 +24,48 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("serve called")
+		serve()
 	},
+}
+
+func hello(w http.ResponseWriter, r *http.Request) {
+	_, err := fmt.Fprint(w, "Here is my first http program")
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+}
+
+func headers(w http.ResponseWriter, req *http.Request) {
+	for name, headers := range req.Header {
+		for _, h := range headers {
+			_, err := fmt.Fprintf(w, "%v: %v\n", name, h)
+			if err != nil {
+				fmt.Printf("%v", err)
+			}
+		}
+	}
+}
+
+func myjoke(w http.ResponseWriter, req *http.Request) {
+	_, err := fmt.Fprint(w, getRandomJoke())
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+}
+
+func serve() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		_, err := fmt.Fprintf(w, "Welcome to my website!")
+		if err != nil {
+			fmt.Printf("%v", err)
+		}
+	})
+	http.HandleFunc("/hello", hello)
+	http.HandleFunc("/headers", headers)
+	http.HandleFunc("/joke", myjoke)
+	http.Handle("/metrics", promhttp.Handler())
+	fmt.Println("Server up and running....")
+	log.Print(http.ListenAndServe(":8080", nil))
 }
 
 func init() {
