@@ -6,6 +6,11 @@ This is not offically supported helm charts. Testing this for local setup.
 
 https://github.com/mongodb/helm-charts#unsupported-charts
 
+Useful links:
+
+<https://www.youtube.com/watch?v=VqeTT0NvRR4>
+<https://www.youtube.com/watch?v=Pv70IcwipF0>
+
 ### Install steps
 
 From the root of directory use this command to install the operator in kube.
@@ -38,3 +43,9 @@ bye
 ```
 
 Will document more hwo to connect this stuff here.
+
+Use below connection string to connec the mongo running in kube. Use Primary DB to connect, secondary DB will not allow direct connection.
+
+```bash
+mongodb://my-user:password@mongo.example.com:27017/?directConnection=true&readPreference=primary&authMechanism=DEFAULT&authSource=admin&retryWrites=false
+```
