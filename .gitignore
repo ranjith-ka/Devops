@@ -8,3 +8,4 @@
 *_tmp
 Docker
 .vscode/*
+vendor/
