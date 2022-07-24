@@ -17,11 +17,11 @@ type oppo struct {
 
 // func (r receiver) identifier(parameters) (return(s)) { code }
 
-func (m moto) currentOffer() float64 {
+func (m *moto) currentOffer() float64 {
 	return m.price - (m.price * 0.25)
 }
 
-func (o oppo) currentOffer() float64 {
+func (o *oppo) currentOffer() float64 {
 	return o.price - (o.price * 0.15)
 }
 
@@ -49,13 +49,13 @@ func do(i interface{}) {
 }
 func main() {
 
-	m1 := moto{
+	m1 := &moto{
 		Brand: "moto",
 		Model: "v3",
 		price: 20000,
 		Tmp:   "ok",
 	}
-	m2 := oppo{
+	m2 := &oppo{
 		Brand: "oppo",
 		Model: "reno v3",
 		price: 14000,

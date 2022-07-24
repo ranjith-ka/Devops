@@ -10,17 +10,17 @@ type mobile struct {
 
 // func (r receiver) identifier(parameters) (return(s)) { code }
 
-func (m mobile) disc() {
+func (m *mobile) disc() {
 	fmt.Println("Discount for the mobile", m.Brand, "is", m.discount, "%")
 }
 
 func main() {
-	m1 := mobile{
+	m1 := &mobile{
 		Brand:    "Oppo",
 		Model:    "Reno5 pro",
 		discount: 20,
 	}
-	m2 := mobile{
+	m2 := &mobile{
 		Brand:    "Honor",
 		Model:    "9 Lite",
 		discount: 30,
