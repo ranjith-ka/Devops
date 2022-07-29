@@ -1,6 +1,6 @@
 .PHONY: minikube
 
-KUBE_VERSION := v1.23.1
+KUBE_VERSION := v1.22.9
 CPU := 4  ## Half of the CPU is good, more than half is bad for my MAC, may be good for a linux servers.
 DISK := 40g
 
