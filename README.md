@@ -30,6 +30,17 @@ git commit -am "just testing"
 gh pr create -f
 ```
 
+## Go WorkSpace
+
+Go1.18 feature of Go Workspace is enabled here.
+
+```bash
+cd ~/code/Devops
+cd ..
+go work init ./Devops (Note go.wrk file will be created, and ENV variable was assinged)
+go work sync
+```
+
 ## Create Nginx Service
 
 ```bash
