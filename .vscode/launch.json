@@ -1,18 +1,21 @@
 {
     "configurations": [
         {
-            "name": "Launch file",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": "${file}"
-        },
-        {
-            "name": "Launch Package",
+            "name": "verify",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${fileDirname}/main.go",
+            "program": "${fileDirname}/..",
+            "env": {},
+            "args": [
+                "verify"
+            ]
+        },
+        {
+            "name": "random",
+            "type": "go",
+            "request": "launch",
+            "program": "${fileDirname}/..",
             "env": {},
             "args": [
                 "random"

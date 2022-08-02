@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/ranjith-ka/Docker/cmd"
+import "github.com/ranjith-ka/Devops/cmd"
 
 func main() {
 	cmd.Execute()

@@ -74,7 +74,7 @@ compile:
 	@go build .
 
 run: build
-	./Docker random
+	./Devops random
 
 reports:
 	@mkdir -p reports
