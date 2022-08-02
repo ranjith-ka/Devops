@@ -1,7 +1,5 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+// Package cmd /*
 
-*/
 package cmd
 
 import (
@@ -9,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/ranjith-ka/Devops/database"
 	"github.com/spf13/cobra"
 )
 
@@ -18,17 +17,24 @@ var verifyCmd = &cobra.Command{
 	Short: "To verify the source URL for random joke",
 	Long:  `Just try to verify the URL to check the source or knowloedge databse, so make sure we run something`,
 	Run: func(cmd *cobra.Command, args []string) {
-		verfiyRandomJoke(url)
+		verifyRandomJoke(url)
 	},
 }
 
-func verfiyRandomJoke(Scopedurl string) string {
-	resp, err := http.Head(Scopedurl)
+func verifyRandomJoke(ScopedUrl string) string {
+
+	database.SetupDB()
+
+	resp, err := http.Head(ScopedUrl)
 	if err != nil {
-		log.Println("Error", Scopedurl, err)
+		log.Println("Error", ScopedUrl, err)
 		return "404 NOK"
 	}
-	fmt.Println(resp.Status, Scopedurl)
-	resp.Body.Close()
+	fmt.Println(resp.Status, ScopedUrl)
+	err = resp.Body.Close()
+	if err != nil {
+		return ""
+	}
+
 	return resp.Status
 }
