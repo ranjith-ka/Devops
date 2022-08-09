@@ -30,7 +30,7 @@ RUN addgroup \
 
 USER user1:user1
 WORKDIR /app
-COPY --from=builder --chown=user1:user1 /build/Docker /app/
+COPY --from=builder --chown=user1:user1 /build/Devops /app/
 EXPOSE 8080
 
-ENTRYPOINT ["./Docker serve"]
+ENTRYPOINT ["./Devops serve"]
