@@ -35,14 +35,15 @@ func SetupDB() {
 		log.Fatal(err)
 	}
 
+	if err = client.Ping(ctx, readpref.Primary()); err != nil {
+		log.Fatal(err)
+	}
+
 	defer func() {
 		if err = client.Disconnect(context.TODO()); err != nil {
 			log.Fatal(err)
 		}
 	}()
-	if err = client.Ping(ctx, readpref.Primary()); err != nil {
-		log.Fatal(err)
-	}
 
 	collection := client.Database("testing").Collection("users")
 

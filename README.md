@@ -1,6 +1,6 @@
 # Docker and K8S
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/ranjith-ka/Docker.svg)](https://pkg.go.dev/github.com/ranjith-ka/Docker)
+[![Go Reference](https://pkg.go.dev/badge/github.com/ranjith-ka/Docker.svg)](https://pkg.go.dev/github.com/ranjith-ka/Devops)
 
 Golang, Docker and Kube Practise session
 
@@ -75,7 +75,7 @@ Remember to add in /etc/hosts (to nginx to work)
 
 Follow the document
 
-<https://github.com/ranjith-ka/Docker/tree/master/kind#kubernetes-in-docker-kind>
+<https://github.com/ranjith-ka/Devops/tree/master/kind#kubernetes-in-docker-kind>
 
 ```bash
 CONTAINER ID        IMAGE                   COMMAND                  CREATED             STATUS              PORTS                       NAMES
@@ -104,8 +104,8 @@ Welcome to my prod website!%
 Just trying out the tutorial
 
 ```bash
-cobra init --pkg-name github.com/ranjith-ka/Docker
-go mod init github.com/ranjith-ka/Docker
+cobra init --pkg-name github.com/ranjith-ka/Devops
+go mod init github.com/ranjith-ka/Devops
 ```
 
 Add new command

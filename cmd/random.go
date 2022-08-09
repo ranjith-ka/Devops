@@ -22,8 +22,8 @@ type RandomJoke struct {
 // randomCmd represents the random command
 var randomCmd = &cobra.Command{
 	Use:   "random",
-	Short: "Random joke from the package Docker",
-	Long:  `Get a Random joke from the package Docker`,
+	Short: "Random joke from the package Devops",
+	Long:  `Get a Random joke from the package Devops`,
 	Run: func(cmd *cobra.Command, args []string) {
 		getRandomJoke()
 	},

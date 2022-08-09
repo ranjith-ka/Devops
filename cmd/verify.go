@@ -23,8 +23,6 @@ var verifyCmd = &cobra.Command{
 
 func verifyRandomJoke(ScopedUrl string) string {
 
-	database.SetupDB()
-
 	resp, err := http.Head(ScopedUrl)
 	if err != nil {
 		log.Println("Error", ScopedUrl, err)
@@ -35,6 +33,8 @@ func verifyRandomJoke(ScopedUrl string) string {
 	if err != nil {
 		return ""
 	}
+
+	database.SetupDB()
 
 	return resp.Status
 }
