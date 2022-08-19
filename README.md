@@ -130,6 +130,14 @@ ctrl + alt + M -- Stop the running code.
 
 Remove all comments <https://marketplace.visualstudio.com/items?itemName=plibither8.remove-comments>
 
+
+## Mongo
+
+To run mongo in local MAC, run the Make commands, this will be helpful for local testing.
+`make run-mongo`
+
+Clean the logs, kill the process if not required.
+
 ### GIT FLOW
 
 I created GIT FLOW using the same nvie git flow, but added two release to understand better.

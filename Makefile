@@ -96,6 +96,7 @@ endif
 
 include make/kind.mk
 include make/minikube.mk
+include make/mongo.mk
 
 #### Run this command once minikube available
 ## eval $(minikube -p minikube docker-env)
