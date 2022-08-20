@@ -29,7 +29,7 @@ func SetupDB() {
 	ctx, cancel := context.WithDeadline(context.Background(), d)
 	defer cancel()
 
-	clientOpts := options.Client().ApplyURI("mongodb://root:rootpass@localhost:27017")
+	clientOpts := options.Client().ApplyURI("mongodb://localhost:27017")
 	client, err := mongo.Connect(context.TODO(), clientOpts)
 	if err != nil {
 		log.Fatal(err)
