@@ -29,10 +29,9 @@ func TestSum(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			result := verfiyRandomJoke(tt.Scopedurl)
+			result := verifyRandomJoke(tt.Scopedurl)
 			if result != tt.expected {
 				t.Errorf("expected %s, but got %s", tt.expected, result)
 			}
