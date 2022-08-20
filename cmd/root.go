@@ -71,3 +71,8 @@ func initConfig() {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 }
+
+// responseSize
+func init() {
+	rootCmd.AddCommand(randomCmd, verifyCmd)
+}

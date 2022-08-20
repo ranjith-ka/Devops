@@ -81,8 +81,3 @@ func getJokeData(baseAPI string) []byte {
 
 	return responseBytes
 }
-
-// responseSize
-func init() {
-	rootCmd.AddCommand(randomCmd, verifyCmd)
-}

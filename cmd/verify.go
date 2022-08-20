@@ -18,6 +18,7 @@ var verifyCmd = &cobra.Command{
 	Long:  `Just try to verify the URL to check the source or knowloedge databse, so make sure we run something`,
 	Run: func(cmd *cobra.Command, args []string) {
 		verifyRandomJoke(url)
+		database.SetupDB()
 	},
 }
 
@@ -33,8 +34,5 @@ func verifyRandomJoke(ScopedUrl string) string {
 	if err != nil {
 		return ""
 	}
-
-	database.SetupDB()
-
 	return resp.Status
 }

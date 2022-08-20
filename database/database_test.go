@@ -57,3 +57,5 @@ func TestInsertOne(t *testing.T) {
 		assert.NotNil(t, err)
 	})
 }
+
+//Add testcase for many
