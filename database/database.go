@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"sync"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -16,6 +17,7 @@ import (
 const shortDuration = 3 * time.Second
 
 var userCollection *mongo.Collection
+var wg sync.WaitGroup //Async database update
 
 type user struct {
 	ID    primitive.ObjectID `bson:"_id,omitempty"`
@@ -46,22 +48,50 @@ func SetupDB() {
 
 	collection := client.Database("testing").Collection("users")
 
-	Firstuser := bson.D{{Key: "fullName", Value: "User_1"}, {Key: "age", Value: 30}}
-	result, err := collection.InsertOne(context.Background(), Firstuser)
-	if err != nil {
-		panic(err)
-	}
+	wg.Add(3)
 
-	fmt.Println(result.InsertedID)
+	Firstuser := bson.D{{Key: "fullName", Value: "User_1"}, {Key: "age", Value: 30}}
+	go func() {
+		result, err := collection.InsertOne(context.Background(), Firstuser)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(result.InsertedID)
+		wg.Done()
+	}()
+
+	userCollection = collection
 
 	userData := user{
 		Name:  "ranjith",
 		Email: "ok@gmail.com",
 	}
+	go func() {
+		t, err := insert(userData)
+		if err != nil {
+			panic("Not able to insert")
+		}
+		fmt.Println(t.ID)
+		wg.Done()
+	}()
 
-	userCollection = collection
-	t, err := insert(userData)
-	fmt.Println(t.ID)
+	muserData := []user{
+		{
+			Name:  "test",
+			Email: "gg",
+		},
+		{
+			Name:  "ll",
+			Email: "hh",
+		},
+	}
+	go func() {
+		err = insertMany(muserData)
+		if err != nil {
+			panic("Not able to insertMany")
+		}
+	}()
+	wg.Wait()
 }
 
 // insert func to support single document in the collection, but test case are take over
@@ -75,14 +105,15 @@ func insert(userData user) (*user, error) {
 	return &userData, nil
 }
 
-// func insertMany(usersData []user) error {
-// 	users := make([]interface{}, len(usersData))
-// 	for i, userData := range usersData {
-// 		users[i] = userData
-// 	}
+//insterMany to insert list of user data, cheking all ID is not implemented
+func insertMany(usersData []user) error {
+	users := make([]interface{}, len(usersData))
+	for i, userData := range usersData {
+		users[i] = userData
+	}
 
-// 	if _, err := userCollection.InsertMany(context.Background(), users); err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+	if _, err := userCollection.InsertMany(context.Background(), users); err != nil {
+		return err
+	}
+	return nil
+}
