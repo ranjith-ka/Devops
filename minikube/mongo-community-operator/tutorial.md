@@ -73,6 +73,10 @@ To print the flightdata collections,
 
     - validation level (Error, Warning, info)
 
+4. Running Mongo with available options in local
+    - WiredTiger is default storage Engine
+    - `db.ShutdownServer()` // To stop the Mongo service
+
 ## References
 
 The MongoDB Limits: https://docs.mongodb.com/manual/reference/limits/

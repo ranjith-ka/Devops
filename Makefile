@@ -146,3 +146,13 @@ clean-es:
 
 delete-app:
 	@helm delete prd-dev canary-dev grafana prometheus
+
+crossplane:
+	@kubectl create namespace crossplane-system
+	@helm repo add crossplane-stable https://charts.crossplane.io/stable
+	@helm install crossplane --namespace crossplane-system crossplane-stable/crossplane
+
+clean-crossplane:
+	@helm delete crossplane --namespace crossplane-system
+	@kubectl delete namespace crossplane-system
+	
