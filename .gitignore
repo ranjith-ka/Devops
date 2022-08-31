@@ -12,3 +12,7 @@ vendor/
 Devops
 Devops.exe
 mongodb*
+
+## Azure
+creds.json
+provider.yaml
