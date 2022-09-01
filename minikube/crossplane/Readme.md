@@ -43,6 +43,8 @@ curl -sL https://raw.githubusercontent.com/crossplane/crossplane/master/install.
 sudo mv kubectl-crossplane /usr/local/bin
 # verify that it is installed
 kubectl crossplane --help
+
+kubectl crossplane install provider crossplane/provider-azure:master
 ```
 
 ```bash
