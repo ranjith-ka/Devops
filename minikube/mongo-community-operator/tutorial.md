@@ -74,8 +74,11 @@ To print the flightdata collections,
     - validation level (Error, Warning, info)
 
 4. Running Mongo with available options in local
+
     - WiredTiger is default storage Engine
     - `db.ShutdownServer()` // To stop the Mongo service
+
+5. `insert()` vs `insertOne()` vs `insertMany()`
 
 ## References
 

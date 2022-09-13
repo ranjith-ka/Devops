@@ -4,7 +4,7 @@ kind: MongoDBCommunity
 metadata:
   name: bpmn-mongodb
 spec:
-  members: 1   ### Make sure you create a 2 node cluster.
+  members: 1 ### Make sure you create a 2 node cluster.
   type: ReplicaSet
   version: "4.2.6"
   security:

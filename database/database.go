@@ -51,6 +51,7 @@ func SetupDB() {
 	wg.Add(3)
 
 	Firstuser := bson.D{{Key: "fullName", Value: "User_1"}, {Key: "age", Value: 30}}
+
 	go func() {
 		result, err := collection.InsertOne(context.Background(), Firstuser)
 		if err != nil {
