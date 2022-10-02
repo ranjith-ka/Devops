@@ -1,0 +1,8 @@
+domain: vizualplatform.com
+layout: helm.sdk.operatorframework.io/v1
+projectName: helm-operator
+resources:
+- group: charts
+  kind: Vizualplatform
+  version: v1alpha1
+version: 3-alpha
