@@ -1,0 +1,6 @@
+apiVersion: v2
+name: helm1
+description: A Helm chart for Kubernetes
+type: application
+version: 3.4.1 3.4.1 3.4.1 
+appVersion: 0.0.1

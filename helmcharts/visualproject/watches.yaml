@@ -1,0 +1,22 @@
+# Use the 'create api' subcommand to add watches to this file.
+- group: charts.vizualplatform.com
+  version: v1alpha1
+  kind: Helm1
+  chart: helm-charts/helm1
+- group: charts.vizualplatform.com
+  version: v1alpha1
+  kind: Helm2
+  chart: helm-charts/helm2
+- group: charts.vizualplatform.com
+  version: v1alpha1
+  kind: Helm3
+  chart: helm-charts/helm3
+- group: charts.vizualplatform.com
+  version: v1alpha1
+  kind: Helm4
+  chart: helm-charts/helm4
+- group: charts.vizualplatform.com
+  version: v1alpha1
+  kind: Helm5
+  chart: helm-charts/helm5
+# +kubebuilder:scaffold:watch

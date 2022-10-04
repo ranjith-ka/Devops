@@ -1,0 +1,186 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+##
+## Base operator rules
+##
+# We need to get namespaces so the operator can read namespaces to ensure they exist
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - get
+# We need to manage Helm release secrets
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - "*"
+# We need to create events on CRs about things happening during reconciliation
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+
+##
+## Rules for charts.vizualplatform.com/v1alpha1, Kind: Helm1
+##
+- apiGroups:
+  - charts.vizualplatform.com
+  resources:
+  - helm1s
+  - helm1s/status
+  - helm1s/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
+##
+## Rules for charts.vizualplatform.com/v1alpha1, Kind: Helm2
+##
+- apiGroups:
+  - charts.vizualplatform.com
+  resources:
+  - helm2s
+  - helm2s/status
+  - helm2s/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
+##
+## Rules for charts.vizualplatform.com/v1alpha1, Kind: Helm3
+##
+- apiGroups:
+  - charts.vizualplatform.com
+  resources:
+  - helm3s
+  - helm3s/status
+  - helm3s/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
+##
+## Rules for charts.vizualplatform.com/v1alpha1, Kind: Helm4
+##
+- apiGroups:
+  - charts.vizualplatform.com
+  resources:
+  - helm4s
+  - helm4s/status
+  - helm4s/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
+##
+## Rules for charts.vizualplatform.com/v1alpha1, Kind: Helm5
+##
+- apiGroups:
+  - charts.vizualplatform.com
+  resources:
+  - helm5s
+  - helm5s/status
+  - helm5s/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- verbs:
+  - "*"
+  apiGroups:
+  - ""
+  resources:
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
+  resources:
+  - "deployments"
+
+# +kubebuilder:scaffold:rules

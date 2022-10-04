@@ -1,0 +1,24 @@
+# permissions for end users to edit helm1s.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: helm1-editor-role
+rules:
+- apiGroups:
+  - charts.vizualplatform.com
+  resources:
+  - helm1s
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - charts.vizualplatform.com
+  resources:
+  - helm1s/status
+  verbs:
+  - get
