@@ -15,4 +15,4 @@ endif
 run-mongo:
 	@mkdir -p ./mongodb/data && mkdir -p ./mongodb/log
 	@echo Running Mongo as Forked service
-	@mongod --config ./mongo.conf --dbpath ./mongodb/data --logpath ./mongodb/log/mongo.log --fork
+	@mongod --config ./mongo.conf --dbpath ./mongodb/data --logpath ./mongodb/log/mongo.log

@@ -17,6 +17,7 @@ import (
 const shortDuration = 3 * time.Second
 
 var userCollection *mongo.Collection
+
 var wg sync.WaitGroup //Async database update
 
 type user struct {
@@ -76,22 +77,22 @@ func SetupDB() {
 		wg.Done()
 	}()
 
-	muserData := []user{
-		{
-			Name:  "test",
-			Email: "gg",
-		},
-		{
-			Name:  "ll",
-			Email: "hh",
-		},
-	}
-	go func() {
-		err = insertMany(muserData)
-		if err != nil {
-			panic("Not able to insertMany")
-		}
-	}()
+	// muserData := []user{
+	// 	{
+	// 		Name:  "test",
+	// 		Email: "gg",
+	// 	},
+	// 	{
+	// 		Name:  "ll",
+	// 		Email: "hh",
+	// 	},
+	// }
+	// go func() {
+	// 	err = insertMany(muserData)
+	// 	if err != nil {
+	// 		panic("Not able to insertMany")
+	// 	}
+	// }()
 	wg.Wait()
 }
 
@@ -107,14 +108,14 @@ func insert(userData user) (*user, error) {
 }
 
 //insterMany to insert list of user data, cheking all ID is not implemented
-func insertMany(usersData []user) error {
-	users := make([]interface{}, len(usersData))
-	for i, userData := range usersData {
-		users[i] = userData
-	}
+// func insertMany(usersData []user) error {
+// 	users := make([]interface{}, len(usersData))
+// 	for i, userData := range usersData {
+// 		users[i] = userData
+// 	}
 
-	if _, err := userCollection.InsertMany(context.Background(), users); err != nil {
-		return err
-	}
-	return nil
-}
+// 	if _, err := userCollection.InsertMany(context.Background(), users); err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
