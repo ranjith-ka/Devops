@@ -18,7 +18,7 @@ Find, insert, update, updateMany
 
 Note:
 
-16MB - Max size for Documents
+16MB - Max size for Documents & 100+ level nesting approach (add collection instead)
 
 ### Projection
 
