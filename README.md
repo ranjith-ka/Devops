@@ -8,8 +8,12 @@ Kubernetes 1.6+
 
 ## Quotes to spice my work
 
+“Innovation is taking two things that already exist and putting them together in a new way.”
+- Tom Freston
+
 “What's measured improves”
 ― Peter Drucker
+
 <https://en.wikipedia.org/wiki/Peter_Drucker>
 
 Red Green Refactor

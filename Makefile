@@ -156,3 +156,6 @@ clean-crossplane:
 	@helm delete crossplane --namespace crossplane-system
 	@kubectl delete namespace crossplane-system
 	
+kuma:
+	@helm repo add kuma https://kumahq.github.io/charts
+	@helm install --create-namespace --namespace kuma-system kuma kuma/kuma

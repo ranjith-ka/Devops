@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -60,10 +59,11 @@ func serve() {
 			fmt.Printf("%v", err)
 		}
 	})
+	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
 	http.HandleFunc("/joke", myjoke)
-	http.Handle("/metrics", promhttp.Handler())
+	
 	fmt.Println("Server up and running....")
 	log.Print(http.ListenAndServe(":8080", nil))
 }
