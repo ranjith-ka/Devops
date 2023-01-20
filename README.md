@@ -19,6 +19,16 @@ Kubernetes 1.6+
 Red Green Refactor
 <https://quii.gitbook.io/learn-go-with-tests/>
 
+# Docker Desktop alternate
+
+<https://github.com/abiosoft/colima>
+
+```bash
+colima start
+docker build . && docker ps -a 
+colima stop
+```
+
 ## Helm
 
 ```bash
@@ -73,6 +83,10 @@ curl http://awesome-http.example.com/dev/metrics
 ```
 
 ## Kind environment
+
+Install colima from pervious steps, to run Kind we need docker engine is running.
+
+`colima start`
 
 Testing in kind cluster, port mapping required for docker image of Kube worker node. So please make sure extraport mappings are added in the kind/config.yaml
 Remember to add in /etc/hosts (to nginx to work)
