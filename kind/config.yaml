@@ -1,13 +1,8 @@
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
-## If we want to use the registry server, we can use that here, i choose kind load option
-containerdConfigPatches:
-  - |-
-    [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:5000"]
-      endpoint = ["http://kind-registry:5000"]
 nodes:
   - role: control-plane
-    image: kindest/node:v1.22.9@sha256:8135260b959dfe320206eb36b3aeda9cffcb262f4b44cda6b33f7bb73f453105
+    image: kindest/node:v1.25.3@sha256:f52781bc0d7a19fb6c405c2af83abfeb311f130707a0e219175677e366cc45d1
   - role: worker
     extraPortMappings:
       - containerPort: 32080
@@ -21,4 +16,4 @@ nodes:
         hostPort: 27017
       - containerPort: 31699
         hostPort: 9092
-    image: kindest/node:v1.22.9@sha256:8135260b959dfe320206eb36b3aeda9cffcb262f4b44cda6b33f7bb73f453105
+    image: kindest/node:v1.25.3@sha256:f52781bc0d7a19fb6c405c2af83abfeb311f130707a0e219175677e366cc45d1
