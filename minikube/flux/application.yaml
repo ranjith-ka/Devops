@@ -1,0 +1,41 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: app
+  namespace: default
+spec:
+  chart:
+    spec:
+      chart: ./charts/dev
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: GitRepository
+        name: dev
+  interval: 10m0s
+  releaseName: canary-dev
+  values:
+    fullnameOverride: staging-dev
+    image:
+      pullPolicy: Always
+      tag: latest
+    ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/canary: "true"
+        nginx.ingress.kubernetes.io/canary-by-header: testing
+        nginx.ingress.kubernetes.io/canary-weight: "30"
+      enabled: true
+      hosts:
+      - host: awesome-http.example.com
+        paths:
+        - path: /dev(/|$)(.*)
+          pathType: Prefix
+    livenessProbe:
+      enabled: true
+    podAnnotations:
+      prometheus.io/path: /metrics
+      prometheus.io/port: "8080"
+      prometheus.io/scrape: "true"
+    readinessProbe:
+      enabled: true
+
