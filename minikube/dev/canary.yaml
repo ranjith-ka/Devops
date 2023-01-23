@@ -1,5 +1,3 @@
-fullnameOverride: staging-dev
-
 podAnnotations:
   prometheus.io/path: "/metrics"
   prometheus.io/port: "8080"
