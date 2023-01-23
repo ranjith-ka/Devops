@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: canary-dev
+  labels:
+    helm.sh/chart: dev-3.2.0
+    app.kubernetes.io/name: dev
+    app.kubernetes.io/instance: canary-dev
+    app.kubernetes.io/version: "0.0.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: dev
+    app.kubernetes.io/instance: canary-dev

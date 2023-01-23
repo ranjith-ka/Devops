@@ -2,21 +2,23 @@
 
 Tutorials:    <https://fluxcd.io/flux/concepts/>
 
-Reconciliation,Kustomization, Bootstrap
+## 1. Install and configure
 
+Reconciliation,Kustomization, Bootstrap
 
 Install Binary:
 
 `brew install fluxcd/tap/flux`
 
 ### Install/Bootstrap Flux
+## Just a default bootstrap one not to be executed.
 
 ```bash
 flux bootstrap github \
   --owner=$GITHUB_USER \
   --repository=Devops \
   --branch=feature/flux-tutorial \
-  --path=./minikube/flux \
+  --path=./minikube/flux/tutorial \
   --personal
 ```
 
@@ -32,8 +34,15 @@ flux bootstrap github \
     └── flux-system
 ```
 
-
+```bash
+flux bootstrap git \
+  --url=ssh://git@github.com/ranjith-ka/Devops \
+  --branch=feature/flux-tutorial \
+  --path=./minikube/flux/
 ```
+
+
+```bash
 ## Add the source to sync from git, then we can use this source while creating helm release.
 flux create source git dev \
   --url=https://github.com/ranjith-ka/Devops \
@@ -42,7 +51,7 @@ flux create source git dev \
   --export > source.yaml
 ```
 
-```
+```bash
   # Create a HelmRelease with a chart from a GitRepository source
   flux create hr app \
     --release-name=canary-dev \
@@ -50,5 +59,71 @@ flux create source git dev \
     --source="GitRepository/dev" \
     --chart=./charts/dev \
     --values=./minikube/dev/staging.yaml \
-    --export > application.yaml
+    --export > staging-app.yaml
+```
+
+```bash
+  flux create hr app \
+    --release-name=prd-dev \
+    --interval=10m \
+    --source="GitRepository/dev" \
+    --chart=./charts/dev \
+    --values=./minikube/dev/prd.yaml \
+    --export > prd-app.yaml
+```
+
+## 2. Utlize Helm release for deployments
+
+<https://fluxcd.io/flux/guides/helmreleases/#prerequisites>
+
+
+```bash
+$ kubectl get helmcharts --all-namespaces
+NAMESPACE   NAME                 CHART          VERSION   SOURCE KIND     SOURCE NAME   AGE   READY   STATUS
+default     default-canary-app   ./charts/dev   *         GitRepository   dev           4s    False   values files merge error: no values file found at path '/charts/dev/canary.yaml' (reference 'charts/dev/canary.yaml')
+```
+
+### Example to use the different values.yaml
+
+```yaml
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: mongodb
+  namespace: mongodb
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: mongodb
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+      valuesFiles:
+        - values.yaml
+        - values-production.yaml
+  values:
+    replicaCount: 5
+```
+
+## 3. Options in Gitrepository source controller
+
+<https://fluxcd.io/flux/components/source/gitrepositories/>
+
+How to exclude or include the files in GIT source controller
+
+```yaml
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: <repository-name>
+spec:
+  ignore: |
+    # exclude all
+    /*
+    # include deploy dir
+    !/deploy
+    # exclude file extensions from deploy dir
+    /deploy/**/*.md
+    /deploy/**/*.txt    
 ```

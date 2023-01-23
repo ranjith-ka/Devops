@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: canary-dev
+  labels:
+    helm.sh/chart: dev-3.2.0
+    app.kubernetes.io/name: dev
+    app.kubernetes.io/instance: canary-dev
+    app.kubernetes.io/version: "0.0.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dev
+      app.kubernetes.io/instance: canary-dev
+  template:
+    metadata:
+      annotations: {}
+
+      labels:
+        app.kubernetes.io/name: dev
+        app.kubernetes.io/instance: canary-dev
+    spec:
+      serviceAccountName: default
+      securityContext:
+        {}
+      containers:
+        - name: dev
+          securityContext:
+            {}
+          image: "ranjithka/canary:0.0.1"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources: {}
