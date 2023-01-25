@@ -9,3 +9,9 @@ spec:
   ref:
     branch: main
   url: https://github.com/ranjith-ka/Devops
+  ignore: |
+    # exclude all
+    /*
+    # include charts directory
+    !/charts/
+    !/minikube/
