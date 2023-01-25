@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: ./charts/dev
-      reconcileStrategy: ChartVersion
+      reconcileStrategy: Revision ## ChartVersion ## Revision
       sourceRef:
         kind: GitRepository
         name: devops
