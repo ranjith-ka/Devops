@@ -6,7 +6,7 @@ podAnnotations:
   prometheus.io/scrape: "true"
 
 image:
-  tag: 0.0.1
+  tag: latest
   pullPolicy: Always
 
 ingress:
