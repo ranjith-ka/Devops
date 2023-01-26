@@ -43,10 +43,3 @@ prometheus:
                 target_label: instance
               - target_label: __address__
                 replacement: prometheus-kube-prometheus-blackbox-exporter:19115
-
-blackboxExporter:
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/probe: "true"
-  startupProbe:
-    enabled: true
