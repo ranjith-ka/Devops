@@ -2,7 +2,12 @@
 
 cluster: kind-cluster
 
-kind: kind-cluster
+## Start Colima
+colima:
+	@echo #### starting Colima with 4CPU and 8GB Memory ####
+	@colima start --cpu 4 --memory 8
+
+kind: colima kind-cluster
 
 kind-cluster:
 	@echo Creating Kind environment
@@ -14,3 +19,4 @@ load-image:
 
 delete-kind:
 	@kind delete cluster --name k8s
+	@colima stop

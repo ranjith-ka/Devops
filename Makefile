@@ -159,3 +159,4 @@ clean-crossplane:
 kuma:
 	@helm repo add kuma https://kumahq.github.io/charts
 	@helm install --create-namespace --namespace kuma-system kuma kuma/kuma
+
