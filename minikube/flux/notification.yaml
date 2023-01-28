@@ -1,0 +1,51 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: discord-url
+  namespace: default
+stringData:
+    address: "https://discord.com/api/webhooks/1068767766733144175/NiCgkH7MiRlKAJs1f15uUyikbMCrt-3LRuKPe8yeDQcfhMr_so3Ydgzpnv8PBZ5qbvXw"  ## This is not available anymore
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Provider
+metadata:
+  name: discord
+  namespace: default
+spec:
+  type: discord
+  secretRef:
+    name: discord-url
+---
+
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Provider
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  type: github
+  address: https://github.com/<username>/fleet-infra
+  secretRef:
+    name: github
+---
+
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Alert
+metadata:
+  name: on-call-webapp
+  namespace: default
+spec:
+  summary: "Local cluster"
+  providerRef:
+    name: discord
+  eventSeverity: info
+  eventSources:
+    - kind: GitRepository
+      name: '*'
+    - kind: HelmChart
+      name: '*' 
+    - kind: HelmRepository
+      name: '*'
+    - kind: HelmRelease
+      name: '*'

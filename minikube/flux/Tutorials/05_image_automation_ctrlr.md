@@ -5,9 +5,22 @@ The image-reflector-controller and image-automation-controller work together to 
 -> The image-reflector-controller scans image repositories and reflects the image metadata in Kubernetes resources.
 -> The image-automation-controller updates YAML files based on the latest images scanned, and commits the changes to a given Git repository.
 
+<https://fluxcd.io/flux/guides/image-update/>
+
+
+```bash
+flux install --components-extra=image-reflector-controller,image-automation-controller
+```
+
 ## Image Policy
 
 <https://fluxcd.io/flux/components/image/imagepolicies/>
+
+Image automation
+
+Image Automation controller isn’t installed by default (since it’s an alpha feature) et you need to reconfigure Flux. The flux bootstrap command is idempotent and you can run it again with the new paramweters:
+
+`--components-extra=image-reflector-controller,image-automation-controller`
 
 
 ```yaml

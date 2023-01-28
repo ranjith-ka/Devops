@@ -11,14 +11,14 @@ Install Binary:
 `brew install fluxcd/tap/flux`
 
 ### Install/Bootstrap Flux
-## Just a default bootstrap one not to be executed.
+### Just a default bootstrap, execute and see the fun !! delete the repo in github if not required anymore
 
 ```bash
 flux bootstrap github \
   --owner=$GITHUB_USER \
-  --repository=Devops \
-  --branch=feature/flux-tutorial \
-  --path=./minikube/flux/tutorial \
+  --repository=infra-fleet \
+  --branch=main \
+  --path=./minikube/flux/flux-system \
   --personal
 ```
 
@@ -37,8 +37,8 @@ flux bootstrap github \
 ```bash
 flux bootstrap git \
   --url=ssh://git@github.com/ranjith-ka/Devops \
-  --branch=feature/flux-tutorial \
-  --path=./minikube/flux/
+  --branch=main \
+  --path=./minikube/flux/flux-system
 ```
 
 
