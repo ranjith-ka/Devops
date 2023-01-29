@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-secrets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-secrets
+  template:
+    metadata:
+      labels:
+        app: hello-secrets
+      annotations:
+        vault.security.banzaicloud.io/vault-addr: "http://vault:8200"
+        vault.security.banzaicloud.io/vault-skip-verify: "false" 
+    spec:
+      serviceAccountName: default
+      containers:
+      - name: alpine
+        image: alpine
+        command: ["sh", "-c", "echo $AWS_SECRET_ACCESS_KEY && echo going to sleep... && sleep 10000"]
+        env:
+        - name: AWS_SECRET_ACCESS_KEY
+          value: "vault:secret/data/accounts/aws#AWS_SECRET_ACCESS_KEY"

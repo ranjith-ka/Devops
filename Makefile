@@ -160,3 +160,20 @@ kuma:
 	@helm repo add kuma https://kumahq.github.io/charts
 	@helm install --create-namespace --namespace kuma-system kuma kuma/kuma
 
+vault:
+	@helm repo add banzaicloud-stable https://kubernetes-charts.banzaicloud.com
+	@kubectl create namespace vault-infra && kubectl label namespace vault-infra name=vault-infra
+	@helm upgrade --namespace vault-infra --install vault-operator banzaicloud-stable/vault-operator --wait
+	@kubectl apply -f minikube/vault/rbac.yaml
+	@kubectl apply -f minikube/vault/cr.yaml
+	@helm upgrade --namespace vault-infra --install vault-secrets-webhook banzaicloud-stable/vault-secrets-webhook --wait
+	
+vault-token:
+	@kubectl get secrets vault-unseal-keys -o jsonpath={.data.vault-root} | base64 --decode
+	@kubectl apply -f minikube/vault/vault-ingress.yaml
+
+delete-vault:
+	@kubectl delete -f minikube/vault/rbac.yaml
+	@kubectl delete -f minikube/vault/cr.yaml
+	@helm delete vault-operator vault-secrets-webhook  -n vault-infra
+	@kubectl delete namespace vault-infra
