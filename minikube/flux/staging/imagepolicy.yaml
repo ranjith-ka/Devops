@@ -2,21 +2,21 @@
 apiVersion: image.toolkit.fluxcd.io/v1alpha1
 kind: ImageRepository
 metadata:
-  name: helloworld
-  namespace: flux-system
+  name: app
+  namespace: default
 spec:
-  image: particule/helloworld
+  image: ranjithka/canary
   interval: 1m0s
 
 ---
 apiVersion: image.toolkit.fluxcd.io/v1alpha1
 kind: ImagePolicy
 metadata:
-  name: helloworld
-  namespace: flux-system
+  name: app
+  namespace: default
 spec:
   imageRepositoryRef:
-    name: helloworld
+    name: app
   policy:
     semver:
-      range: '>= 1.0.0 <2.0.0'
+      range: '>= 0.0.0 <0.0.1'

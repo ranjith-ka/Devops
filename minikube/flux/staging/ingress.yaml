@@ -35,16 +35,9 @@ spec:
         requests:
           cpu: 200m
           memory: 200Mi
-      # autoscaling:
-      #   enabled: false
-      #   minReplicas: 1
-      #   maxReplicas: 7
-      #   targetCPUUtilizationPercentage: 70
-      #   targetMemoryUtilizationPercentage: 80
       containerPort:
         http: 80
         https: 443
-        # special: 2443
       service:
         enabled: true
         type: NodePort
@@ -53,7 +46,6 @@ spec:
           https: 31443
           tcp:
             2443: 32443
-    #### Enable this if you have a Mongo controller in the Kube
             27017: 31697
     tcp:
       27017: "default/mongo:27017"
