@@ -18,7 +18,6 @@ spec:
   values:
     image:
       pullPolicy: Always
-      tag: latest
     ingress:
       annotations:
         nginx.ingress.kubernetes.io/canary: "true"
