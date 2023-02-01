@@ -5,9 +5,12 @@ metadata:
   name: app
   namespace: default
 spec:
-  image: ranjithka/canary
+  image: docker.io/ranjithka/canary
   interval: 1m0s
-
+  accessFrom:
+    namespaceSelectors:
+      - matchLabels:
+          kubernetes.io/metadata.name: default
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImagePolicy
@@ -17,6 +20,39 @@ metadata:
 spec:
   imageRepositoryRef:
     name: app
+    namespace: default
   policy:
     semver:
-      range: 1.0.x
+      range: "0.0.x"
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: app
+  namespace: default
+spec:
+  sourceRef: # moved from `.spec.checkout`
+    kind: GitRepository
+    name: devops
+    namespace: default
+  interval: 5m
+  # update:
+  #   strategy: Setters
+    # path: ./chart/dev
+  git:
+    checkout: # moved under `git`, loses `gitRepositoryRef`
+      ref:
+        branch: main # moved into `ref` struct
+    commit: # moved under `git`
+      author:
+        name: fluxbot  # moved from `authorName`
+        email: fluxbot@example.com # moved from `authorEmail`
+      messageTemplate: |
+        An automated update from FluxBot
+        [ci skip]        
+      signingKey:
+        secretRef:
+          name: git-secrets
+    push: # moved under `git`
+      branch: auto
+---

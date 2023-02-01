@@ -29,3 +29,9 @@ canary-dev	default  	1       	2023-01-29 18:47:44.051134198 +0000 UTC	deployed	d
 nginx     	default  	1       	2023-01-29 18:47:45.267912657 +0000 UTC	deployed	ingress-nginx-4.0.13    	1.1.0
 prd-dev   	default  	2       	2023-01-29 18:51:10.533669879 +0000 UTC	deployed	dev-3.2.1+91a457debe80.1	0.0.1
 ```
+
+```bash
+  flux create secret git git-secrets \
+    --url=ssh://git@github.com/ranjith-ka/Devops \
+    --private-key-file=/Users/ranjith.a/.ssh/id_rsa
+```

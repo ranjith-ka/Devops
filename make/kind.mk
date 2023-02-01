@@ -20,3 +20,5 @@ load-image:
 delete-kind:
 	@kind delete cluster --name k8s
 	@colima stop
+
+delete-cluster: delete-kind

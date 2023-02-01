@@ -12,11 +12,13 @@ spec:
       sourceRef:
         kind: GitRepository
         name: devops
-        namespace: flux-system
+        namespace: default
   interval: 10m0s
   releaseName: canary-dev
   values:
     image:
+      repository: ranjithka/canary # {"$imagepolicy": "default:app:name"}
+      tag: 0.0.0 # {"$imagepolicy": "default:app:tag"}
       pullPolicy: Always
     ingress:
       annotations:

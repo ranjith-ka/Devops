@@ -177,3 +177,6 @@ delete-vault:
 	@kubectl delete -f minikube/vault/cr.yaml
 	@helm delete vault-operator vault-secrets-webhook  -n vault-infra
 	@kubectl delete namespace vault-infra
+
+flux:
+	@flux install --components-extra=image-reflector-controller,image-automation-controller
