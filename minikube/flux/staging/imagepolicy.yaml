@@ -36,9 +36,9 @@ spec:
     name: devops
     namespace: default
   interval: 5m
-  # update:
-  #   strategy: Setters
-    # path: ./chart/dev
+  update:
+    strategy: Setters
+    path: ./chart/dev
   git:
     checkout: # moved under `git`, loses `gitRepositoryRef`
       ref:

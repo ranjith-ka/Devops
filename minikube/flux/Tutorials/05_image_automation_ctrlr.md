@@ -57,3 +57,5 @@ $ kubectl get deploy canary-dev -o json | jq -r '.spec.template.spec.containers[
 ## Blogs to refer
 
 <https://particule.io/en/blog/flux-auto-image-update/>
+
+<https://www.youtube.com/watch?v=8pbdXAd-F44>
