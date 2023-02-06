@@ -31,28 +31,25 @@ metadata:
   name: app
   namespace: default
 spec:
-  sourceRef: # moved from `.spec.checkout`
+  sourceRef:
     kind: GitRepository
     name: devops
     namespace: default
   interval: 5m
   update:
     strategy: Setters
-    path: ./chart/dev
+    path: ./minikube/flux/staging
   git:
-    checkout: # moved under `git`, loses `gitRepositoryRef`
+    checkout:
       ref:
-        branch: main # moved into `ref` struct
-    commit: # moved under `git`
+        branch: main
+    commit:
       author:
-        name: fluxbot  # moved from `authorName`
-        email: fluxbot@example.com # moved from `authorEmail`
+        name: fluxbot
+        email: fluxbot@example.com
       messageTemplate: |
         An automated update from FluxBot
         [ci skip]        
-      signingKey:
-        secretRef:
-          name: git-secrets
-    push: # moved under `git`
+    push:
       branch: auto
 ---

@@ -51,6 +51,8 @@ flux create secret git -n default git-secrets \
     --private-key-file=/Users/ranjith.a/.ssh/id_rsa
 ```
 
+Once the secrets created make sure you use the source with right git clone options, if you use https// to clone this will not work.
+
 ```bash
 $ kubectl get deploy canary-dev -o json | jq -r '.spec.template.spec.containers[0].image'
 ```

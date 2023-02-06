@@ -8,7 +8,9 @@ spec:
   interval: 1m0s
   ref:
     branch: main
-  url: https://github.com/ranjith-ka/Devops
+  secretRef:
+    name: git-secrets
+  url: ssh://git@github.com/ranjith-ka/Devops
   ignore: |
     # exclude all
     /*
