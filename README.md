@@ -14,10 +14,16 @@ Kubernetes 1.6+
 “What's measured improves”
 ― Peter Drucker
 
+ “It's not about your resources, it's about your resourcefulness .”
+ - Tony Robbins
+
 <https://en.wikipedia.org/wiki/Peter_Drucker>
 
 Red Green Refactor
 <https://quii.gitbook.io/learn-go-with-tests/>
+
+Learn -> adapt -> document -> share
+
 
 # Docker Desktop alternate
 
