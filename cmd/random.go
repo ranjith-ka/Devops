@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -24,7 +23,7 @@ var randomCmd = &cobra.Command{
 	Use:   "random",
 	Short: "Random joke from the package Devops",
 	Long:  `Get a Random joke from the package Devops`,
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func( _ *cobra.Command, _ []string) {
 		getRandomJoke()
 	},
 }
@@ -74,7 +73,7 @@ func getJokeData(baseAPI string) []byte {
 			fmt.Println("Error here")
 		}
 	}(response.Body)
-	responseBytes, err := ioutil.ReadAll(response.Body)
+	responseBytes, err := io.ReadAll(response.Body)
 	if err != nil {
 		log.Printf("Could not read response body. %v", err)
 	}
