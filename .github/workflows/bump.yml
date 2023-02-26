@@ -1,16 +1,27 @@
+### Bump version
 name: Bump version
 on:
   push:
     branches:
       - main
-      - 'release/**'
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: '0'
+
     - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@master
+      id: tag
+      uses: anothrNick/github-tag-action@1.61.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        REPO_OWNER: anothrNick
+        WITH_V: true
+        DEFAULT_BUMP: patch
+
+    - name: Release
+      if: steps.tag.outputs.tag
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: "${{ steps.tag.outputs.tag }}"
