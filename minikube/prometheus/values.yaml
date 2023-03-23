@@ -25,10 +25,8 @@ configmapReload:
   alertmanager:
     enabled: false
 
-kubeStateMetrics:
-  enabled: false ## Kube metrics for SRE team, will work on devops topics
-
 kube-state-metrics:
+  enabled: false ## Kube metrics for SRE team, will work on devops topics
   resources:
     limits:
       cpu: 100m
@@ -37,7 +35,7 @@ kube-state-metrics:
       cpu: 10m
       memory: 32Mi
 
-nodeExporter:
+prometheus-node-exporter:
   enabled: false
   resources:
     requests:
@@ -88,7 +86,7 @@ server:
       memory: "512M"
   retention: "3d"
 
-pushgateway:
+prometheus-pushgateway:
   enabled: false
 
 # extraScrapeConfigs:
