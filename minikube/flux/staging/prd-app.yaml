@@ -18,6 +18,9 @@ spec:
         - ./minikube/dev/prd.yaml
   interval: 10m0s
   releaseName: prd-dev
+  values:
+    image:
+      tag: 0.0.6 # {"$imagepolicy": "default:app:tag"}
 
   postRenderers:
     # Instruct helm-controller to use built-in "kustomize" post renderer.
