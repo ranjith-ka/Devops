@@ -15,7 +15,7 @@ spec:
       valuesFiles:
         - ./charts/dev/values.yaml
         - ./minikube/dev/prd.yaml
-  interval: 10m0s
+  interval: 1m0s
   releaseName: prd-dev
 
   postRenderers:

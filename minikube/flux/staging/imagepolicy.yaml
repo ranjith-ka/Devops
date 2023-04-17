@@ -21,9 +21,11 @@ spec:
   imageRepositoryRef:
     name: app
     namespace: default
+  filterTags:
+    pattern: '.*-beta.*'
   policy:
     semver:
-      range: "0.0.x"
+      range: '^0.x-0'
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta1
 kind: ImageUpdateAutomation
@@ -35,7 +37,7 @@ spec:
     kind: GitRepository
     name: devops
     namespace: default
-  interval: 5m
+  interval: 1m0s
   update:
     strategy: Setters
     path: minikube/dev
@@ -53,3 +55,16 @@ spec:
     push:
       branch: auto
 ---
+### This take priority over beta, no clue why
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: app
+  namespace: default
+spec:
+  imageRepositoryRef:
+    name: app
+    namespace: default
+  policy:
+    semver:
+      range: 0.0.x
