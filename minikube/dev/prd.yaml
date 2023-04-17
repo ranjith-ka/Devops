@@ -6,7 +6,7 @@ podAnnotations:
   prometheus.io/scrape: "false"
 
 image:
-  tag: 0.0.1
+  tag: 0.0.1 # {"$imagepolicy": "default:app:tag"}
 
 ingress:
   enabled: true

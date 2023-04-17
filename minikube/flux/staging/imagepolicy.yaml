@@ -38,7 +38,7 @@ spec:
   interval: 5m
   update:
     strategy: Setters
-    path: minikube/flux/staging
+    path: minikube/dev
   git:
     checkout:
       ref:
