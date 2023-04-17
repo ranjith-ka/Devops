@@ -5,7 +5,7 @@ metadata:
   name: discord-url
   namespace: default
 stringData:
-    address: "https://discord.com/api/webhooks/1068767766733144175/NiCgkH7MiRlKAJs1f15uUyikbMCrt-3LRuKPe8yeDQcfhMr_so3Ydgzpnv8PBZ5qbvXw"  ## This is not available anymore
+    address: "https://discord.com/api/webhooks/1068899269949530243/-74HnpqOY-SjjVi408Pv53BmVDHU016x4iKB7PChP9REqF6_XifW3UJ2k04814ahh3cG"  ## This is not available anymore
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Provider
