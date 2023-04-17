@@ -17,7 +17,7 @@ spec:
   values:
     image:
       repository: docker.io/ranjithka/canary # {"$imagepolicy": "default:app:name"}
-      tag: 0.0.3 # {"$imagepolicy": "default:app:tag"}
+      tag: 0.0.1 # {"$imagepolicy": "default:app:tag"}
       pullPolicy: Always
     ingress:
       annotations:
