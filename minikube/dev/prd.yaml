@@ -1,13 +1,10 @@
 fullnameOverride: prd-dev
-
 podAnnotations:
   prometheus.io/path: "/metrics"
   prometheus.io/port: "8080"
   prometheus.io/scrape: "false"
-
 image:
-  tag: 0.0.1 # {"$imagepolicy": "default:app:tag"}
-
+  tag: 0.0.8 # {"$imagepolicy": "default:app:tag"}
 ingress:
   enabled: true
   annotations:
