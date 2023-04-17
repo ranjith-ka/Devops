@@ -1,4 +1,3 @@
----
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -20,8 +19,7 @@ spec:
   releaseName: prd-dev
   values:
     image:
-      tag: 0.0.6 # {"$imagepolicy": "default:app:tag"}
-
+      tag: 0.0.7 # {"$imagepolicy": "default:app:tag"}
   postRenderers:
     # Instruct helm-controller to use built-in "kustomize" post renderer.
     - kustomize:
