@@ -4,7 +4,7 @@ podAnnotations:
   prometheus.io/port: "8080"
   prometheus.io/scrape: "false"
 image:
-  tag: 0.0.9 # {"$imagepolicy": "default:app:tag"}
+  tag: latest # {"$imagepolicy": "default:app:tag"}
 ingress:
   enabled: true
   annotations:
