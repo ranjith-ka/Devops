@@ -7,6 +7,10 @@ metadata:
 spec:
   image: docker.io/ranjithka/canary
   interval: 1m0s
+  exclusionList:
+    - "^.*\\.sig$"
+    - "1.0.2"
+    - "1.1.1|1.0.0"
   accessFrom:
     namespaceSelectors:
       - matchLabels:
@@ -53,7 +57,7 @@ spec:
         An automated update from FluxBot
         [ci skip]        
     push:
-      branch: auto
+      branch: app-auto
 ---
 ### This take priority over beta, no clue why
 apiVersion: image.toolkit.fluxcd.io/v1beta1

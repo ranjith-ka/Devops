@@ -12,12 +12,15 @@ spec:
         kind: GitRepository
         name: devops
         namespace: default
+      valuesFiles:
+        - ./charts/dev/values.yaml
+        - ./minikube/dev/canary.yaml
   interval: 10m0s
   releaseName: canary-dev
   values:
     image:
-      repository: docker.io/ranjithka/canary # {"$imagepolicy": "default:app:name"}
-      tag: 0.0.8 # {"$imagepolicy": "default:app:tag"}
+      repository: docker.io/ranjithka/canary
+      tag: 0.0.1
       pullPolicy: Always
     ingress:
       annotations:

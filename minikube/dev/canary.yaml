@@ -1,11 +1,13 @@
+image:
+  repository: docker.io/ranjithka/canary # {"$imagepolicy": "default:app:name"}
+  tag: 0.0.1 # {"$imagepolicy": "default:app:tag"}
+  pullPolicy: Always
+
 podAnnotations:
   prometheus.io/path: "/metrics"
   prometheus.io/port: "8080"
   prometheus.io/scrape: "true"
 
-image:
-  tag: latest
-  pullPolicy: Always
 
 livenessProbe:
   enabled: true
