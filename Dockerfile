@@ -1,9 +1,11 @@
 FROM golang:1.18 as builder
 
 ARG APP
+
 WORKDIR /build
 
 COPY go.mod go.sum ./
+
 RUN go mod download
 
 # Copy the source from the current directory to the Working Directory inside the container
@@ -16,6 +18,7 @@ FROM alpine
 ENV USER=user1
 ENV UID=1001
 ENV GID=1001
+
 RUN addgroup \
     --gid "$GID" "$USER" \
     && adduser \
@@ -29,8 +32,11 @@ RUN addgroup \
     "$USER"
 
 USER user1:user1
+
 WORKDIR /app
+
 COPY --from=builder --chown=user1:user1 /build/Devops /app/
+
 EXPOSE 8080
 
-ENTRYPOINT ["./Devops serve"]
+ENTRYPOINT ["./Devops"]

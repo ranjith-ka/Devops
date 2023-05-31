@@ -1,6 +1,6 @@
 image:
   repository: docker.io/ranjithka/canary # {"$imagepolicy": "default:app:name"}
-  tag: 0.0.1 # {"$imagepolicy": "default:app:tag"}
+  tag: latest # {"$imagepolicy": "default:app:tag"}
   pullPolicy: Always
 
 podAnnotations:
