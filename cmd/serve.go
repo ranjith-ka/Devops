@@ -34,6 +34,13 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func hello2(w http.ResponseWriter, r *http.Request) {
+	_, err := fmt.Fprint(w, "Here is my second http program guys")
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+}
+
 func headers(w http.ResponseWriter, req *http.Request) {
 	for name, headers := range req.Header {
 		for _, h := range headers {
@@ -61,6 +68,7 @@ func serve() {
 	})
 	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/hello", hello)
+	http.HandleFunc("/hello2", hello2)
 	http.HandleFunc("/headers", headers)
 	http.HandleFunc("/joke", myjoke)
 	
