@@ -1,5 +1,5 @@
 image:
-  repository: docker.io/ranjithka/canary # {"$imagepolicy": "default:app:name"}
+  repository: ranjithka/canary # {"$imagepolicy": "default:app:name"}
   tag: latest # {"$imagepolicy": "default:app:tag"}
   pullPolicy: Always
 

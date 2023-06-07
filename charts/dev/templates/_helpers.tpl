@@ -41,6 +41,7 @@ helm.sh/chart: {{ include "dev.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+backstage.io/kubernetes-id: {{ include "dev.name" . }}
 {{- end }}
 
 {{/*
@@ -49,6 +50,9 @@ Selector labels
 {{- define "dev.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "dev.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- if .Values.backstage }}
+backstage.io/kubernetes-id: {{ include "dev.name" . }}
+{{- end }}
 {{- end }}
 
 {{/*

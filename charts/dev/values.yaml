@@ -97,6 +97,9 @@ readinessProbe:
   successThreshold: 1
   timeoutSeconds: 3
 
+### Selector Labels are immutuable feild, to update we need to install the service again
+backstage: false
+
 env:
   open:
 secrets:
