@@ -1,4 +1,4 @@
-FROM golang:1.18 as builder
+FROM  --platform=linux/amd64 golang:1.18 as builder
 
 ARG APP
 
@@ -11,9 +11,9 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY  . .
 
-RUN CGO_ENABLED=0 go build .
+RUN CGO_ENABLED=0 GOOS=linux go build .
 
-FROM alpine
+FROM --platform=linux/amd64 alpine
 
 ENV USER=user1
 ENV UID=1001
