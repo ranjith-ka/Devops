@@ -40,14 +40,29 @@ spec:
     airflow:
       enabled: true
       dags:
+        path: /airflow-dags/dags
         persistence:
           enabled: false
       logs:
+        path: /airflow-logs
         persistence:
           enabled: false
       airflow:
         config:
+          AIRFLOW__OPENMETADATA_AIRFLOW_APIS__DAG_GENERATED_CONFIGS: "/airflow-dags/dags"
           AIRFLOW__WEBSERVER__BASE_URL: "http://open-metadata-dag.example.com"
+        extraVolumeMounts:
+          - mountPath: /airflow-logs
+            name: efs-airflow-logs
+          - mountPath: /airflow-dags/dags
+            name: efs-airflow-dags
+        extraVolumes:
+          - name: efs-airflow-logs
+            persistentVolumeClaim:
+              claimName: nfs-pvc-logs
+          - name: efs-airflow-dags
+            persistentVolumeClaim:
+              claimName: nfs-pvc-dags
         dbMigrations:
           resources:
             requests:
