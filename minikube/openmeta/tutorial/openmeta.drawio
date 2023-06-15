@@ -1,0 +1,13 @@
+<mxfile host="65bd71144e">
+    <diagram id="fh9MkBkeEu-UzOp-0QGQ" name="Page-1">
+        <mxGraphModel dx="977" dy="634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1600" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://docs.open-metadata.org/images/v1.0.0/main-concepts/high-level-design/system-context.png;" vertex="1" parent="1">
+                    <mxGeometry x="210" y="30" width="731.03" height="530" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

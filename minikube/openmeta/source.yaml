@@ -1,0 +1,9 @@
+### Install Open metadata Source
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: open-metadata
+  namespace: default
+spec:
+  interval: 5m0s
+  url: https://helm.open-metadata.org/

@@ -180,3 +180,14 @@ delete-vault:
 
 flux:
 	@flux install --components-extra=image-reflector-controller,image-automation-controller
+
+openmeta-deps:
+	@kubectl create secret generic mysql-secrets --from-literal=openmetadata-mysql-password=openmetadata_password
+	@kubectl create secret generic airflow-secrets --from-literal=openmetadata-airflow-password=admin
+	@kubectl create secret generic airflow-mysql-secrets --from-literal=airflow-mysql-password=airflow_pass
+	@kubectl apply -f minikube/openmeta/source.yaml
+	@kubectl apply -f minikube/openmeta/deps_flux_local.yaml
+
+openmeta-cleanup:
+	@kubectl delete secrets mysql-secrets airflow-secrets airflow-mysql-secrets
+	@kubectl delete -f minikube/openmeta/deps_flux_local.yaml
