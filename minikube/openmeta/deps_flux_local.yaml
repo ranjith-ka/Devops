@@ -41,7 +41,7 @@ spec:
       enabled: true
       dags:
         persistence:
-          enabled: true
+          enabled: false
       logs:
         persistence:
           enabled: false
