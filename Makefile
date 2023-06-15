@@ -191,3 +191,7 @@ openmeta-deps:
 openmeta-cleanup:
 	@kubectl delete secrets mysql-secrets airflow-secrets airflow-mysql-secrets
 	@kubectl delete -f minikube/openmeta/deps_flux_local.yaml
+
+nfs:
+	@helm repo add nfs-ganesha-server-and-external-provisioner https://kubernetes-sigs.github.io/nfs-ganesha-server-and-external-provisioner
+	@helm install -f minikube/nfs/values.yaml nfs nfs-ganesha-server-and-external-provisioner/nfs-server-provisioner
