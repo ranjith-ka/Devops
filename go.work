@@ -1,0 +1,6 @@
+go 1.20
+
+use (
+	.
+	./Exercism/go/two-fer
+)

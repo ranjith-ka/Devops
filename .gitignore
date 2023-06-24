@@ -16,3 +16,4 @@ mongodb*
 ## Azure
 creds.json
 provider.yaml
+.exercism
