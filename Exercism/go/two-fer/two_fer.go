@@ -3,9 +3,7 @@
 
 // Package twofer should have a package comment that summarizes what it's about.
 // https://golang.org/doc/effective_go.html#commentary
-package twofer
-
-import "fmt"
+package main
 
 // ShareWith should have a comment documenting it.
 func ShareWith(name string) string {
@@ -13,11 +11,9 @@ func ShareWith(name string) string {
 	// Then remove all the stock comments.
 	// They're here to help you get started but they only clutter a finished solution.
 	// If you leave them in, reviewers may protest!
-    for i := range name {
-		if len(i) == 0 {
-			fmt.Println("One for you, one for me")
-		}
-		
-    }
 	return ""
+}
+
+func main(){
+
 }
