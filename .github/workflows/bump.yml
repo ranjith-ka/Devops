@@ -1,4 +1,5 @@
 ### Bump version
+### Docs available at https://github.com/anothrNick/github-tag-action
 name: Bump version
 on:
   push:
