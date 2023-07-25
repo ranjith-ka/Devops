@@ -1,9 +1,9 @@
 ### Bump version
 name: Bump version
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   pull_request:
     branches:
       - main
@@ -18,18 +18,17 @@ jobs:
     - name: create pre release
       if: |
         github.event_name == 'pull_request'
-      uses: anothrNick/github-tag-action@1.67.0
+      uses: anothrNick/github-tag-action@1.65.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
-        DEFAULT_BUMP: none
         PRERELEASE: true
 
     # - name: Bump version and push tag
     #   if: |
     #     github.head_ref == 'main'
     #   id: tag
-    #   uses: anothrNick/github-tag-action@1.67.0
+    #   uses: anothrNick/github-tag-action@1.65.0
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #     WITH_V: true
