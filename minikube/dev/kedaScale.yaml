@@ -1,0 +1,21 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: prometheus-scaledobject
+  namespace: deafult
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: dev
+  triggers:
+  - type: prometheus
+    metadata:
+      # Required
+      serverAddress: http://prometheus-server.default.svc.cluster.local:80
+      metricName: promhttp_metric_handler_requests_total
+      threshold: '50'
+      query: sum(promhttp_metric_handler_requests_total{code="200",app_kubernetes_io_instance="dev"})
+  idleReplicaCount: 0                       
+  minReplicaCount: 2
+  maxReplicaCount: 10
