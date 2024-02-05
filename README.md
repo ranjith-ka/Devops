@@ -179,3 +179,5 @@ sequenceDiagram
     John->>Bob: How about you?
     Bob-->>John: Jolly good!
 ```
+
+## Prompt Engineering for Generative AI
