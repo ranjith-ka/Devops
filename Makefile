@@ -158,7 +158,7 @@ clean-crossplane:
 	
 kuma:
 	@helm repo add kuma https://kumahq.github.io/charts
-	@helm install --create-namespace --namespace kuma-system kuma kuma/kuma
+	@helm install --create-namespace --namespace kuma-system kuma -f minikube/kuma/values.yaml kuma/kuma
 
 vault:
 	@helm repo add banzaicloud-stable https://kubernetes-charts.banzaicloud.com
