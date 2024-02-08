@@ -158,7 +158,7 @@ clean-crossplane:
 	
 kuma:
 	@helm repo add kuma https://kumahq.github.io/charts
-	@helm install --create-namespace --namespace kuma-system kuma kuma/kuma
+	@helm install --create-namespace --namespace kuma-system kuma -f minikube/kuma/values.yaml kuma/kuma
 
 vault:
 	@helm repo add banzaicloud-stable https://kubernetes-charts.banzaicloud.com
@@ -195,3 +195,11 @@ openmeta-cleanup:
 nfs:
 	@helm repo add nfs-ganesha-server-and-external-provisioner https://kubernetes-sigs.github.io/nfs-ganesha-server-and-external-provisioner
 	@helm install -f minikube/nfs/values.yaml nfs nfs-ganesha-server-and-external-provisioner/nfs-server-provisioner
+
+kafka:
+	@helm repo add strimzi https://strimzi.io/charts/
+	@helm install --create-namespace --namespace kafka strimzi strimzi/strimzi-kafka-operator --namespace kafka
+
+kafka-ui:
+	@helm repo add kafka-ui https://provectus.github.io/kafka-ui-charts
+	@helm install kafka-ui -f minikube/kafka/kafka-ui.yaml kafka-ui/kafka-ui
