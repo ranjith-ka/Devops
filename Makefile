@@ -65,6 +65,14 @@ install-tools: download
 
 build: generate compile
 
+install-helm:
+	@curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+install-kubectl:
+	@curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
+	@chmod +x kubectl
+	@sudo mv kubectl /usr/local/bin/
+
 generate:
 	@echo Generate code
 	@go generate ./...
@@ -120,6 +128,11 @@ ingress:
 	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 	@echo Installing Ingress Helm Chart
 	@helm install -f minikube/nginx/values.yaml nginx ingress-nginx/ingress-nginx --version 4.4.2
+
+ingress2:
+	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+	@echo Installing Ingress Helm Chart
+	@helm install -f minikube/nginx/values2.yaml nginx ingress-nginx/ingress-nginx --version 4.4.2
 
 install-canary-app:
 	@helm install -f minikube/dev/canary.yaml canary-dev charts/dev

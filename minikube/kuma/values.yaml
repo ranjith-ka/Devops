@@ -1,3 +1,6 @@
+### To enable Egress
+# egress:
+#   enabled: true
 controlPlane:
   ingress:
     enabled: true
