@@ -127,12 +127,12 @@ push:
 ingress:
 	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 	@echo Installing Ingress Helm Chart
-	@helm install -f minikube/nginx/values.yaml nginx ingress-nginx/ingress-nginx --version 4.4.2
+	@helm install -f minikube/nginx/values.yaml nginx ingress-nginx/ingress-nginx
 
 ingress2:
 	@helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 	@echo Installing Ingress Helm Chart
-	@helm install -f minikube/nginx/values2.yaml nginx ingress-nginx/ingress-nginx --version 4.4.2
+	@helm install -f minikube/nginx/values2.yaml nginx2 ingress-nginx/ingress-nginx
 
 install-canary-app:
 	@helm install -f minikube/dev/canary.yaml canary-dev charts/dev

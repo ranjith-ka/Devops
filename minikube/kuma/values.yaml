@@ -2,6 +2,7 @@
 # egress:
 #   enabled: true
 controlPlane:
+  mode: global  ## To setup control plane as global
   ingress:
     enabled: true
     ingressClassName: dev-nginx

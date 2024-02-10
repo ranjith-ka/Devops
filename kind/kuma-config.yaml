@@ -1,0 +1,17 @@
+## This version is for kind v0.19.0  // https://github.com/kubernetes-sigs/kind/releases/tag/v0.19.0
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 32080
+        hostPort: 80
+        protocol: tcp
+      - containerPort: 32443
+        hostPort: 2443
+      - containerPort: 31443
+        hostPort: 443
+      - containerPort: 31697
+        hostPort: 27017
+      - containerPort: 31699
+        hostPort: 9092

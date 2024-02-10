@@ -58,3 +58,10 @@ Welcome to my canary website!%
 $ curl -s -H "testing: never" http://awesome-http.example.com/dev
 Welcome to my prod website!%
 ```
+
+
+### Reference:
+
+Setting max open file limits on OSX
+
+<https://neo4j.com/developer/kb/setting-max-open-file-limits-on-osx>

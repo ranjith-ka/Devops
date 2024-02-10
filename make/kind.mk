@@ -13,9 +13,11 @@ kind-cluster:
 	@echo Creating Kind environment
 	@kind create cluster --config kind/config.yaml --name k8s
 
-kind-cluster2:
-	@echo Creating Kind environment
-	@kind create cluster --config kind/config2.yaml --name k8s2
+kuma-kind:
+	@kind create cluster --config kind/kuma-config.yaml --name kuma-kind
+
+kuma-kind2:
+	@kind create cluster --config kind/kuma-config2.yaml --name kuma-kind2
 
 load-image:
 	@kind load docker-image  ranjithka/canary:0.0.1  --name k8s
