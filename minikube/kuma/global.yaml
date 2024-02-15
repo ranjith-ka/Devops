@@ -20,3 +20,5 @@ controlPlane:
       nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     path: /
+  globalZoneSyncService:
+    type: ClusterIP

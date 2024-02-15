@@ -169,10 +169,6 @@ clean-crossplane:
 	@helm delete crossplane --namespace crossplane-system
 	@kubectl delete namespace crossplane-system
 	
-kuma:
-	@helm repo add kuma https://kumahq.github.io/charts
-	@helm install --create-namespace --namespace kuma-system kuma -f minikube/kuma/values.yaml kuma/kuma
-
 vault:
 	@helm repo add banzaicloud-stable https://kubernetes-charts.banzaicloud.com
 	@kubectl create namespace vault-infra && kubectl label namespace vault-infra name=vault-infra
@@ -216,3 +212,11 @@ kafka:
 kafka-ui:
 	@helm repo add kafka-ui https://provectus.github.io/kafka-ui-charts
 	@helm install kafka-ui -f minikube/kafka/kafka-ui.yaml kafka-ui/kafka-ui
+
+kuma-global:
+	@helm repo add kuma https://kumahq.github.io/charts
+	@helm install --create-namespace --namespace kuma-system kuma-global -f minikube/kuma/global.yaml kuma/kuma
+
+kuma-cp:
+	@helm repo add kuma https://kumahq.github.io/charts
+	@helm install --namespace kuma-system kuma-cp -f minikube/kuma/cp.yaml kuma/kuma
