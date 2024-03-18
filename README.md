@@ -179,3 +179,7 @@ sequenceDiagram
     John->>Bob: How about you?
     Bob-->>John: Jolly good!
 ```
+
+### Operators
+
+<https://developers.redhat.com/author/deepak-sharma>
