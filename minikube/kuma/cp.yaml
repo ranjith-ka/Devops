@@ -1,6 +1,6 @@
 ### To enable Egress
-# egress:
-#   enabled: true
+egress:
+  enabled: true
 controlPlane:
   mode: zone  ## To setup control plane as global
   zone: zone-1 ## To setup control plane as zone
