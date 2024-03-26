@@ -17,4 +17,6 @@ nodes:
         hostPort: 27017
       - containerPort: 31699
         hostPort: 9092
+      - containerPort: 30171
+        hostPort: 8080
     image: kindest/node:v1.27.1@sha256:b7d12ed662b873bd8510879c1846e87c7e676a79fefc93e17b2a52989d3ff42b
