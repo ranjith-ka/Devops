@@ -213,13 +213,19 @@ kafka-ui:
 	@helm repo add kafka-ui https://provectus.github.io/kafka-ui-charts
 	@helm install kafka-ui -f minikube/kafka/kafka-ui.yaml kafka-ui/kafka-ui
 
+kuma:
+	@kumactl install control-plane | kubectl apply -f -
+	@kubectl apply -f minikube/kuma/demo.yaml
+	@kubectl apply -f minikube/kuma/kuma-ingress.yaml
+	@helm install -f minikube/nginx/values.yaml nginx ingress-nginx/ingress-nginx
+
 kuma-global:
 	@helm repo add kuma https://kumahq.github.io/charts
 	@helm install --create-namespace --namespace kuma-system kuma-global -f minikube/kuma/global.yaml kuma/kuma
 
 kuma-cp:
 	@helm repo add kuma https://kumahq.github.io/charts
-	@helm install --namespace kuma-system kuma-cp -f minikube/kuma/cp.yaml kuma/kuma
+	@helm install  kuma-cp -f minikube/kuma/cp.yaml kuma/kuma
 
 metallb::
 	@kubectl get configmap kube-proxy -n kube-system -o yaml | sed -e "s/strictARP: false/strictARP: true/" | kubectl apply -f - -n kube-system

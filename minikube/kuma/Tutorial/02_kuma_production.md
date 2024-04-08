@@ -82,4 +82,3 @@ Kuma - being an application that wants to improve the underlying connectivity be
     5683: gRPC Intercommunication CP server used internally by Kuma to communicate between CP instances.
     5685: the Kuma Discovery Service port, leveraged in multi-zone deployments.
 
-//TODO

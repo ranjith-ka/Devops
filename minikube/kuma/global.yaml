@@ -1,12 +1,12 @@
 ### To enable Egress
-# egress:
-#   enabled: true
+egress:
+  enabled: true
 controlPlane:
-  mode: global  ## To setup control plane as global
+  mode: zone  ## To setup control plane as global replace sone with `global`
   service:
-    type: LoadBalancer
+    type: ClusterIP
   ingress:
-    enabled: false
+    enabled: true
     ingressClassName: dev-nginx
     hostname: kuma.example.com
     annotations:
@@ -23,4 +23,4 @@ controlPlane:
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     path: /
   globalZoneSyncService:
-    type: LoadBalancer
+    type: ClusterIP

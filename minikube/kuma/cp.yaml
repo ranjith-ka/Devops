@@ -3,10 +3,8 @@ egress:
   enabled: true
 controlPlane:
   mode: zone  ## To setup control plane as global
-  zone: zone-1 ## To setup control plane as zone
+  zone: myzone ## To setup control plane as zone
   kdsGlobalAddress: grpcs://kuma-global-zone-sync:5685
   tls:
     kdsZoneClient:
       skipVerify: true
-ingress:
-  enabled: true
