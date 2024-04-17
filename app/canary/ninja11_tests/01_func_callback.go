@@ -20,6 +20,16 @@ func incrementor() func() int {
 	}
 }
 
+// create function for decrement
+func decrement() func() int {
+	var y int
+	return func() int {
+		y--
+		return y
+	}
+
+}
+
 func main() {
 
 }
