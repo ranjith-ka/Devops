@@ -41,3 +41,19 @@ func Test_incrementor(t *testing.T) {
 		})
 	}
 }
+
+func Test_decrement(t *testing.T) {
+	tests := []struct {
+		name string
+		want int
+	}{
+		{"decrement", -1},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := decrement()(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("decrement = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
