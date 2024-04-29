@@ -6,7 +6,7 @@ import "fmt"
 
 func main() {
 	foo1()
-	bar2("ooi")
+	bar2("ooi", "gg")
 
 	// x1 := rapper()
 	// fmt.Println(x1)
@@ -19,15 +19,15 @@ func main() {
 
 }
 
-//foo Just a function to call
+// foo Just a function to call
 func foo1() {
 	fmt.Println("Hey this is foo")
 }
 
 // String Return
 
-func bar2(s string) {
-	fmt.Println("bar", s)
+func bar2(s, e string) {
+	fmt.Println("bar", s, e)
 }
 
 func rapper2() string {

@@ -10,7 +10,7 @@ import (
 func main() {
 
 	six()
-	seven()
+	//seven()
 }
 
 func six() {
@@ -55,6 +55,17 @@ func six() {
 			"test",
 		},
 	}
+
+	dd := map[int32]map[string]map[string]map[string]int32{
+		24: {
+			"test": {
+				"test": {
+					"test": 32,
+				},
+			},
+		},
+	}
+	fmt.Println(dd)
 	fmt.Println(z)
 
 	fmt.Println(y)
@@ -79,7 +90,7 @@ func seven() {
 			"Samsung": 2021,
 		}
 
-		// Reassign the values
+	// Reassign the values
 	Phone = m
 
 	fmt.Println(Phone)

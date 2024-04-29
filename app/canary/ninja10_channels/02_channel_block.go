@@ -15,12 +15,12 @@ func receive(c <-chan int) {
 	}
 }
 
-func gen() <-chan int { // func retun channel
+func gen() <-chan int { // func return channel
 	c := make(chan int)
 
 	go func() { // New go routine to start concurrency. Channel to sync between go routine.
 		for i := 0; i < 10; i++ {
-			c <- i // Also Blocks until recive concludes
+			c <- i // Also Blocks until receive concludes
 		}
 		close(c)
 	}()

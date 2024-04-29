@@ -3,8 +3,8 @@ package main
 import "fmt"
 
 func main() {
-	// one()
-	two()
+	one()
+	//two()
 }
 
 type Brand struct {
@@ -14,16 +14,19 @@ type Brand struct {
 // Phone to return if brand is Moto
 func (b Brand) Phone() string {
 	if b.X == "moto" {
-		return b.Y
+		return b.X
 	}
-	return b.X
+	return b.Y
 }
 
 func one() {
 
 	var v Brand // To ignore the error in vscode, but this is the defined type
 	v = Brand{"moto", "return me if moto in first field"}
+
+	s := Brand{X: "ffg", Y: "test"}
 	fmt.Println(v.Phone())
+	fmt.Println(s.Phone())
 }
 
 // https://www.youtube.com/watch?v=HDF5Ol8jto0&list=PLJ7-HiqskdZKn03J2X0y37agMrYCnhvEU&index=11

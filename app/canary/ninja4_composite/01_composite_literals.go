@@ -19,19 +19,17 @@ func main() {
 
 	fmt.Println("********one End*********")
 	two()
-	fmt.Println("********two End*********")
-	three()
-	fmt.Println("********three End*********")
-	four()
-	fmt.Println("********four End*********")
+	// fmt.Println("********two End*********")
+	// three()
+	// fmt.Println("********three End*********")
+	// four()
+	// fmt.Println("********four End*********")
 }
 
 func two() {
-	x := []int{1, 2, 3, 4, 5, 6, 7, 8, 9} // Slicing on a slice
-	fmt.Println(x)
-	fmt.Println(x[:5])
-	fmt.Println(x[5:])
-	fmt.Println(x[2:7])
+	x := []int{7, 2, 8, -9, 4, 0, 15, 22} // Slicing on a slice
+	fmt.Println(x[:len(x)/2])
+	fmt.Println(x[len(x)/2:])
 }
 
 func four() {
