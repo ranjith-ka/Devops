@@ -34,3 +34,30 @@ _ssh() {
 complete -F _ssh ssh
 complete -F _ssh ssh-copy-id
 #complete -F _ssh scp
+
+#### Kubenetes Handy commands
+
+function kube_desc_pod() {
+    if [ $# -eq 2 ]; then
+        kubectl describe po $1 -n $2
+    else
+        kubectl describe po $1
+    fi
+}
+
+function kdex-fn() {
+    if [ $# -eq 2 ]; then
+        kubectl exec -it $1 /bin/sh -n $2
+    else
+        kubectl exec -it $1 /bin/sh
+    fi
+}
+
+alias k='kubectl'
+alias k_po_all='kubectl get po --all-namespaces'
+alias k_po='kubectl get po'
+alias kpo='kubectl get po'
+alias k_svc_all='kubectl get svc --all-namespaces'
+alias k_svc='kubectl get svc'
+alias k_ds_po='kube_desc_pod'
+alias k_login="kdex-fn"
