@@ -1,4 +1,4 @@
-FROM  --platform=linux/amd64 golang:1.18 as builder
+FROM  --platform=linux/amd64 golang:1.22 as builder
 
 ARG APP
 

@@ -1,0 +1,55 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: newsecret
+type: Opaque
+data:
+  connection: RW5kcG9pbnQ9c2I6Ly9hei1zZXJ2aWNlYnVzLW5zLXd1LWdjby1kZXYtMDAxLnNlcnZpY2VidXMud2luZG93cy5uZXQvO1NoYXJlZEFjY2Vzc0tleU5hbWU9dGVzdDtTaGFyZWRBY2Nlc3NLZXk9c1dRcUNOdTh3Zy8xVU0wZmMwUmtDSUFlclFPUDQ4R1NoK0FTYkVzeExFOD07RW50aXR5UGF0aD1xdWV1ZS1idWxrLXVwbG9hZC1ib29raW5ncy1sb2NhbA==
+  ## Temp secrets for the Queue, once deleted need to create again.
+---
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: queue-bulk-upload-bookings-local-auth
+spec:
+  secretTargetRef:
+    - parameter: connection
+      name: newsecret
+      key: connection
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: example-scaledobject
+  labels:
+    app: prd-dev
+    deploymentName: prd-dev
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: prd-dev
+  idleReplicaCount: 0
+  minReplicaCount: 1
+  maxReplicaCount: 3
+  pollingInterval: 30
+  cooldownPeriod: 300
+  fallback:
+    failureThreshold: 3
+    replicas: 2
+  triggers:
+    # - metadata:
+    #     messageCount: "5"
+    #     queueName: queue-bulk-upload-bookings-local
+    #   type: azure-servicebus
+    - metadata:
+        value: "80"
+      metricType: Utilization
+      type: cpu
+    - metadata:
+        value: "80"
+      metricType: Utilization
+      type: memory
+      # authenticationRef:
+      #   name: queue-bulk-upload-bookings-local-auth
