@@ -1,0 +1,32 @@
+apiVersion: skaffold/v4beta10
+kind: Config
+metadata:
+  name: devops
+build:
+  artifacts:
+    - image: joke
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  kustomize:
+    paths:
+      - minikube/kustomize/base
+deploy:
+  helm:
+    releases:        
+      - name: dev
+        chartPath: charts/dev
+        valuesFiles:
+          - minikube/dev/canary.yaml
+        version: 1.0.2
+profiles:
+  - name: production
+    manifests:
+      kustomize:
+        paths:
+          - minikube/kustomize/production
+  - name: staging
+    manifests:
+      kustomize:
+        paths:
+          - minikube/kustomize/staging
