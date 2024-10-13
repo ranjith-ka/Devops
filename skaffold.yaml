@@ -4,9 +4,13 @@ metadata:
   name: devops
 build:
   artifacts:
-    - image: joke
+    - image: ranjithka/prd
       docker:
         dockerfile: Dockerfile
+  local:
+    push: false
+  tagPolicy:
+    gitCommit: {}
 manifests:
   kustomize:
     paths:
@@ -17,7 +21,7 @@ deploy:
       - name: dev
         chartPath: charts/dev
         valuesFiles:
-          - minikube/dev/canary.yaml
+          - minikube/dev/prd.yaml
         version: 1.0.2
 profiles:
   - name: production

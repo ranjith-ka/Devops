@@ -37,6 +37,16 @@
             "args": [
                 "random"
             ]
+        },
+        {
+            "name": "Skaffold Debug",
+            "type": "go",
+            "request": "attach",
+            "mode": "remote",
+            "host": "localhost",
+            "port": 56268,
+            "cwd": "${workspaceFolder}",
+            "remotePath": "/go"
         }
     ]
 }
