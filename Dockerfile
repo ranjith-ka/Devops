@@ -1,4 +1,4 @@
-FROM golang:1.23 as builder
+FROM golang:1.23-alpine AS builder
 
 ARG APP
 
@@ -11,7 +11,7 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY  . .
 
-RUN go build .
+RUN go build -o Devops main.go
 
 FROM alpine:3.14
 
@@ -39,4 +39,4 @@ COPY --from=builder --chown=user1:user1 /build/Devops /app/
 
 EXPOSE 8080
 
-ENTRYPOINT ["./Devops"]
+ENTRYPOINT ["./Devops", "serve"]
