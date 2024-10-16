@@ -5,12 +5,12 @@ metadata:
 build:
   artifacts:
     - image: ranjithka/prd
-      docker:
-        dockerfile: Dockerfile
-  local:
-    push: false
+      kaniko: {}
+  cluster:
+    dockerConfig:
+      secretName: kaniko-secret
   tagPolicy:
-    gitCommit: {}
+    gitCommit: {} # Use the git commit sha as the tag
 manifests:
   kustomize:
     paths:
@@ -23,14 +23,14 @@ deploy:
         valuesFiles:
           - minikube/dev/prd.yaml
         version: 1.0.2
-profiles:
-  - name: production
-    manifests:
-      kustomize:
-        paths:
-          - minikube/kustomize/production
-  - name: staging
-    manifests:
-      kustomize:
-        paths:
-          - minikube/kustomize/staging
+# profiles:
+#   - name: production  
+#     manifests:
+#       kustomize:
+#         paths:
+#           - minikube/kustomize/production
+#   - name: staging
+#     manifests:
+#       kustomize:
+#         paths:
+#           - minikube/kustomize/staging
