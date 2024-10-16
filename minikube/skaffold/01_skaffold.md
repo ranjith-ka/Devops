@@ -34,3 +34,16 @@ Skaffold also supports a polling mode where the filesystem is checked for change
 
 - [ ] Add debugging with Skaffold
 - [ ] Steps for Golang and .NET Core
+
+## Continuous Delivery
+
+Skaffold can be used to automate the deployment of applications to Kubernetes. Skaffold can be used to deploy applications to a Kubernetes cluster, and can also be used to deploy applications to a local Kubernetes cluster, such as Minikube.
+
+### Deploying to a Kubernetes Cluster
+
+To deploy an application to a Kubernetes cluster, you can use the skaffold deploy command. This command will build the application, push the image to a registry, and deploy the application to the Kubernetes cluster.
+
+```bash
+skaffold deploy
+```
+
