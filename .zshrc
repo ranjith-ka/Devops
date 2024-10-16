@@ -56,3 +56,45 @@ alias k_svc='kubectl get svc'
 alias k_ds_po='kube_desc_pod'
 alias k_login="kdex-fn"
 alias k_busybox='kubectl run -i --tty busybox --image=busybox --restart=Never -- /bin/sh; kubectl delete pod busybox'
+
+dive_image() {
+  local IMAGE_NAME="${1}"
+  local TMP_FILE=/tmp/dive-tmp-image.tar
+  docker save "$IMAGE_NAME" > $TMP_FILE && dive $TMP_FILE --source=docker-archive && rm $TMP_FILE
+}
+
+# Function to remove all "exited" containers
+remove_exited_containers() {
+  local exited_containers=$(docker ps -a -f status=exited -q)
+  if [ -n "$exited_containers" ]; then
+    docker rm $exited_containers
+  fi
+}
+
+# Function to remove all "created" containers
+remove_created_containers() {
+  local created_containers=$(docker ps -a -f status=created -q)
+  if [ -n "$created_containers" ]; then
+    docker rm $created_containers
+  fi
+}
+
+# Function to remove all stopped containers (both "exited" and "created")
+remove_stopped_containers() {
+  docker container prune -f
+}
+
+# Function to remove all untagged images
+remove_untagged_images() {
+  local untagged_images=$(docker images -f "dangling=true" -q)
+  if [ -n "$untagged_images" ]; then
+    docker rmi $untagged_images
+  fi
+}
+
+cleanup_docker() {
+  remove_exited_containers
+  remove_created_containers
+  remove_stopped_containers
+  remove_untagged_images
+}

@@ -1,0 +1,36 @@
+apiVersion: skaffold/v4beta10
+kind: Config
+metadata:
+  name: devops
+build:
+  artifacts:
+    - image: ranjithka/prd
+      kaniko: {}
+  cluster:
+    dockerConfig:
+      secretName: kaniko-secret
+  tagPolicy:
+    gitCommit: {} # Use the git commit sha as the tag
+manifests:
+  kustomize:
+    paths:
+      - minikube/kustomize/base
+deploy:
+  helm:
+    releases:        
+      - name: dev
+        chartPath: charts/dev
+        valuesFiles:
+          - minikube/dev/prd.yaml
+        version: 1.0.2
+# profiles:
+#   - name: production  
+#     manifests:
+#       kustomize:
+#         paths:
+#           - minikube/kustomize/production
+#   - name: staging
+#     manifests:
+#       kustomize:
+#         paths:
+#           - minikube/kustomize/staging

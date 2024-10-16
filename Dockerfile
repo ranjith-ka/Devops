@@ -1,4 +1,4 @@
-FROM  --platform=linux/amd64 golang:1.22 as builder
+FROM golang:1.23-alpine AS builder
 
 ARG APP
 
@@ -11,9 +11,9 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY  . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build .
+RUN go build -o Devops main.go
 
-FROM --platform=linux/amd64 alpine
+FROM alpine:3.14
 
 ENV USER=user1
 ENV UID=1001
@@ -39,4 +39,4 @@ COPY --from=builder --chown=user1:user1 /build/Devops /app/
 
 EXPOSE 8080
 
-ENTRYPOINT ["./Devops"]
+ENTRYPOINT ["./Devops", "serve"]
