@@ -9,7 +9,7 @@ image:
 ingress:
   enabled: true
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
     nginx.ingress.kubernetes.io/http2-push-preload: "true"
@@ -23,5 +23,5 @@ ingress:
   hosts:
     - host: awesome-http.example.com
       paths:
-        - path: /dev(/|$)(.*)
+        - path: /dev
           pathType: Prefix
