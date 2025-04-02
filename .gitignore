@@ -7,7 +7,6 @@
 *.lock
 *_tmp
 Docker
-.vscode/*
 vendor/
 Devops
 Devops.exe
