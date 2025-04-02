@@ -183,3 +183,45 @@ sequenceDiagram
 ### Operators
 
 <https://developers.redhat.com/author/deepak-sharma>
+
+
+## Application Usage Guide
+
+This document provides instructions on how to use the application.
+
+## Prerequisites
+
+1. Ensure you have Visual Studio Code installed.
+2. Install the Copilot Chat extension from the VS Code marketplace.
+3. Set up your development environment as per the project requirements.
+
+## Steps to Use the Application
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd <repository-folder>
+   ```
+
+2. Start the application:
+   ```bash
+   go run main.go serve
+   ```
+
+3. Open your browser and navigate to `http://localhost:8080` to access the application.
+
+4. Available endpoints:
+   - `/`: Welcome message.
+   - `/hello`: Displays the first HTTP program message.
+   - `/hello2`: Displays the second HTTP program message.
+   - `/headers`: Displays the request headers.
+   - `/joke`: Fetches a random joke.
+
+5. Open Visual Studio Code and navigate to the Copilot Chat panel.
+
+6. Follow the instructions in the [Readme](../Readme.md) to configure custom instructions.
+
+## Troubleshooting
+
+- If you encounter issues, check the logs or refer to the FAQ section in this document.
+- For further assistance, contact the support team.

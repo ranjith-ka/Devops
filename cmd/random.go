@@ -26,7 +26,7 @@ var randomCmd = &cobra.Command{
     Long:  `Get a Random joke from the package Devops`,
     Run: func(cmd *cobra.Command, args []string) {
         getRandomJoke()
-        getRandomJokeWithCopilot()
+        // getRandomJokeWithCopilot()
     },
 }
 
