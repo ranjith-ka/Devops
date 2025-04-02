@@ -59,6 +59,13 @@ func myjoke(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+func myjoke2(w http.ResponseWriter, req *http.Request) {
+	_, err := fmt.Fprint(w, getRandomJokeWithLLMStudio())
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+}
+
 func serve() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		_, err := fmt.Fprintf(w, "Welcome to my website!")
@@ -71,7 +78,8 @@ func serve() {
 	http.HandleFunc("/hello2", hello2)
 	http.HandleFunc("/headers", headers)
 	http.HandleFunc("/joke", myjoke)
-	
+	http.HandleFunc("/joke2", myjoke2)
+
 	fmt.Println("Server up and running....")
 	log.Print(http.ListenAndServe(":8080", nil))
 }
