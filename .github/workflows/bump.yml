@@ -2,24 +2,22 @@
 ### Docs available at https://github.com/anothrNick/github-tag-action
 name: Bump version
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
+    types:
+      - closed
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: '0'
 
     - name: create pre release
       if: |
         github.event_name == 'pull_request'
-      uses: anothrNick/github-tag-action@1.67.0
+      uses: anothrNick/github-tag-action@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
@@ -30,7 +28,7 @@ jobs:
       if: |
         github.ref == 'refs/heads/main'
       id: tag
-      uses: anothrNick/github-tag-action@1.67.0
+      uses: anothrNick/github-tag-action@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
@@ -39,6 +37,7 @@ jobs:
 
     - name: Release
       if: steps.tag.outputs.tag
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         tag_name: "${{ steps.tag.outputs.tag }}"
+        generate_release_notes: true
