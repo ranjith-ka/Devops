@@ -177,7 +177,7 @@ func parseLocalServerResponse(responseBytes []byte) string {
 // Example usage of the Copilot agent
 func getRandomJokeWithLLMStudio() string {
 	fmt.Println("Fetching a joke using LLM Studio...")
-	prompt := "Tell me a funny programming joke."
+	prompt := "Tell me a funny astronaut joke."
 	copilotResponse := getLocalServerResponse(prompt)
 
 	if copilotResponse == "" {
