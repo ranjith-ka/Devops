@@ -1,9 +1,9 @@
-## This version is for kind v0.19.0  // https://github.com/kubernetes-sigs/kind/releases/tag/v0.19.0
+## This version is for kind v0.x.x  // https://github.com/kubernetes-sigs/kind/releases
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
   - role: control-plane
-    image: kindest/node:v1.27.1@sha256:b7d12ed662b873bd8510879c1846e87c7e676a79fefc93e17b2a52989d3ff42b
+    image: kindest/node:v1.31.6@sha256:28b7cbb993dfe093c76641a0c95807637213c9109b761f1d422c2400e22b8e87
   - role: worker
     extraPortMappings:
       - containerPort: 32080
@@ -19,4 +19,4 @@ nodes:
         hostPort: 9092
       - containerPort: 30171
         hostPort: 8080
-    image: kindest/node:v1.27.1@sha256:b7d12ed662b873bd8510879c1846e87c7e676a79fefc93e17b2a52989d3ff42b
+    image: kindest/node:v1.31.6@sha256:28b7cbb993dfe093c76641a0c95807637213c9109b761f1d422c2400e22b8e87
