@@ -225,3 +225,12 @@ This document provides instructions on how to use the application.
 
 - If you encounter issues, check the logs or refer to the FAQ section in this document.
 - For further assistance, contact the support team.
+
+
+### Skaffold
+
+```bash
+   kubectl create secret generic kaniko-secret \
+   --from-file=.dockerconfigjson=$HOME/.docker/config.json \
+   --type=kubernetes.io/dockerconfigjson
+```
