@@ -5,10 +5,14 @@ metadata:
 build:
   artifacts:
     - image: ranjithka/prd
-      kaniko: {}
+      kaniko:
+        cache: {} # Enable Kaniko cache
+        # Optionally specify a remote cache repo:
+        # cache:
+        #   repo: gcr.io/<your-project>/kaniko-cache
   cluster:
     dockerConfig:
-      secretName: kaniko-secret
+      path: ~/.docker/config.json
   tagPolicy:
     gitCommit: {} # Use the git commit sha as the tag
 manifests:
