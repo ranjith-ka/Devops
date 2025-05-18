@@ -8,6 +8,10 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
+RUN echo "Building the application..."
+
+RUN sleep 5
+
 # Copy the source from the current directory to the Working Directory inside the container
 COPY  . .
 
