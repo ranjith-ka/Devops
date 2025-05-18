@@ -13,7 +13,7 @@ COPY  . .
 
 RUN go build -o Devops main.go
 
-FROM alpine:3.14
+FROM alpine:latest
 
 ENV USER=user2
 ENV UID=1002

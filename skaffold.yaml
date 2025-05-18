@@ -8,7 +8,7 @@ build:
       docker:
         dockerfile: Dockerfile.Prd
   local:
-    push: true 
+    push: false
     tryImportMissing: true
     useBuildkit: true
     concurrency: 0
@@ -37,7 +37,7 @@ build:
       docker:
         dockerfile: Dockerfile.Canary
   local:
-    push: true
+    push: false
     tryImportMissing: true
     useBuildkit: true
     concurrency: 0
