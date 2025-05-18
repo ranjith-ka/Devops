@@ -1,40 +1,55 @@
 apiVersion: skaffold/v4beta10
 kind: Config
 metadata:
-  name: devops
+  name: prd
 build:
   artifacts:
     - image: ranjithka/prd
-      kaniko:
-        cache: {} # Enable Kaniko cache
-        # Optionally specify a remote cache repo:
-        # cache:
-        #   repo: gcr.io/<your-project>/kaniko-cache
-  cluster:
-    dockerConfig:
-      path: ~/.docker/config.json
+      docker:
+        dockerfile: Dockerfile.Prd
+  local:
+    push: true 
+    tryImportMissing: true
+    useBuildkit: true
+    concurrency: 0
+    useDockerCLI: true
   tagPolicy:
-    gitCommit: {} # Use the git commit sha as the tag
-manifests:
-  kustomize:
-    paths:
-      - minikube/kustomize/base
+    gitCommit: {}
 deploy:
+  kubeContext: kind-k8s
   helm:
     releases:        
-      - name: dev
+      - name: prd-dev
         chartPath: charts/dev
         valuesFiles:
           - minikube/dev/prd.yaml
-        version: 1.0.2
-# profiles:
-#   - name: production  
-#     manifests:
-#       kustomize:
-#         paths:
-#           - minikube/kustomize/production
-#   - name: staging
-#     manifests:
-#       kustomize:
-#         paths:
-#           - minikube/kustomize/staging
+        version: 1.0.3
+---
+apiVersion: skaffold/v4beta10
+kind: Config
+requires:
+  - configs: ["prd"]
+metadata:
+  name: canary      
+build:
+  artifacts:
+    - image: ranjithka/canary
+      docker:
+        dockerfile: Dockerfile.Canary
+  local:
+    push: true
+    tryImportMissing: true
+    useBuildkit: true
+    concurrency: 0
+    useDockerCLI: true
+  tagPolicy:
+    gitCommit: {}
+deploy:
+  kubeContext: kind-k8s
+  helm:
+    releases:
+      - name: canary-dev
+        chartPath: charts/dev
+        valuesFiles:
+          - minikube/dev/canary.yaml
+        version: 1.0.3

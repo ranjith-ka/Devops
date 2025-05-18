@@ -1,0 +1,29 @@
+apiVersion: skaffold/v4beta10
+kind: Config
+metadata:
+  name: devops
+build:
+  artifacts:
+    - image: ranjithka/prd
+      kaniko:
+        cache: {}
+        dockerfile: Dockerfile.Prd
+    - image: ranjithka/canary
+      kaniko:
+        cache: {}
+        dockerfile: Dockerfile.Canary
+  cluster:
+    dockerConfig:
+      path: ~/.docker/config.json
+      secretName: kaniko-docker-cfg # Use a unique secret name
+    namespace: default
+  tagPolicy:
+    sha256: {}
+deploy:
+  helm:
+    releases:        
+      - name: dev
+        chartPath: charts/dev
+        valuesFiles:
+          - minikube/dev/prd.yaml
+        version: 1.0.2
