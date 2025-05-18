@@ -2,7 +2,18 @@ apiVersion: skaffold/v4beta10
 kind: Config
 metadata:
   name: prd
+portForward:
+  - resourceType: service
+    resourceName: prd-dev
+    port: 8080
+    localPort: 8080
+    namespace: default
 build:
+  tagPolicy:
+    gitCommit: {}
+  # tagPolicy:
+  #   envTemplate:
+  #     template: "{{.IMAGE_NAME}}:{{.IMAGE_TAG}}"
   artifacts:
     - image: ranjithka/prd
       docker:
@@ -13,8 +24,6 @@ build:
     useBuildkit: true
     concurrency: 0
     useDockerCLI: true
-  tagPolicy:
-    gitCommit: {}
 deploy:
   kubeContext: kind-k8s
   helm:
@@ -24,13 +33,28 @@ deploy:
         valuesFiles:
           - minikube/dev/prd.yaml
         version: 1.0.3
+profiles:
+  - name: prd
+    activation:
+      - env: APP=Production
+    build:
+      artifacts:
+        - image: ranjithka/prd
+          docker:
+            dockerfile: Dockerfile.Prd
 ---
 apiVersion: skaffold/v4beta10
 kind: Config
 requires:
   - configs: ["prd"]
 metadata:
-  name: canary      
+  name: canary
+portForward:
+  - resourceType: service
+    resourceName: canary-dev
+    port: 8080
+    localPort: 8081
+    namespace: default
 build:
   artifacts:
     - image: ranjithka/canary

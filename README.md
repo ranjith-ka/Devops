@@ -228,7 +228,6 @@ This document provides instructions on how to use the application.
 - If you encounter issues, check the logs or refer to the FAQ section in this document.
 - For further assistance, contact the support team.
 
-
 ### Skaffold
 
 ```bash
@@ -236,3 +235,12 @@ This document provides instructions on how to use the application.
    --from-file=.dockerconfigjson=$HOME/.docker/config.json \
    --type=kubernetes.io/dockerconfigjson
 ```
+
+```bash
+## To cativate the Profile with configs
+skaffold dev -p prd
+
+## Activate with module 
+skaffold dev --module canary
+```
+
