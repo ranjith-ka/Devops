@@ -1,0 +1,42 @@
+FROM golang:1.23-alpine AS builder
+
+ARG APP
+
+WORKDIR /build
+
+COPY go.mod go.sum ./
+
+RUN go mod download
+
+# Copy the source from the current directory to the Working Directory inside the container
+COPY  . .
+
+RUN go build -o Devops main.go
+
+FROM alpine:3.14
+
+ENV USER=user2
+ENV UID=1002
+ENV GID=1002
+
+RUN addgroup \
+    --gid "$GID" "$USER" \
+    && adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "$(pwd)" \
+    --ingroup "$USER" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "$UID" \
+    "$USER"
+
+USER user2:user2
+
+WORKDIR /app
+
+COPY --from=builder --chown=user2:user2 /build/Devops /app/
+
+EXPOSE 8080
+
+ENTRYPOINT ["./Devops", "serve"]

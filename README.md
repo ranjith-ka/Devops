@@ -30,6 +30,8 @@ Learn -> adapt -> document -> share
 <https://github.com/abiosoft/colima>
 
 ```bash
+## colima start --arch x86_64 --vm-type=qemu --cpu 8 --memory 16 --disk 100 --kubernetes
+# To start colima with Kubernetes with x86_64 architecture
 colima start
 docker build . && docker ps -a 
 colima stop
