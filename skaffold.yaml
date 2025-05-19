@@ -37,16 +37,20 @@ profiles:
   - name: prd
     activation:
       - env: APP=Production
-    build:
-      artifacts:
-        - image: ranjithka/prd
-          docker:
-            dockerfile: Dockerfile.Prd
+      - kubeContext: kind-k8s
+        command: build
+    patches:
+      - op: replace
+        path: /build/artifacts/0/docker/dockerfile
+        value: Dockerfile.Prd 
 ---
 apiVersion: skaffold/v4beta10
 kind: Config
 requires:
   - configs: ["prd"]
+    activeProfiles:
+      - name: profile1
+        activatedBy: [profile2]
 metadata:
   name: canary
 portForward:
@@ -77,3 +81,5 @@ deploy:
         valuesFiles:
           - minikube/dev/canary.yaml
         version: 1.0.3
+profiles:
+  - name: canary

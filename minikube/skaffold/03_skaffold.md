@@ -40,12 +40,8 @@ profiles:
   - name: dev
     activation:
       - env: DEV
-    build:
-      artifacts:
-        - image: my-image
-          context: .
-          docker:
-            dockerfile: Dockerfile
+      - kubectl: minikube
+        command: dev
     deploy:
       kubectl:
         manifests:
