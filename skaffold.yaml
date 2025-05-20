@@ -18,6 +18,9 @@ build:
     - image: ranjithka/prd
       docker:
         dockerfile: Dockerfile.Prd
+        secrets:
+          - id: mysecret
+            env: USER
   local:
     push: false
     tryImportMissing: true
