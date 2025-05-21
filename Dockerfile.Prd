@@ -13,7 +13,7 @@ RUN go build -o Devops main.go
 FROM alpine:3.14
 
 RUN printenv
-# ENV USER=user1
+# ENV USER=user1 # Skaffold variable via DockerBuildKIT
 ENV UID=1001
 ENV GID=1001
 
@@ -28,7 +28,7 @@ RUN --mount=type=secret,id=mysecret,env=USER \
     --shell "/sbin/nologin" \
     --no-create-home \
     --uid "$UID" \
-    "$USER"
+    "$USER" && echo "User created: $USER"
 
 USER user1:user1
 

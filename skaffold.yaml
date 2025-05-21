@@ -66,7 +66,7 @@ build:
   artifacts:
     - image: ranjithka/canary
       docker:
-        dockerfile: Dockerfile.Canary
+        dockerfile: Dockerfile.Canary # just for reference, replcae with profile patches
   local:
     push: false
     tryImportMissing: true
@@ -75,6 +75,7 @@ build:
     useDockerCLI: true
   tagPolicy:
     gitCommit: {}
+
 deploy:
   kubeContext: kind-k8s
   helm:
@@ -86,3 +87,11 @@ deploy:
         version: 1.0.3
 profiles:
   - name: canary
+    activation:
+      - env: APP=Canary
+      - kubeContext: kind-k8s
+        command: build
+    patches:
+      - op: replace
+        path: /build/artifacts/0/docker/dockerfile
+        value: Dockerfile.Prd
