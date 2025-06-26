@@ -17,3 +17,15 @@ creds.json
 provider.yaml
 .exercism
 npmcache
+bin/
+share/
+obj/
+bin/
+lib/
+lib64/
+libexec/
+local/
+sbin/
+src/
+var/
+vbin/
