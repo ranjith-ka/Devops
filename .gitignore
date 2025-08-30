@@ -11,7 +11,9 @@ vendor/
 Devops
 Devops.exe
 mongodb*
-
+bin/
+lib/
+share/
 ## Azure
 creds.json
 provider.yaml

@@ -10,7 +10,8 @@ Tutorial docs from python:
 
 https://docs.python.org/3.13/tutorial/index.html
 
-https://app.codesignal.com/login
+https://app.codesignal.com/
+
 Day1:
 
 https://www.youtube.com/watch?v=BiDOehqG68g

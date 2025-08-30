@@ -71,24 +71,3 @@ blue = color & 0xFF
 
 print(f"Red: {red}, Green: {green}, Blue: {blue}")
 # This will print the amount of red, green, and blue in the color.
-
-### Slice Strings
-
-# %%
-print("Hello")
-
-# %% [markdown]
-# # Lets Try this
-
-# %%
-print("Hello, JupyterLab!")
-
-
-# %%
-name = "Python"
-print(name[::-1])
-print(name[2:-2])
-# %%
-
-
-## Lists
