@@ -17,6 +17,13 @@ Kubernetes 1.6+
  “It's not about your resources, it's about your resourcefulness .”
  - Tony Robbins
 
+"Upon a falling card, birds soar high;
+Even paper learns to fly.
+But when the card rests on the ground,
+Only truth remains around."
+
+- kalaignar
+  
 <https://en.wikipedia.org/wiki/Peter_Drucker>
 
 Red Green Refactor
