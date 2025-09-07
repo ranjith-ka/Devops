@@ -86,8 +86,9 @@ print("Hello, JupyterLab!")
 
 # %%
 name = "Python"
-print(name[::-1])
-print(name[2:-2])
+## Slice syntax is string[start:stop:step]
+# print(name[::-1])
+print(name[3:1:-2])
 # %%
 
 
