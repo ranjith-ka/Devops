@@ -1,6 +1,9 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -48,6 +51,15 @@ func main() {
 	api.POST("/hs_suggest", hsSuggest)
 	api.POST("/bulk_update", bulkUpdate)
 	api.POST("/assign", assignCase)
+	
+	// Advanced ML Integration Endpoints
+	api.POST("/ml/classify", mlClassifyCase)
+	api.POST("/ml/extract_metadata", mlExtractMetadata)
+	api.POST("/ml/analyze_document", mlAnalyzeDocument)
+	api.POST("/ml/forecast_demand", mlForecastDemand)
+	api.POST("/ml/optimize_route", mlOptimizeRoute)
+	api.POST("/ml/capacity_planning", mlCapacityPlanning)
+	api.POST("/ml/similarity_check", mlSimilarityCheck)
 
 	port := "5000"
 	r.Run(":" + port)
@@ -260,4 +272,252 @@ func tokenOverlapScore(a, b []string) int {
 		}
 	}
 	return score
+}
+
+// ML Integration Handler Functions
+
+func mlClassifyCase(c *gin.Context) {
+	var input struct {
+		Text string `json:"text"`
+	}
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Call NLP service
+	payload := map[string]interface{}{
+		"text": input.Text,
+	}
+	result, err := callMLService("http://nlp:8000/classify", payload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func mlExtractMetadata(c *gin.Context) {
+	var input struct {
+		Text string `json:"text"`
+	}
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Call NLP service for metadata extraction
+	payload := map[string]interface{}{
+		"text": input.Text,
+	}
+	result, err := callMLService("http://nlp:8000/extract_metadata", payload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func mlAnalyzeDocument(c *gin.Context) {
+	var input struct {
+		Image string `json:"image"`
+		Type  string `json:"type"`
+	}
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Call CV service for document analysis
+	payload := map[string]interface{}{
+		"image": input.Image,
+		"type":  input.Type,
+	}
+	
+	// First extract text
+	textResult, err := callMLService("http://cv:8001/extract_text", payload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Then quality check
+	qualityResult, err := callMLService("http://cv:8001/quality_check", payload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Combine results
+	result := map[string]interface{}{
+		"text_extraction": textResult,
+		"quality_check":   qualityResult,
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func mlForecastDemand(c *gin.Context) {
+	var input struct {
+		Data            []map[string]interface{} `json:"data"`
+		Days            int                      `json:"days"`
+		Model           string                   `json:"model"`
+		ConfidenceLevel float64                  `json:"confidence_level"`
+	}
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Set defaults
+	if input.Days == 0 {
+		input.Days = 30
+	}
+	if input.Model == "" {
+		input.Model = "random_forest"
+	}
+	if input.ConfidenceLevel == 0 {
+		input.ConfidenceLevel = 0.95
+	}
+
+	// Call time series service
+	payload := map[string]interface{}{
+		"data":             input.Data,
+		"days":             input.Days,
+		"model":            input.Model,
+		"confidence_level": input.ConfidenceLevel,
+	}
+	result, err := callMLService("http://ts:8002/forecast", payload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func mlOptimizeRoute(c *gin.Context) {
+	var input struct {
+		Locations       []map[string]interface{} `json:"locations"`
+		StartLocation   map[string]interface{}   `json:"start_location"`
+		VehicleCapacity int                      `json:"vehicle_capacity"`
+		Algorithm       string                   `json:"algorithm"`
+	}
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Set defaults
+	if input.VehicleCapacity == 0 {
+		input.VehicleCapacity = 1000
+	}
+	if input.Algorithm == "" {
+		input.Algorithm = "nearest_neighbor"
+	}
+
+	// Call optimization service
+	payload := map[string]interface{}{
+		"locations":        input.Locations,
+		"start_location":   input.StartLocation,
+		"vehicle_capacity": input.VehicleCapacity,
+		"algorithm":        input.Algorithm,
+	}
+	result, err := callMLService("http://opt:8003/optimize_route", payload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func mlCapacityPlanning(c *gin.Context) {
+	var input struct {
+		CurrentCapacity       int                      `json:"current_capacity"`
+		DemandData           []map[string]interface{} `json:"demand_data"`
+		ExpectedGrowthRate   float64                  `json:"expected_growth_rate"`
+		PlanningHorizonMonths int                     `json:"planning_horizon_months"`
+	}
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Set defaults
+	if input.CurrentCapacity == 0 {
+		input.CurrentCapacity = 100
+	}
+	if input.ExpectedGrowthRate == 0 {
+		input.ExpectedGrowthRate = 0.1
+	}
+	if input.PlanningHorizonMonths == 0 {
+		input.PlanningHorizonMonths = 12
+	}
+
+	// Call time series service
+	payload := map[string]interface{}{
+		"current_capacity":         input.CurrentCapacity,
+		"demand_data":             input.DemandData,
+		"expected_growth_rate":    input.ExpectedGrowthRate,
+		"planning_horizon_months": input.PlanningHorizonMonths,
+	}
+	result, err := callMLService("http://ts:8002/capacity_planning", payload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func mlSimilarityCheck(c *gin.Context) {
+	var input struct {
+		Text1 string `json:"text1"`
+		Text2 string `json:"text2"`
+	}
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Call NLP service for similarity
+	payload := map[string]interface{}{
+		"text1": input.Text1,
+		"text2": input.Text2,
+	}
+	result, err := callMLService("http://nlp:8000/similarity", payload)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+// Helper function to call ML services
+func callMLService(url string, payload map[string]interface{}) (map[string]interface{}, error) {
+	jsonData, err := json.Marshal(payload)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var result map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("ML service error: %v", result)
+	}
+
+	return result, nil
 }
