@@ -1,0 +1,2 @@
+This demo uses stubbed ML services. If you replace stubs with real models:
+- Check model licenses (YOLOv5 is AGPL; consider YOLOX / OpenMMLab for Apache-2.0)

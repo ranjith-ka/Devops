@@ -1,0 +1,53 @@
+version: "3.8"
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+  api:
+    build: ./api
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/logistics?sslmode=disable
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: logistics
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./deploy/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+
+  nlp:
+    build: ./services/nlp
+    ports:
+      - "8000:8000"
+
+  cv:
+    build: ./services/cv
+    ports:
+      - "8001:8001"
+
+  ts:
+    build: ./services/ts
+    ports:
+      - "8002:8002"
+
+  opt:
+    build: ./services/opt
+    ports:
+      - "8003:8003"
+
+volumes:
+  pgdata:

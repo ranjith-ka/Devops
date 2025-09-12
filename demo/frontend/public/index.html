@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>emapy - Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    input, textarea { width: 100%; padding: 6px; margin: 4px 0; }
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+    pre { background:#f4f4f4; padding:8px; }
+  </style>
+</head>
+<body>
+  <h1>emapy — Demo</h1>
+  <div class="grid">
+    <div>
+      <h3>Create Case</h3>
+      <input id="title" placeholder="Title"/>
+      <input id="sender" placeholder="Sender (email)"/>
+      <input id="eta" placeholder="ETA (RFC3339) - optional"/>
+      <input id="sla" placeholder="SLA days (int)"/>
+      <label><input type="checkbox" id="hypercare"/> Hypercare</label>
+      <textarea id="details" placeholder="Details"></textarea>
+      <button onclick="createCase()">Create</button>
+      <h3>Bulk Update</h3>
+      <input id="bulk_ids" placeholder="IDs comma separated (e.g. 1,2,3)"/>
+      <input id="bulk_hs" placeholder="HS Code"/>
+      <input id="bulk_pref" placeholder="Preference"/>
+      <input id="bulk_supp" placeholder="Supp Units"/>
+      <button onclick="bulkUpdate()">Apply Bulk Update</button>
+    </div>
+    <div>
+      <h3>Actions</h3>
+      <button onclick="loadCases()">Refresh Cases</button>
+      <h4>Duplicate Check</h4>
+      <input id="dup_title" placeholder="Title to check"/>
+      <input id="dup_sender" placeholder="Sender"/>
+      <button onclick="dupCheck()">Check Duplicates</button>
+      <h4>HS Suggest</h4>
+      <input id="hs_title" placeholder="Title for HS"/>
+      <textarea id="hs_details" placeholder="Details"></textarea>
+      <button onclick="hsSuggest()">Suggest HS</button>
+      <h4>Assign Case</h4>
+      <input id="assign_id" placeholder="Case ID"/>
+      <input id="assign_to" placeholder="Assignee"/>
+      <button onclick="assignCase()">Assign</button>
+    </div>
+  </div>
+
+  <h3>Cases</h3>
+  <div id="cases"></div>
+
+  <script>
+    async function createCase(){
+      const payload = {
+        title: document.getElementById('title').value,
+        details: document.getElementById('details').value,
+        sender: document.getElementById('sender').value,
+        eta: document.getElementById('eta').value,
+        sla_days: parseInt(document.getElementById('sla').value||'0'),
+        hypercare: document.getElementById('hypercare').checked
+      };
+      const r = await fetch('/api/cases',{method:'POST',headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+      const j = await r.json();
+      alert('Created: ' + JSON.stringify(j));
+      loadCases();
+    }
+    async function loadCases(){
+      const r = await fetch('/api/cases');
+      const j = await r.json();
+      const el = document.getElementById('cases');
+      el.innerHTML = '<pre>'+JSON.stringify(j,null,2)+'</pre>';
+    }
+    async function dupCheck(){
+      const payload = { title: document.getElementById('dup_title').value, sender: document.getElementById('dup_sender').value};
+      const r = await fetch('/api/duplicate_check',{method:'POST',headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+      const j = await r.json();
+      alert('Candidates: '+ j.candidates.length);
+      console.log(j);
+    }
+    async function hsSuggest(){
+      const payload = { title: document.getElementById('hs_title').value, details: document.getElementById('hs_details').value};
+      const r = await fetch('/api/hs_suggest',{method:'POST',headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+      const j = await r.json();
+      alert('HS suggestions: ' + JSON.stringify(j.suggestions));
+    }
+    async function bulkUpdate(){
+      const ids = (document.getElementById('bulk_ids').value||'').split(',').map(s=>parseInt(s.trim())).filter(Boolean);
+      const payload = { ids: ids, hs_code: document.getElementById('bulk_hs').value, preference: document.getElementById('bulk_pref').value, supp_units: document.getElementById('bulk_supp').value};
+      const r = await fetch('/api/bulk_update',{method:'POST',headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+      const j = await r.json();
+      alert(JSON.stringify(j));
+      loadCases();
+    }
+    async function assignCase(){
+      const payload = { id: parseInt(document.getElementById('assign_id').value), assignee: document.getElementById('assign_to').value};
+      const r = await fetch('/api/assign',{method:'POST',headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+      const j = await r.json();
+      alert(JSON.stringify(j));
+      loadCases();
+    }
+    // initial load
+    loadCases();
+  </script>
+</body>
+</html>
