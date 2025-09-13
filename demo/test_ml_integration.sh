@@ -3,7 +3,8 @@
 echo "🚀 Testing Emapy AI Advanced ML Integrations"
 echo "=============================================="
 
-API_BASE="http://localhost:5000/api"
+# Route through frontend nginx reverse proxy to avoid host port conflicts (e.g., macOS AirPlay on 5000)
+API_BASE="http://localhost/api"
 
 # Colors for output
 RED='\033[0;31m'

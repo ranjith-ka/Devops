@@ -42,7 +42,9 @@ func main() {
 	}
 
 	r := gin.Default()
+	// Health endpoints
 	r.GET("/health", func(c *gin.Context) { c.JSON(200, gin.H{"status": "ok"}) })
+	r.GET("/api/health", func(c *gin.Context) { c.JSON(200, gin.H{"status": "ok"}) })
 
 	api := r.Group("/api")
 	api.POST("/cases", createCase)
@@ -95,7 +97,7 @@ func createCase(c *gin.Context) {
 	}
 
 	var cs Case
-	if err := db.Get(&cs, "SELECT * FROM cases WHERE id=$1", id); err != nil {
+	if err := db.Get(&cs, "SELECT id, title, details, sender, eta, sla_days, hypercare, COALESCE(label,'') as label, COALESCE(hs_code,'') as hs_code, COALESCE(preference,'') as preference, COALESCE(supp_units,'') as supp_units, COALESCE(assigned_to,'') as assigned_to, priority_score, created_at FROM cases WHERE id=$1", id); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -104,7 +106,7 @@ func createCase(c *gin.Context) {
 
 func listCases(c *gin.Context) {
 	cases := []Case{}
-	err := db.Select(&cases, "SELECT * FROM cases ORDER BY priority_score DESC, created_at DESC LIMIT 200")
+	err := db.Select(&cases, "SELECT id, title, details, sender, eta, sla_days, hypercare, COALESCE(label,'') as label, COALESCE(hs_code,'') as hs_code, COALESCE(preference,'') as preference, COALESCE(supp_units,'') as supp_units, COALESCE(assigned_to,'') as assigned_to, priority_score, created_at FROM cases ORDER BY priority_score DESC, created_at DESC LIMIT 200")
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
