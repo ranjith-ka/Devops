@@ -20,7 +20,7 @@ else:
 
 num = int(input("Enter a number: "))
 ### Check multiple if statement
-if num > 99 and num < 1000:
+if 99 < num < 1000:
     print("Three Digit")
 elif num > 999:
     print("More than Three Digit")

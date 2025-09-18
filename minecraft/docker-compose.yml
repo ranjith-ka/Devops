@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  minecraft:
+    image: itzg/minecraft-server:latest
+    container_name: minecraft-paper
+    ports:
+      - "25565:25565"
+      - "8100:8100"
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      VERSION: "1.21.1"
+      MEMORY: "2G"
+      DIFFICULTY: "normal"
+      ONLINE_MODE: "TRUE"
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: "minecraft"
+      RCON_PORT: 25575
+      # SPIGET_RESOURCES: "274" # Dynmap (disabled; using local plugins mount)
+    volumes:
+      - ./data:/data
+      - ./datapacks:/data/world/datapacks
+      - ./plugins:/plugins
+    restart: unless-stopped
+
+
