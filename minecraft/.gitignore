@@ -1,0 +1,11 @@
+# Minecraft server runtime data
+data/
+logs/
+crash-reports/
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+
+
