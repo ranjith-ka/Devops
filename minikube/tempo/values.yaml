@@ -1,0 +1,25 @@
+replicas: 1
+
+tempo:
+  resources:
+   requests:
+     cpu: 1000m
+     memory: 1Gi
+   limits:
+     cpu: 2000m
+     memory: 1Gi
+
+  # Configure trace receivers for pushing traces (OTLP only)
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: "0.0.0.0:4317"
+        http:
+          endpoint: "0.0.0.0:4318"
+
+# Note: The Tempo chart automatically exposes all receiver ports via the main service
+
+# Disable Tempo Query for now - use Grafana to query traces instead
+tempoQuery:
+  enabled: false

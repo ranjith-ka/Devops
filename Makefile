@@ -148,6 +148,7 @@ monitoring:
 	@helm install -f minikube/prometheus/values.yaml prometheus prometheus-community/prometheus
 	@helm repo add grafana https://grafana.github.io/helm-charts
 	@helm install -f minikube/grafana/values.yaml grafana grafana/grafana
+	@helm install -f minikube/tempo/values.yaml tempo grafana/tempo
 
 es:
 	@helm install -f minikube/elastic-search/master.yaml elasticsearch-master elastic/elasticsearch
@@ -230,3 +231,6 @@ kuma-cp:
 metallb::
 	@kubectl get configmap kube-proxy -n kube-system -o yaml | sed -e "s/strictARP: false/strictARP: true/" | kubectl apply -f - -n kube-system
 	@kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.3/config/manifests/metallb-native.yaml
+
+tempo:
+	@helm install -f minikube/tempo/values.yaml tempo grafana/tempo
