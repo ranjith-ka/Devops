@@ -53,14 +53,14 @@ func headers(w http.ResponseWriter, req *http.Request) {
 }
 
 func myjoke(w http.ResponseWriter, req *http.Request) {
-	_, err := fmt.Fprint(w, getRandomJoke())
+    _, err := fmt.Fprint(w, getRandomJoke(req.Context()))
 	if err != nil {
 		fmt.Printf("%v", err)
 	}
 }
 
 func myjoke2(w http.ResponseWriter, req *http.Request) {
-	_, err := fmt.Fprint(w, getRandomJokeWithLLMStudio())
+    _, err := fmt.Fprint(w, getRandomJokeWithLLMStudio(req.Context()))
 	if err != nil {
 		fmt.Printf("%v", err)
 	}

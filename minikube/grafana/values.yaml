@@ -39,3 +39,7 @@ datasources:
         type: prometheus
         url: http://prometheus-server
         isDefault: true
+
+      - name: Tempo
+        type: tempo
+        url: http://tempo:3200
