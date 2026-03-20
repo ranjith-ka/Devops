@@ -2,7 +2,7 @@
 
 Official: [Chapter 2. The SQL Language](https://www.postgresql.org/docs/current/tutorial-sql.html) (PostgreSQL docs).
 
-**Prerequisites:** Database `mydb` (or your choice) and `psql` as in [Getting Started](https://www.postgresql.org/docs/current/tutorial-start.html).
+**Prerequisites:** Database `mydb` (or your choice) and `psql` — local walkthrough: [Chapter 1](../chapter_01_getting_started/README.md); official [Getting Started](https://www.postgresql.org/docs/current/tutorial-start.html).
 
 **Hands-on:** [EXERCISES.md](EXERCISES.md) — step-by-step practice (with collapsible solutions).
 
