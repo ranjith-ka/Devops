@@ -2,7 +2,9 @@
 
 https://www.postgresql.org/docs/current/index.html — Official Documentation
 
-**Chapter 2 (SQL language):** [chapter_02_sql/README.md](chapter_02_sql/README.md) — local notes aligned with [Chapter 2. The SQL Language](https://www.postgresql.org/docs/current/tutorial-sql.html).
+**Chapter 1 (getting started):** [chapter_01_getting_started/README.md](chapter_01_getting_started/README.md) — aligned with [Chapter 1. Getting Started](https://www.postgresql.org/docs/current/tutorial-start.html).
+
+**Chapter 2 (SQL language):** [chapter_02_sql/README.md](chapter_02_sql/README.md) — aligned with [Chapter 2. The SQL Language](https://www.postgresql.org/docs/current/tutorial-sql.html).
 
 
 
