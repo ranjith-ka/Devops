@@ -1,6 +1,8 @@
 
 # Kafka
 
+Detailed tutorial: [tutorial/01_tutorial.md](tutorial/01_tutorial.md)
+
 ## Install steps
 
 `kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka`
