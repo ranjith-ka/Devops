@@ -18,10 +18,10 @@ CREATE TABLE weather (
     date            date
 );
 
-INSERT INTO cities VALUES ('San Francisco', '(-194.0, 53.0)');
+INSERT INTO cities VALUES ('Mumbai', '(72.9, 19.1)');
 
-INSERT INTO weather VALUES ('San Francisco', 46, 50, 0.25, '1994-11-27');
+INSERT INTO weather VALUES ('Mumbai', 46, 50, 0.25, '1994-11-27');
 INSERT INTO weather (city, temp_lo, temp_hi, prcp, date)
-    VALUES ('San Francisco', 43, 57, 0.0, '1994-11-29');
+    VALUES ('Mumbai', 43, 57, 0.0, '1994-11-29');
 INSERT INTO weather (date, city, temp_hi, temp_lo)
-    VALUES ('1994-11-29', 'Hayward', 54, 37);
+    VALUES ('1994-11-29', 'Pune', 54, 37);

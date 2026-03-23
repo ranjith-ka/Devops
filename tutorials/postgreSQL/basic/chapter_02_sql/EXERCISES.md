@@ -46,7 +46,7 @@ Or inside `psql` (path = where **your** file is):
 2. Same data using `SELECT * FROM weather;`.
 3. Add a column that shows `(temp_hi + temp_lo) / 2` and label it `temp_avg` with `AS`.
 
-**Check:** Step 3 returns **3 rows**; `temp_avg` for the first San Francisco row should be **48**.
+**Check:** Step 3 returns **3 rows**; `temp_avg` for the first Mumbai row should be **48**.
 
 <details>
 <summary>Solution</summary>
@@ -67,7 +67,7 @@ SELECT city, (temp_hi + temp_lo) / 2 AS temp_avg, date FROM weather;
 
 **Goal:** Filter and sort.
 
-1. Rows where `city` is `'San Francisco'`.
+1. Rows where `city` is `'Mumbai'`.
 2. Rows where `prcp` is greater than `0` (hint: one row).
 3. All rows ordered by `date`, then by `city`.
 
@@ -77,7 +77,7 @@ SELECT city, (temp_hi + temp_lo) / 2 AS temp_avg, date FROM weather;
 <summary>Solution</summary>
 
 ```sql
-SELECT * FROM weather WHERE city = 'San Francisco';
+SELECT * FROM weather WHERE city = 'Mumbai';
 
 SELECT * FROM weather WHERE prcp > 0;
 
@@ -94,7 +94,7 @@ SELECT * FROM weather ORDER BY date, city;
 
 1. `SELECT DISTINCT city FROM weather ORDER BY city;`
 
-**Check:** **2** rows: `Hayward`, `San Francisco`.
+**Check:** **2** rows: `Mumbai`, `Pune`.
 
 <details>
 <summary>Solution</summary>
@@ -111,9 +111,9 @@ SELECT DISTINCT city FROM weather ORDER BY city;
 
 **Goal:** Add rows so joins and aggregates are more interesting.
 
-1. Insert a city **`Oakland`** with location **`(-194.0, 53.0)`** (same pattern as San Francisco in `basics.sql`).
-2. Insert a **`weather`** row: city **`Oakland`**, `temp_lo` **40**, `temp_hi` **58**, `prcp` **0**, date **`1994-11-30`** (use explicit column list).
-3. Insert another **`weather`** row for **`Hayward`** on **`1994-11-30`**: low **36**, high **60**, precipitation **0.1**.
+1. Insert a city **`Bengaluru`** with location **`(77.6, 12.9)`** (same pattern as Mumbai in `basics.sql`).
+2. Insert a **`weather`** row: city **`Bengaluru`**, `temp_lo` **40**, `temp_hi` **58**, `prcp` **0**, date **`1994-11-30`** (use explicit column list).
+3. Insert another **`weather`** row for **`Pune`** on **`1994-11-30`**: low **36**, high **60**, precipitation **0.1**.
 
 **Check:** `SELECT count(*) FROM cities;` → **2**. `SELECT count(*) FROM weather;` → **5**.
 
@@ -121,13 +121,13 @@ SELECT DISTINCT city FROM weather ORDER BY city;
 <summary>Solution</summary>
 
 ```sql
-INSERT INTO cities VALUES ('Oakland', '(-194.0, 53.0)');
+INSERT INTO cities VALUES ('Bengaluru', '(77.6, 12.9)');
 
 INSERT INTO weather (city, temp_lo, temp_hi, prcp, date)
-    VALUES ('Oakland', 40, 58, 0.0, '1994-11-30');
+    VALUES ('Bengaluru', 40, 58, 0.0, '1994-11-30');
 
 INSERT INTO weather (city, temp_lo, temp_hi, prcp, date)
-    VALUES ('Hayward', 36, 60, 0.1, '1994-11-30');
+    VALUES ('Pune', 36, 60, 0.1, '1994-11-30');
 ```
 
 </details>
@@ -141,7 +141,7 @@ INSERT INTO weather (city, temp_lo, temp_hi, prcp, date)
 1. Join `weather` and `cities` so that `weather.city = cities.name`. Start with `SELECT *` and an explicit `JOIN ... ON`.
 2. Repeat with only: `city`, `temp_lo`, `temp_hi`, `date`, `location`.
 
-**Check:** Inner join returns **4 rows** (Hayward’s two weather rows have **no** matching city in `cities` after section 5).
+**Check:** Inner join returns **4 rows** (Pune’s two weather rows have **no** matching city in `cities` after section 5).
 
 <details>
 <summary>Solution</summary>
@@ -163,7 +163,7 @@ SELECT w.city, w.temp_lo, w.temp_hi, w.date, c.location
 **Goal:** Keep all weather rows, even without a city.
 
 1. `LEFT OUTER JOIN` `weather` to `cities` on `weather.city = cities.name` with `SELECT *`.
-2. Confirm **Hayward** rows show **NULL** in `cities` columns.
+2. Confirm **Pune** rows show **NULL** in `cities` columns.
 
 **Check:** **5 rows** total.
 
@@ -187,7 +187,7 @@ SELECT *
 1. Per `city`: `count(*)`, `max(temp_hi)`, `min(temp_lo)`.
 2. Same, but only cities where `max(temp_lo) < 45` (use `HAVING`).
 
-**Check:** Step 1 has **3** groups (Hayward, Oakland, San Francisco). Step 2 leaves **Hayward** and **Oakland** (San Francisco’s max low is **46**).
+**Check:** Step 1 has **3** groups (Bengaluru, Mumbai, Pune). Step 2 leaves **Bengaluru** and **Pune** (Mumbai’s max low is **46**).
 
 <details>
 <summary>Solution</summary>
@@ -214,7 +214,7 @@ SELECT city, count(*), max(temp_hi), min(temp_lo)
 1. Find `max(temp_hi)` from `weather`.
 2. Select `city` (and optionally `date`) for rows where `temp_hi` equals that maximum.
 
-**Check:** At least **Hayward** on `1994-11-30` (`temp_hi` **60**). If only one row has that high, one row; if tied, multiple.
+**Check:** At least **Pune** on `1994-11-30` (`temp_hi` **60**). If only one row has that high, one row; if tied, multiple.
 
 <details>
 <summary>Solution</summary>
@@ -238,7 +238,7 @@ SELECT city, date, temp_hi
 1. Subtract **1** from both `temp_lo` and `temp_hi` for all rows where `date = '1994-11-30'`.
 2. `SELECT * FROM weather ORDER BY city, date;` and confirm the change.
 
-**Check:** Oakland becomes **39** / **57** for that date after the update.
+**Check:** Bengaluru becomes **39** / **57** for that date after the update.
 
 <details>
 <summary>Solution</summary>
@@ -259,18 +259,18 @@ SELECT * FROM weather ORDER BY city, date;
 
 **Goal:** Remove rows safely.
 
-1. Delete only **`weather`** rows where `city = 'Oakland'`.
-2. Optionally remove **`Oakland`** from **`cities`** (no longer referenced by `weather`).
+1. Delete only **`weather`** rows where `city = 'Bengaluru'`.
+2. Optionally remove **`Bengaluru`** from **`cities`** (no longer referenced by `weather`).
 
-**Check:** No Oakland in `weather`; `SELECT * FROM cities;` has only San Francisco if you did step 2.
+**Check:** No Bengaluru in `weather`; `SELECT * FROM cities;` has only Mumbai if you did step 2.
 
 <details>
 <summary>Solution</summary>
 
 ```sql
-DELETE FROM weather WHERE city = 'Oakland';
+DELETE FROM weather WHERE city = 'Bengaluru';
 
-DELETE FROM cities WHERE name = 'Oakland';
+DELETE FROM cities WHERE name = 'Bengaluru';
 ```
 
 </details>
