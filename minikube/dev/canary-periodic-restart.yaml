@@ -1,0 +1,67 @@
+# Periodic rolling restart for deployment/canary-dev.
+#
+# Adjust schedule below (cron syntax). Example: "0 */6 * * *" = every 6 hours at :00.
+# Apply: kubectl apply -f minikube/dev/canary-periodic-restart.yaml
+# Namespace: change metadata.namespace on each object if canary-dev is not in default.
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: canary-rollout-restart
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: restart-canary-dev
+  namespace: default
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    resourceNames: ["canary-dev"]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: restart-canary-dev
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: restart-canary-dev
+subjects:
+  - kind: ServiceAccount
+    name: canary-rollout-restart
+    namespace: default
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: canary-dev-rollout-restart
+  namespace: default
+spec:
+  # Every day at 03:00 UTC — edit to your interval (e.g. "0 */6 * * *" for every 6 hours).
+  schedule: "* * * * *"  # every minute
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          serviceAccountName: canary-rollout-restart
+          restartPolicy: OnFailure
+          containers:
+            - name: kubectl
+              # minikube/dev/kubectl-image/Dockerfile installs kubectl at /usr/local/bin/kubectl
+              image: devops-kubectl:test
+              imagePullPolicy: IfNotPresent
+              command:
+                - /usr/local/bin/kubectl
+                - rollout
+                - restart
+                - deployment/canary-dev
+                - -n
+                - default
