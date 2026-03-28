@@ -21,4 +21,14 @@ SELECT * FROM employees WHERE name LIKE '_a%';   -- second char is 'a'
 ```sql
 -- Your practice queries here
 
+devdb=# select * from github_users where login like '%dev';
+ id |    login    | display_name |  company   | created_at
+----+-------------+--------------+------------+------------
+  1 | ranjith-dev | Ranjith A    | Acme Cloud | 2018-03-12
+(1 row)
+
+ mydb=# select * from employees where name like '%R%';
+ name | age
+------+-----
+(0 rows)
 ```
