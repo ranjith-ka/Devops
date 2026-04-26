@@ -11,7 +11,6 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql
-      # Runs *.sql in this folder once on first DB init (empty volume only).
       - ./practice/github_sample:/docker-entrypoint-initdb.d:ro
 volumes:
   pgdata:
