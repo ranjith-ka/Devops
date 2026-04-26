@@ -2,33 +2,60 @@
 
 [▶ Watch this section](https://www.youtube.com/watch?v=btZdKO17xOM&t=2834s) · [⬆ Back to top](#table-of-contents)
 
-Pattern matching with `LIKE`:
+Pattern matching with `LIKE` (string columns):
+
+- **`%`** — any sequence of characters (including empty).
+- **`_`** — exactly one character.
 
 ```sql
-SELECT * FROM employees WHERE name LIKE 'R%';   -- starts with R
-SELECT * FROM employees WHERE name LIKE '%vi';   -- ends with vi
-SELECT * FROM employees WHERE name LIKE '_a%';   -- second char is 'a'
+-- Starts with 'r' (e.g. ranjith-dev, ravi-p)
+SELECT * FROM github_users WHERE login LIKE 'r%';
+
+-- Ends with '-dev'
+SELECT * FROM github_users WHERE login LIKE '%-dev';
+
+-- Second character is 'a' (e.g. fatima-z, carlos-m)
+SELECT * FROM github_users WHERE login LIKE '_a%';
 ```
 
----
+More examples on the same data:
+
+```sql
+-- PR titles containing "feat"
+SELECT id, title FROM pull_requests WHERE title LIKE '%feat:%';
+
+-- Repository full name under an owner (slash is literal)
+SELECT full_name FROM repositories WHERE full_name LIKE 'ranjith-dev/%';
+
+-- Workflow names starting with "C" (e.g. CI)
+SELECT DISTINCT workflow_name FROM workflow_runs WHERE workflow_name LIKE 'C%';
+```
 
 ---
 
 ## Practice
 
+Uses the GitHub practice dataset. Load once if needed:
+
+```bash
+psql -d devdb -f tutorials/postgreSQL/practice/github_sample/github_practice_seed.sql
+```
+
 > Write your own queries below.
 
 ```sql
--- Your practice queries here
+-- Ends with "bot"
+SELECT * FROM github_users WHERE login LIKE '%bot';
 
-devdb=# select * from github_users where login like '%dev';
- id |    login    | display_name |  company   | created_at
-----+-------------+--------------+------------+------------
-  1 | ranjith-dev | Ranjith A    | Acme Cloud | 2018-03-12
-(1 row)
+-- Login contains "dev" anywhere
+SELECT * FROM github_users WHERE login LIKE '%dev%';
 
- mydb=# select * from employees where name like '%R%';
- name | age
-------+-----
-(0 rows)
+-- PR title starts with "fix:"
+SELECT * FROM pull_requests WHERE title LIKE 'fix:%';
+
+-- Branch: literal "feature/", then anything (all rows in this seed use this prefix)
+SELECT * FROM pull_requests WHERE head_branch LIKE 'feature/%';
+
+-- Workflow name "CI" — one character + "I" (underscore matches "C")
+SELECT * FROM workflow_runs WHERE workflow_name LIKE '_I';
 ```

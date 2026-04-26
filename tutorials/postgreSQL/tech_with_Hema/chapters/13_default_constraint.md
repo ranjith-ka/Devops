@@ -20,6 +20,18 @@ CREATE TABLE tasks (
 > Write your own queries below.
 
 ```sql
--- Your practice queries here
 
+CREATE TABLE orders (
+    id INT PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL,
+    notes TEXT,
+    email VARCHAR(255) UNIQUE,
+    order_date DATE CHECK (order_date >= DATE '1980-01-01'),
+    status VARCHAR(20) DEFAULT 'pending'
+    
+);
+
+
+INSERT INTO orders (id, product_name, notes, email, order_date)
+VALUES (15, 'Keyboard', 'Mechanical', 'dg@fg.com', '2002-01-01');
 ```
