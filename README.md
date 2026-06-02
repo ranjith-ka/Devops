@@ -1,3 +1,5 @@
+# "DevOps is a home, not a monument."
+
 # AI Platform Engineering Leadership Roadmap
 
 My long-term career goal is to evolve from DevOps and platform engineering into an AI Platform Engineering / AI Infrastructure leadership role similar to organizations like Adobe Express, OpenAI, Anthropic, or Microsoft AI.
