@@ -94,4 +94,4 @@ profiles:
     patches:
       - op: replace
         path: /build/artifacts/0/docker/dockerfile
-        value: Dockerfile.Prd
+        value: Dockerfile.Canary
