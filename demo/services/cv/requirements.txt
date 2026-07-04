@@ -3,5 +3,5 @@ opencv-python==4.8.1.78
 pillow==12.2.0
 easyocr==1.7.0
 ultralytics==8.0.206
-torch==2.8.0
+torch==2.12.1
 numpy==1.24.3
