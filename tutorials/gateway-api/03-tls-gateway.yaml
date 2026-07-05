@@ -1,0 +1,110 @@
+---
+# 03-tls-gateway.yaml
+# Gateway with TLS/HTTPS support
+#
+# Prerequisites:
+# 1. Sample apps deployed (06-sample-apps.yaml)
+# 2. TLS certificate secret created:
+#    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes \
+#      -subj "/CN=demo.localhost"
+#    kubectl create secret tls demo-tls --cert=cert.pem --key=key.pem -n demo-apps
+#
+# This creates:
+# 1. Updated Gateway with both HTTP and HTTPS listeners
+# 2. HTTPRoute for HTTPS traffic
+#
+# Apply with: kubectl apply -f 03-tls-gateway.yaml -n demo-apps
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: tls-gateway
+  namespace: demo-apps
+spec:
+  gatewayClassName: envoy
+  listeners:
+  # HTTP listener (redirect to HTTPS optional)
+  - name: http
+    port: 80
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: Same
+  # HTTPS listener with TLS termination
+  - name: https
+    port: 443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: demo-tls
+        kind: Secret
+    allowedRoutes:
+      namespaces:
+        from: Same
+
+---
+# HTTPRoute for HTTPS
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: tls-route
+  namespace: demo-apps
+spec:
+  parentRefs:
+  - name: tls-gateway
+    kind: Gateway
+    sectionName: https
+  hostnames:
+  - "demo.localhost"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: http-app
+      port: 8080
+
+---
+# Alternative: HTTP to HTTPS redirect route
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: http-redirect-route
+  namespace: demo-apps
+spec:
+  parentRefs:
+  - name: tls-gateway
+    kind: Gateway
+    sectionName: http
+  hostnames:
+  - "demo.localhost"
+  rules:
+  - filters:
+    - type: RequestRedirect
+      requestRedirect:
+        scheme: https
+        statusCode: 301
+
+---
+# Setup Instructions:
+# 1. Create TLS secret:
+#    mkdir -p /tmp/certs && cd /tmp/certs
+#    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes \
+#      -subj "/CN=demo.localhost"
+#    kubectl create secret tls demo-tls --cert=cert.pem --key=key.pem -n demo-apps
+#
+# 2. Verify secret:
+#    kubectl get secret -n demo-apps
+#
+# 3. Apply this manifest:
+#    kubectl apply -f 03-tls-gateway.yaml -n demo-apps
+#
+# 4. Test HTTPS (ignore self-signed certificate warnings):
+#    kubectl port-forward -n demo-apps svc/envoy-gateway-tls-gateway 8443:443
+#    curl -k -H "Host: demo.localhost" https://localhost:8443/
+#
+# 5. Test HTTP redirect (optional):
+#    kubectl port-forward -n demo-apps svc/envoy-gateway-tls-gateway 8080:80
+#    curl -L -H "Host: demo.localhost" http://localhost:8080/

@@ -1,0 +1,50 @@
+---
+# 01-basic-gateway.yaml
+# Basic Gateway and HTTPRoute example
+# 
+# This creates:
+# 1. A Gateway named demo-gateway listening on port 80
+# 2. An HTTPRoute that routes demo.localhost to http-app service
+#
+# Apply with: kubectl apply -f 01-basic-gateway.yaml -n demo-apps
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: demo-gateway
+  namespace: demo-apps
+spec:
+  gatewayClassName: envoy
+  listeners:
+  - name: http
+    port: 80
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: Same
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: http-app-route
+  namespace: demo-apps
+spec:
+  parentRefs:
+  - name: demo-gateway
+    kind: Gateway
+  hostnames:
+  - "demo.localhost"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: http-app
+      port: 8080
+      weight: 100
+
+---
+# Testing:
+# kubectl port-forward -n demo-apps svc/envoy-gateway-demo-gateway 8080:80
+# curl -H "Host: demo.localhost" http://localhost:8080/

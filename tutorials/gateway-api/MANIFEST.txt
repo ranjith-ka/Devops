@@ -1,0 +1,349 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║           GATEWAY API TUTORIAL - MANIFEST & FILE STRUCTURE                ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📁 DIRECTORY: /Users/ranjith.a/code/github/ranjith/Devops/tutorials/gateway-api/
+
+═══════════════════════════════════════════════════════════════════════════════
+📚 DOCUMENTATION (Read these first)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. INDEX.md (8 KB) - START HERE!
+   ├─ Quick navigation guide
+   ├─ Learning path recommendations
+   ├─ Tutorial statistics
+   ├─ Quick start options
+   ├─ File descriptions
+   ├─ Prerequisites checklist
+   └─ External resources
+
+2. README.md (22 KB) - Complete Step-by-Step Tutorial
+   ├─ Part 1: Setup & Installation
+   │  ├─ Create kind cluster with Gateway API support
+   │  ├─ Install CRDs
+   │  ├─ Install Envoy Gateway controller
+   │  └─ Verify installation
+   │
+   ├─ Part 2: Basic HTTP Routing
+   │  ├─ Deploy sample applications
+   │  ├─ Create Gateway resource
+   │  ├─ Create HTTPRoute
+   │  └─ Test routing
+   │
+   ├─ Part 3: Advanced Routing
+   │  ├─ Path-based routing
+   │  ├─ Header-based routing
+   │  └─ Multiple hostname routing
+   │
+   ├─ Part 4: TLS/HTTPS
+   │  ├─ Self-signed certificates
+   │  ├─ TLS termination
+   │  └─ HTTPS testing
+   │
+   ├─ Part 5: Cross-Namespace Routing
+   │  ├─ Multi-namespace setup
+   │  ├─ ReferencePolicy
+   │  └─ Cross-namespace services
+   │
+   ├─ Part 6: Traffic Management
+   │  ├─ Weighted load balancing
+   │  ├─ Canary deployments
+   │  └─ Blue-green deployments
+   │
+   ├─ Part 7: Troubleshooting
+   │  ├─ Common issues & solutions
+   │  ├─ Debugging commands
+   │  └─ Log analysis
+   │
+   ├─ Migration from Ingress
+   │  ├─ Before/After comparison
+   │  ├─ Key differences
+   │  └─ Migration steps
+   │
+   ├─ Cleanup instructions
+   ├─ Summary of learning outcomes
+   ├─ Additional resources
+   └─ Next steps for advanced topics
+
+3. QUICK_REFERENCE.md (6 KB) - Command Cheatsheet
+   ├─ Installation commands
+   ├─ Viewing resources
+   ├─ Debugging commands
+   ├─ Port forwarding
+   ├─ Testing commands
+   ├─ YAML templates
+   ├─ Common Gateway patterns
+   ├─ Common HTTPRoute patterns
+   ├─ TLS setup
+   ├─ Cross-namespace setup
+   ├─ Load balancing patterns
+   ├─ Common issues table
+   ├─ Useful links
+   └─ Cleanup commands
+
+4. EXAMPLES.md (1 KB) - Guide to Example Files
+   ├─ File descriptions
+   ├─ Progressive learning path
+   └─ How to use examples
+
+═══════════════════════════════════════════════════════════════════════════════
+🔧 EXAMPLE MANIFESTS (Apply these to learn)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. 06-sample-apps.yaml (2 KB) - TEST APPLICATIONS
+   Purpose: Deploy sample applications for testing routing
+   Contents:
+   ├─ http-app Deployment (2 replicas)
+   ├─ http-app Service
+   ├─ api-app Deployment (1 replica)
+   └─ api-app Service
+   
+   Use: kubectl apply -f 06-sample-apps.yaml
+   When: Start with this, needed for all other examples
+   Testing: kubectl get pods -n demo-apps
+
+2. 01-basic-gateway.yaml (1 KB) - BASIC HTTP ROUTING
+   Purpose: Learn the basics of Gateway and HTTPRoute
+   Contents:
+   ├─ Gateway "demo-gateway" (port 80, HTTP)
+   └─ HTTPRoute "http-app-route" (routes demo.localhost to http-app)
+   
+   Use: kubectl apply -f 01-basic-gateway.yaml -n demo-apps
+   When: After deploying sample apps
+   Testing: curl -H "Host: demo.localhost" http://localhost:8080/
+
+3. 02-advanced-routing.yaml (3 KB) - ADVANCED ROUTING PATTERNS
+   Purpose: Learn path, header, and hostname-based routing
+   Contents:
+   ├─ Path-based routing (different routes for /api vs /)
+   ├─ Header-based routing (X-Version header matching)
+   └─ Multiple hostname routing (app.localhost vs api.localhost)
+   
+   Use: kubectl apply -f 02-advanced-routing.yaml -n demo-apps
+   When: After basic gateway is working
+   Testing: Multiple curl examples with different paths and headers
+
+4. 03-tls-gateway.yaml (3 KB) - TLS/HTTPS TERMINATION
+   Purpose: Learn HTTPS and certificate management
+   Contents:
+   ├─ Updated Gateway with HTTPS listener
+   ├─ TLS certificate reference
+   ├─ HTTPS HTTPRoute
+   └─ Optional HTTP redirect route
+   
+   Prerequisites: TLS secret (demo-tls) must exist
+   Setup:
+   - openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem ...
+   - kubectl create secret tls demo-tls --cert=cert.pem --key=key.pem
+   
+   Use: kubectl apply -f 03-tls-gateway.yaml -n demo-apps
+   When: After understanding basic routing
+   Testing: curl -k https://localhost:8443/ (with -k for self-signed)
+
+5. 04-cross-namespace.yaml (3 KB) - CROSS-NAMESPACE ROUTING
+   Purpose: Learn routing to services in different namespaces
+   Contents:
+   ├─ api-backend namespace creation
+   ├─ backend-app Deployment in api-backend
+   ├─ backend-app Service in api-backend
+   ├─ ReferencePolicy for security (in api-backend namespace)
+   └─ HTTPRoute from demo-apps referencing backend-app service
+   
+   Use: kubectl apply -f 04-cross-namespace.yaml
+   When: After understanding basic routing
+   Testing: curl -H "Host: backend.localhost" http://localhost:8080/
+   Key Concept: ReferencePolicy is in backend namespace, allows demo-apps access
+
+6. 05-traffic-management.yaml (5 KB) - TRAFFIC MANAGEMENT
+   Purpose: Learn weighted routing, canary, and blue-green deployments
+   Contents:
+   ├─ http-app-v2 Deployment (for testing)
+   ├─ http-app-v2 Service
+   ├─ Weighted route (70% v1, 30% v2)
+   ├─ Canary route (95% v1, 5% v2)
+   ├─ User-based canary (header-based)
+   └─ Blue-green route (100% v1, ready to switch)
+   
+   Use: kubectl apply -f 05-traffic-management.yaml -n demo-apps
+   When: After understanding routing basics
+   Testing: Multiple requests to see traffic distribution
+   Advanced: Patch weights to perform blue-green switch
+
+═══════════════════════════════════════════════════════════════════════════════
+🚀 AUTOMATION & SCRIPTS
+═══════════════════════════════════════════════════════════════════════════════
+
+setup.sh (2 KB) - AUTOMATED ONE-COMMAND SETUP
+   Purpose: Automate kind cluster creation and Gateway API installation
+   
+   Steps:
+   1. Delete existing kind cluster
+   2. Create new kind cluster with config.yaml
+   3. Install Gateway API CRDs
+   4. Install Envoy Gateway helm chart
+   5. Wait for controller readiness
+   6. Verify installation
+   
+   Use: cd tutorials/gateway-api && ./setup.sh
+   Time: ~2-3 minutes
+   Requirements: Docker running, helm installed, kind installed
+
+═══════════════════════════════════════════════════════════════════════════════
+📋 QUICK REFERENCE TABLE
+═══════════════════════════════════════════════════════════════════════════════
+
+File                      Type      Size   Topic                    Level
+─────────────────────────────────────────────────────────────────────────────
+INDEX.md                  Docs      8KB    Navigation              Beginner
+README.md                 Docs      22KB   Full Tutorial            All
+QUICK_REFERENCE.md        Docs      6KB    Command Cheatsheet       All
+EXAMPLES.md               Docs      1KB    File Guide               Beginner
+──────────────────────────────────────────────────────────────────────────
+06-sample-apps.yaml       YAML      2KB    Test Apps               Beginner
+01-basic-gateway.yaml     YAML      1KB    Basic Routing           Beginner
+02-advanced-routing.yaml  YAML      3KB    Advanced Routing        Intermediate
+03-tls-gateway.yaml       YAML      3KB    TLS/HTTPS              Intermediate
+04-cross-namespace.yaml   YAML      3KB    Multi-namespace         Advanced
+05-traffic-management.yaml YAML     5KB    Weighted/Canary         Advanced
+──────────────────────────────────────────────────────────────────────────
+setup.sh                  Script    2KB    Automation              Beginner
+
+═══════════════════════════════════════════════════════════════════════════════
+🎯 HOW TO USE THESE FILES
+═══════════════════════════════════════════════════════════════════════════════
+
+SCENARIO 1: I'm completely new to Gateway API
+→ 1. Read INDEX.md (5 min)
+→ 2. Run setup.sh (10 min)
+→ 3. Read README.md Part 1-2 (30 min)
+→ 4. Apply 06-sample-apps.yaml and 01-basic-gateway.yaml (10 min)
+→ 5. Test with curl commands from README Part 2 (10 min)
+→ 6. Progress to Part 3-6 as needed
+
+SCENARIO 2: I want to learn specific topics
+→ Find the part in README.md
+→ Look for corresponding example file
+→ Copy commands from that section
+→ Apply and test
+
+SCENARIO 3: I just need quick commands
+→ Use QUICK_REFERENCE.md
+→ Find the command you need
+→ Copy and adapt to your setup
+
+SCENARIO 4: I want to understand specific patterns
+→ Find the pattern in the examples (01-05)
+→ Read the YAML and comments
+→ Apply and experiment
+→ Refer to README.md section for detailed explanation
+
+SCENARIO 5: I want to troubleshoot issues
+→ Read README.md Part 7
+→ Use QUICK_REFERENCE.md debugging section
+→ Check controller logs
+→ Describe resources
+
+═══════════════════════════════════════════════════════════════════════════════
+✅ VERIFICATION CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+After completing the tutorial, verify you can:
+
+□ Install Gateway API CRDs
+□ Install Envoy Gateway controller
+□ Create and configure a Gateway resource
+□ Create and configure HTTPRoute resources
+□ Route traffic based on paths
+□ Route traffic based on hostnames
+□ Route traffic based on headers
+□ Configure TLS/HTTPS termination
+□ Route to services in different namespaces
+□ Implement weighted load balancing
+□ Implement canary deployments
+□ Implement blue-green deployments
+□ Debug Gateway API issues
+□ Read and understand all resource statuses
+□ Use kubectl describe effectively
+□ Check controller logs for issues
+
+═══════════════════════════════════════════════════════════════════════════════
+🔗 FILE DEPENDENCIES
+═══════════════════════════════════════════════════════════════════════════════
+
+Installation Dependencies:
+  setup.sh
+    ├── Requires: Docker, kind, kubectl, helm
+    └── Creates: kind cluster with Gateway API support
+
+Tutorial Dependencies:
+  README.md (all parts)
+    ├── Part 1-2: Can run setup.sh independently
+    ├── Part 2+: Requires 06-sample-apps.yaml deployed
+    ├── Part 3: Requires 06-sample-apps.yaml + 01-basic-gateway.yaml
+    ├── Part 4: Requires TLS secret (demo-tls)
+    ├── Part 5: Requires 06-sample-apps.yaml + 01-basic-gateway.yaml
+    └── Part 6: Requires 06-sample-apps.yaml
+
+Example File Dependencies:
+  06-sample-apps.yaml (no dependencies)
+    ├── Deploys: demo-apps namespace and sample services
+    └── Required by: All other examples
+  
+  01-basic-gateway.yaml
+    ├── Requires: 06-sample-apps.yaml
+    └── Needed by: Testing basic routing
+  
+  02-advanced-routing.yaml
+    ├── Requires: 06-sample-apps.yaml + 01-basic-gateway.yaml
+    └── Provides: Multiple routing examples
+  
+  03-tls-gateway.yaml
+    ├── Requires: demo-tls secret created manually
+    ├── Requires: 06-sample-apps.yaml
+    └── Provides: HTTPS examples
+  
+  04-cross-namespace.yaml
+    ├── Requires: 06-sample-apps.yaml + 01-basic-gateway.yaml
+    ├── Creates: api-backend namespace
+    └── Provides: Cross-namespace examples
+  
+  05-traffic-management.yaml
+    ├── Requires: 06-sample-apps.yaml + 01-basic-gateway.yaml
+    ├── Creates: http-app-v2 for testing
+    └── Provides: Traffic management examples
+
+═══════════════════════════════════════════════════════════════════════════════
+📝 TOTAL CONTENT SUMMARY
+═══════════════════════════════════════════════════════════════════════════════
+
+Documentation:        37 KB (4 files)
+  ├─ README.md       22 KB
+  ├─ QUICK_REFERENCE  6 KB
+  ├─ INDEX.md         8 KB
+  └─ EXAMPLES.md      1 KB
+
+Example Manifests:    18 KB (6 files)
+  ├─ 05-traffic-management.yaml  5 KB
+  ├─ 04-cross-namespace.yaml     3 KB
+  ├─ 03-tls-gateway.yaml         3 KB
+  ├─ 02-advanced-routing.yaml    3 KB
+  ├─ 06-sample-apps.yaml         2 KB
+  └─ 01-basic-gateway.yaml       1 KB
+
+Scripts:              2 KB (1 file)
+  └─ setup.sh         2 KB
+
+Other:                1 KB (1 file)
+  └─ MANIFEST.txt (this file)
+
+═════════════════════════════════════════════════════════════════════════════════
+
+Total: ~58 KB of documentation, examples, and scripts
+Lines: ~2,500 lines of tutorial content and code
+Learning Time: 2-3 hours for complete mastery
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Ready to get started? Open INDEX.md and follow the recommended learning path!
+
+═══════════════════════════════════════════════════════════════════════════════

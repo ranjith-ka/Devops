@@ -1,0 +1,139 @@
+---
+# 04-cross-namespace.yaml
+# Cross-namespace routing with ReferencePolicy
+#
+# This demonstrates how to route traffic from a Gateway in one namespace
+# to a backend service in another namespace.
+#
+# Prerequisites:
+# 1. demo-apps namespace with gateway (from 01-basic-gateway.yaml or 06-sample-apps.yaml)
+# 2. This will create: api-backend namespace with backend-app service
+#
+# Apply with:
+#   kubectl apply -f 04-cross-namespace.yaml
+# This includes the backend namespace creation and setup.
+
+---
+# Step 1: Create api-backend namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: api-backend
+
+---
+# Step 2: Deploy backend service in api-backend namespace
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-app
+  namespace: api-backend
+  labels:
+    app: backend-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-app
+  template:
+    metadata:
+      labels:
+        app: backend-app
+    spec:
+      containers:
+      - name: app
+        image: hashicorp/http-echo:latest
+        args:
+          - "-listen=:8080"
+          - "-text=Backend Service Response (from api-backend namespace)"
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-app
+  namespace: api-backend
+spec:
+  selector:
+    app: backend-app
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+  type: ClusterIP
+
+---
+# Step 3: Create ReferencePolicy to allow cross-namespace routing
+# This policy lives in the BACKEND namespace (where the service is)
+# It allows HTTPRoutes from demo-apps namespace to reference this service
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferencePolicy
+metadata:
+  name: allow-cross-namespace
+  namespace: api-backend
+spec:
+  from:
+  # This policy allows HTTPRoutes from demo-apps namespace
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    namespace: demo-apps
+  # To reference Services in this namespace
+  to:
+  - group: ""
+    kind: Service
+    name: backend-app
+
+---
+# Step 4: Create HTTPRoute in demo-apps that references backend-app in api-backend
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: backend-route
+  namespace: demo-apps
+spec:
+  parentRefs:
+  - name: demo-gateway
+    kind: Gateway
+  hostnames:
+  - "backend.localhost"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    # Reference service in different namespace
+    - name: backend-app
+      namespace: api-backend
+      port: 8080
+
+---
+# Testing:
+# 1. Verify both namespaces and services:
+#    kubectl get ns
+#    kubectl get svc -n api-backend
+#    kubectl get svc -n demo-apps
+#
+# 2. Verify ReferencePolicy:
+#    kubectl get referencepolicy -n api-backend
+#    kubectl describe referencepolicy allow-cross-namespace -n api-backend
+#
+# 3. Test the route:
+#    kubectl port-forward -n demo-apps svc/envoy-gateway-demo-gateway 8080:80
+#    curl -H "Host: backend.localhost" http://localhost:8080/
+#
+# Expected output: Backend Service Response (from api-backend namespace)
+#
+# Troubleshooting:
+# If the route doesn't work, check:
+# - kubectl describe httproute backend-route -n demo-apps
+# - kubectl describe referencepolicy allow-cross-namespace -n api-backend
+# - kubectl logs -n envoy-gateway-system -l app=envoy-gateway
