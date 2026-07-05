@@ -1,0 +1,216 @@
+---
+# 05-traffic-management.yaml
+# Traffic management: weighted load balancing
+#
+# This demonstrates advanced traffic management patterns:
+# 1. Weighted load balancing: Route traffic to multiple services with specific weights
+# 2. Canary deployments: Route small percentage to new version
+#
+# Prerequisites:
+# 1. Sample apps deployed (06-sample-apps.yaml)
+# 2. Additional deployment for http-app-v2
+#
+# Apply with: kubectl apply -f 05-traffic-management.yaml -n demo-apps
+
+---
+# Deploy http-app-v2 for canary testing
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-app-v2
+  namespace: demo-apps
+  labels:
+    app: http-app-v2
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-app-v2
+  template:
+    metadata:
+      labels:
+        app: http-app-v2
+        version: v2
+    spec:
+      containers:
+      - name: app
+        image: hashicorp/http-echo:latest
+        args:
+          - "-listen=:8080"
+          - "-text=Hello from HTTP App V2! 🚀 (CANARY)"
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: http-app-v2
+  namespace: demo-apps
+spec:
+  selector:
+    app: http-app-v2
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+  type: ClusterIP
+
+---
+# Example 1: Weighted load balancing (70/30 split)
+# Route 70% of traffic to v1, 30% to v2
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: weighted-route
+  namespace: demo-apps
+spec:
+  parentRefs:
+  - name: demo-gateway
+    kind: Gateway
+  hostnames:
+  - "weighted.localhost"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    # 70% of traffic to v1
+    - name: http-app
+      port: 8080
+      weight: 70
+    # 30% of traffic to v2 (canary)
+    - name: http-app-v2
+      port: 8080
+      weight: 30
+
+---
+# Example 2: Canary deployment (95/5 split)
+# Route 95% to stable v1, 5% to new v2 for testing
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: canary-route
+  namespace: demo-apps
+spec:
+  parentRefs:
+  - name: demo-gateway
+    kind: Gateway
+  hostnames:
+  - "canary.localhost"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    # Stable version: 95% of traffic
+    - name: http-app
+      port: 8080
+      weight: 95
+    # Canary version: 5% of traffic
+    - name: http-app-v2
+      port: 8080
+      weight: 5
+
+---
+# Example 3: User-based canary (header-based routing)
+# Route users with X-Canary header to new version
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: user-canary-route
+  namespace: demo-apps
+spec:
+  parentRefs:
+  - name: demo-gateway
+    kind: Gateway
+  hostnames:
+  - "user-canary.localhost"
+  rules:
+  # Canary users: Send to v2
+  - matches:
+    - headers:
+      - name: X-Canary
+        value: "true"
+      path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: http-app-v2
+      port: 8080
+  # All other users: Send to v1
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: http-app
+      port: 8080
+
+---
+# Example 4: Blue-Green Deployment
+# Easily switch between two versions by changing weights
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: blue-green-route
+  namespace: demo-apps
+spec:
+  parentRefs:
+  - name: demo-gateway
+    kind: Gateway
+  hostnames:
+  - "blue-green.localhost"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    # Current production (blue): 100%
+    - name: http-app
+      port: 8080
+      weight: 100
+    # New version (green): 0% (ready to switch)
+    - name: http-app-v2
+      port: 8080
+      weight: 0
+    # To switch: Change weights to http-app: 0, http-app-v2: 100
+
+---
+# Testing weighted routing:
+# kubectl port-forward -n demo-apps svc/envoy-gateway-demo-gateway 8080:80 &
+# 
+# For weighted (70/30):
+# for i in {1..10}; do
+#   curl -s -H "Host: weighted.localhost" http://localhost:8080/ | head -c 20
+#   echo " (Request $i)"
+# done
+# Expected: 7x v1 responses, 3x v2 responses (approximately)
+#
+# For canary (95/5):
+# for i in {1..100}; do
+#   curl -s -H "Host: canary.localhost" http://localhost:8080/ | grep -q "V2" && echo "CANARY" || echo "STABLE"
+# done
+# Expected: ~95 STABLE, ~5 CANARY
+#
+# For user-based canary:
+# curl -H "Host: user-canary.localhost" http://localhost:8080/
+# Expected: v1 response
+# curl -H "Host: user-canary.localhost" -H "X-Canary: true" http://localhost:8080/
+# Expected: v2 response
+#
+# For blue-green:
+# Edit the route to switch weights:
+# kubectl patch httproute blue-green-route -n demo-apps --type=json \
+#   -p='[{"op":"replace","path":"/spec/rules/0/backendRefs/0/weight","value":0},{"op":"replace","path":"/spec/rules/0/backendRefs/1/weight","value":100}]'

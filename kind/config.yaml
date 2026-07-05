@@ -1,10 +1,24 @@
-## This version is for kind v0.x.x  // https://github.com/kubernetes-sigs/kind/releases
+## This version is for kind v0.x.x with Gateway API support
+## https://github.com/kubernetes-sigs/kind/releases
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
+featureGates:
+  HTTPRouteHostRewriting: true
+  GatewayAPI: true
 nodes:
   - role: control-plane
     image: kindest/node:v1.31.6@sha256:28b7cbb993dfe093c76641a0c95807637213c9109b761f1d422c2400e22b8e87
+    kubeadmConfigPatches:
+      - |
+        kind: ClusterConfiguration
+        apiServer:
+          extraArgs:
+            feature-gates: GatewayAPI=true,HTTPRouteHostRewriting=true
+        controllerManager:
+          extraArgs:
+            feature-gates: GatewayAPI=true,HTTPRouteHostRewriting=true
   - role: worker
+    image: kindest/node:v1.31.6@sha256:28b7cbb993dfe093c76641a0c95807637213c9109b761f1d422c2400e22b8e87
     extraPortMappings:
       - containerPort: 32080
         hostPort: 80
@@ -19,4 +33,3 @@ nodes:
         hostPort: 9092
       - containerPort: 30171
         hostPort: 8080
-    image: kindest/node:v1.31.6@sha256:28b7cbb993dfe093c76641a0c95807637213c9109b761f1d422c2400e22b8e87
