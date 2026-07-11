@@ -5,4 +5,5 @@ toolchain go1.24.1
 use (
 	.
 	./Exercism/go/two-fer
+	./services/inference
 )

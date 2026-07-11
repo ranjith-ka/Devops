@@ -1,0 +1,263 @@
+openapi: 3.1.0
+info:
+  title: AI-Native CI/CD Intelligence Platform API
+  version: 0.1.0
+  description: Spec-first contract for AI reasoning, pipeline intelligence, and artifact generation.
+servers:
+  - url: https://api.example.com
+paths:
+  /chat:
+    post:
+      summary: Conversational AI over delivery evidence
+      operationId: chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: Chat response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+  /analyze-pipeline:
+    post:
+      summary: Analyze a pipeline run or definition
+      operationId: analyzePipeline
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: Pipeline analysis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+  /deployment-summary:
+    post:
+      summary: Summarize a deployment
+      operationId: deploymentSummary
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: Deployment summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+  /root-cause:
+    post:
+      summary: Rank root-cause hypotheses
+      operationId: rootCause
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: Root cause analysis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+  /optimize:
+    post:
+      summary: Optimize delivery systems
+      operationId: optimize
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: Optimization plan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+  /security-review:
+    post:
+      summary: Review delivery security posture
+      operationId: securityReview
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: Security review
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+  /explain-workflow:
+    post:
+      summary: Explain a workflow graph
+      operationId: explainWorkflow
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: Workflow explanation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+  /generate-pipeline:
+    post:
+      summary: Generate a delivery pipeline
+      operationId: generatePipeline
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: Generated pipeline
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+  /generate-terraform:
+    post:
+      summary: Generate Terraform
+      operationId: generateTerraform
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: Generated Terraform
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+  /generate-kubernetes:
+    post:
+      summary: Generate Kubernetes manifests
+      operationId: generateKubernetes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: Generated Kubernetes manifests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+  /generate-video-plan:
+    post:
+      summary: Generate a YouTube content and publishing brief
+      operationId: generateVideoPlan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: Generated YouTube brief
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+  /upload-video:
+    post:
+      summary: Prepare a YouTube video upload workflow
+      operationId: uploadVideo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: YouTube upload workflow
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+components:
+  schemas:
+    InferenceRequest:
+      type: object
+      required: [org_id, prompt]
+      properties:
+        org_id:
+          type: string
+        repository:
+          type: string
+        pipeline:
+          type: string
+        deployment:
+          type: string
+        prompt:
+          type: string
+        context:
+          type: object
+          properties:
+            branch:
+              type: string
+            environment:
+              type: string
+            time_range:
+              type: string
+    InferenceResponse:
+      type: object
+      required: [request_id, summary]
+      properties:
+        request_id:
+          type: string
+        model:
+          type: string
+        prompt_template:
+          type: string
+        summary:
+          type: string
+        confidence:
+          type: number
+        evidence:
+          type: array
+          items:
+            type: string
+        recommendations:
+          type: array
+          items:
+            type: string
+        artifacts:
+          type: array
+          items:
+            type: string
