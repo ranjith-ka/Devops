@@ -1,0 +1,40 @@
+services:
+  inference:
+    build:
+      context: .
+      dockerfile: services/inference/Dockerfile
+    environment:
+      PORT: "8080"
+    ports:
+      - "8080:8080"
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_INFERENCE_URL: http://inference:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - inference
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: pipeline_os
+      POSTGRES_USER: pipeline_os
+      POSTGRES_PASSWORD: pipeline_os
+    ports:
+      - "5432:5432"
+    volumes:
+      - pipeline-os-postgres:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  pipeline-os-postgres: {}

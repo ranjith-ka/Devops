@@ -594,3 +594,13 @@ skaffold dev -p prd
 skaffold dev --module canary
 ```
 
+## AI CI/CD Platform
+
+- Product blueprint: [product/ai-cicd-platform/blueprint.md](product/ai-cicd-platform/blueprint.md)
+- Spec-first API contract: [specs/openapi.yaml](specs/openapi.yaml)
+- Event contract: [proto/ai_cicd_platform.proto](proto/ai_cicd_platform.proto)
+- Shared contracts: [packages/contracts/README.md](packages/contracts/README.md)
+- Product index: [product/ai-cicd-platform/README.md](product/ai-cicd-platform/README.md)
+- Web scaffold: [apps/web/README.md](apps/web/README.md)
+- Inference scaffold: [services/inference/README.md](services/inference/README.md)
+- Local deployment guide: [product/ai-cicd-platform/local-deployment.md](product/ai-cicd-platform/local-deployment.md)

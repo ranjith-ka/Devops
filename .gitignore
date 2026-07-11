@@ -32,3 +32,25 @@ src/
 var/
 vbin/
 .env
+# --- Project-specific (web + inference) ---
+# Next.js / Node artifacts
+apps/web/node_modules/
+apps/web/.next/
+apps/web/out/
+apps/web/.turbo/
+apps/web/.env.local
+apps/web/.env.development.local
+apps/web/.env.test.local
+apps/web/.env.production.local
+
+# Go service runtime/build artifacts
+services/inference/.env
+services/inference/.env.*
+!services/inference/.env.youtube.example
+services/inference/coverage.out
+
+# Common local outputs
+coverage/
+*.log
+dist/
+tmp/

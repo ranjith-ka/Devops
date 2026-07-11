@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package aicicd.platform.v1;
+
+option go_package = "github.com/ranjith-ka/Devops/proto/aicicdplatformv1";
+
+message ContextEnvelope {
+  string branch = 1;
+  string environment = 2;
+  string time_range = 3;
+}
+
+message InferenceRequest {
+  string org_id = 1;
+  string repository = 2;
+  string pipeline = 3;
+  string deployment = 4;
+  string prompt = 5;
+  ContextEnvelope context = 6;
+}
+
+message InferenceResponse {
+  string request_id = 1;
+  string model = 2;
+  string prompt_template = 3;
+  string summary = 4;
+  double confidence = 5;
+  repeated string evidence = 6;
+  repeated string recommendations = 7;
+  repeated string artifacts = 8;
+}
+
+message EventEnvelope {
+  string event_id = 1;
+  string event_type = 2;
+  uint32 schema_version = 3;
+  string tenant_id = 4;
+  string correlation_id = 5;
+  string causation_id = 6;
+  string occurred_at = 7;
+  string source = 8;
+  string payload_json = 9;
+}
