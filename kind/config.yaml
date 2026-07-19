@@ -1,35 +1,31 @@
-## This version is for kind v0.x.x with Gateway API support
-## https://github.com/kubernetes-sigs/kind/releases
+## kind v0.32.0 (Kubernetes 1.36.1)
+## https://github.com/kubernetes-sigs/kind/releases/tag/v0.32.0
+##
+## Gateway API is installed via CRDs + a controller (see kind/GATEWAY_API_SETUP.md),
+## not via Kubernetes feature gates (removed in 1.36+).
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
-featureGates:
-  HTTPRouteHostRewriting: true
-  GatewayAPI: true
 nodes:
   - role: control-plane
-    image: kindest/node:v1.31.6@sha256:28b7cbb993dfe093c76641a0c95807637213c9109b761f1d422c2400e22b8e87
-    kubeadmConfigPatches:
-      - |
-        kind: ClusterConfiguration
-        apiServer:
-          extraArgs:
-            feature-gates: GatewayAPI=true,HTTPRouteHostRewriting=true
-        controllerManager:
-          extraArgs:
-            feature-gates: GatewayAPI=true,HTTPRouteHostRewriting=true
+    image: kindest/node:v1.36.1@sha256:3489c7674813ba5d8b1a9977baea8a6e553784dab7b84759d1014dbd78f7ebd5
   - role: worker
-    image: kindest/node:v1.31.6@sha256:28b7cbb993dfe093c76641a0c95807637213c9109b761f1d422c2400e22b8e87
+    image: kindest/node:v1.36.1@sha256:3489c7674813ba5d8b1a9977baea8a6e553784dab7b84759d1014dbd78f7ebd5
     extraPortMappings:
       - containerPort: 32080
         hostPort: 80
-        protocol: tcp
+        protocol: TCP
       - containerPort: 32443
         hostPort: 2443
+        protocol: TCP
       - containerPort: 31443
         hostPort: 443
+        protocol: TCP
       - containerPort: 31697
         hostPort: 27017
+        protocol: TCP
       - containerPort: 31699
         hostPort: 9092
+        protocol: TCP
       - containerPort: 30171
         hostPort: 8080
+        protocol: TCP
