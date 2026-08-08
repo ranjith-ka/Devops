@@ -1,0 +1,10 @@
+**/bin
+**/obj
+.git
+.idea
+.vscode
+README.md
+k8s
+scripts
+skaffold.yaml
+skaffold-remote.yaml

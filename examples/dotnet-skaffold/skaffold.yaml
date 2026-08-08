@@ -1,0 +1,32 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: dotnet-skaffold
+
+build:
+  tagPolicy:
+    gitCommit: {}
+  artifacts:
+    - image: ranjithka/dotnet-skaffold-api
+      context: .
+      docker:
+        dockerfile: Dockerfile
+  local:
+    push: false
+    useBuildkit: true
+
+manifests:
+  rawYaml:
+    - k8s/namespace.yaml
+    - k8s/deployment.yaml
+    - k8s/service.yaml
+
+deploy:
+  kubectl: {}
+
+portForward:
+  - resourceType: service
+    resourceName: dotnet-skaffold-api
+    namespace: dotnet-skaffold
+    port: 8080
+    localPort: 8080

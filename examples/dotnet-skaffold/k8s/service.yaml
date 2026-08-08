@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnet-skaffold-api
+  namespace: dotnet-skaffold
+spec:
+  selector:
+    app: dotnet-skaffold-api
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
