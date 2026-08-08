@@ -1,0 +1,42 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: dotnet-skaffold-remote
+
+build:
+  tagPolicy:
+    gitCommit: {}
+  artifacts:
+    - image: ranjithka/dotnet-skaffold-api
+      context: .
+      custom:
+        # Explicit values keep this local proof-of-concept pinned to Kind even
+        # when another (for example production) context is currently selected.
+        # Set BUILD_KUBE_CONTEXT to intentionally target a remote Kind context.
+        buildCommand: >-
+          KUBECONTEXT=${BUILD_KUBE_CONTEXT:-kind-k8s}
+          NAMESPACE=buildkit
+          DOCKER_CONFIG_SECRET_NAME=buildkit-registry-auth
+          ./scripts/build-in-cluster.sh
+        dependencies:
+          dockerfile:
+            path: Dockerfile
+  cluster:
+    namespace: buildkit
+
+manifests:
+  rawYaml:
+    - k8s/namespace.yaml
+    - k8s/deployment.yaml
+    - k8s/service.yaml
+
+deploy:
+  kubeContext: kind-k8s
+  kubectl: {}
+
+portForward:
+  - resourceType: service
+    resourceName: dotnet-skaffold-api
+    namespace: dotnet-skaffold
+    port: 8080
+    localPort: 8080

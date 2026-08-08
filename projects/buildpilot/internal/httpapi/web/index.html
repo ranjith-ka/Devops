@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BuildPilot</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+    body { margin: 0; background: #08111f; color: #e5eefc; }
+    main { width: min(960px, calc(100% - 32px)); margin: 0 auto; padding: 72px 0; }
+    .tag { color: #72e6b1; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { max-width: 760px; font-size: clamp(42px, 7vw, 78px); line-height: .98; margin: 18px 0; }
+    .lead { color: #9fb0c8; font-size: 20px; max-width: 720px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 48px; }
+    section { background: #101c2e; border: 1px solid #24344d; border-radius: 18px; padding: 24px; }
+    label { display: block; color: #b9c8dc; margin: 12px 0 7px; }
+    input, textarea { box-sizing: border-box; width: 100%; border: 1px solid #344864; border-radius: 10px; background: #07101d; color: #eef5ff; padding: 12px; }
+    textarea { min-height: 160px; resize: vertical; }
+    button { margin-top: 14px; border: 0; border-radius: 10px; background: #72e6b1; color: #062015; padding: 12px 18px; font-weight: 800; cursor: pointer; }
+    button:disabled { cursor: wait; opacity: .65; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; color: #bcd0e8; min-height: 70px; }
+    pre.error { color: #ff9d9d; }
+  </style>
+</head>
+<body>
+<main>
+  <div class="tag">Private AI-assisted builds</div>
+  <h1>Build the Dockerfile you already have.</h1>
+  <p class="lead">Choose a repository and Dockerfile, then queue it for your cluster agent. AI is optional and reserved for diagnosing failures.</p>
+  <div class="grid">
+    <section>
+      <h2>Start a build</h2>
+      <label for="repo">Path under REPOSITORY_ROOT</label>
+      <input id="repo" value=".">
+      <label for="dockerfile">Dockerfile path</label>
+      <input id="dockerfile" value="Dockerfile">
+      <label for="image">Image name and tag</label>
+      <input id="image" placeholder="example/api:dev">
+      <label for="agent">Cluster agent ID</label>
+      <input id="agent" value="local-kind">
+      <button id="build-button" onclick="build()">Queue build</button>
+      <pre id="build-result">Waiting for build details.</pre>
+    </section>
+    <section>
+      <h2>Explain failed build</h2>
+      <label for="logs">Build log excerpt</label>
+      <textarea id="logs" placeholder="Paste the relevant error lines"></textarea>
+      <button onclick="diagnose()">Diagnose</button>
+      <pre id="diagnosis">Waiting for build logs.</pre>
+    </section>
+  </div>
+</main>
+<script>
+async function request(path, body, output) {
+  const target = document.getElementById(output);
+  target.classList.remove('error');
+  target.textContent = 'Working…';
+  try {
+    const response = await fetch(path, {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify(body)});
+    const contentType = response.headers.get('content-type') || '';
+    const data = contentType.includes('application/json') ? await response.json() : {error: await response.text()};
+    if (!response.ok) {
+      throw new Error(data.error || `Request failed with HTTP ${response.status}`);
+    }
+    target.textContent = JSON.stringify(data, null, 2);
+    return data;
+  } catch (error) {
+    target.classList.add('error');
+    target.textContent = `Error: ${error.message || error}`;
+    throw error;
+  }
+}
+async function build() {
+  const button = document.getElementById('build-button');
+  button.disabled = true;
+  try {
+    await request('/api/v1/builds', {
+      repository: document.getElementById('repo').value,
+      dockerfile: document.getElementById('dockerfile').value,
+      image: document.getElementById('image').value,
+      agent_id: document.getElementById('agent').value
+    }, 'build-result');
+  } catch (_) {
+    // request() renders an actionable error in the matching panel.
+  } finally {
+    button.disabled = false;
+  }
+}
+async function diagnose() {
+  try {
+    await request('/api/v1/builds/diagnose', {logs: document.getElementById('logs').value}, 'diagnosis');
+  } catch (_) {}
+}
+</script>
+</body>
+</html>
