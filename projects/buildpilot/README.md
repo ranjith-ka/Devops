@@ -6,8 +6,9 @@ outbound cluster-agent architecture. The current phase is deliberately safe:
 AI returns reviewable plans and diagnoses but cannot write files or execute
 cluster operations.
 
-Read [ARCHITECTURE.md](ARCHITECTURE.md) for the system design and
-[PLAN.md](PLAN.md) for delivery phases.
+Read [PRODUCT.md](PRODUCT.md) for the product, remote-verification workflow,
+packaging, and repository strategy. See [ARCHITECTURE.md](ARCHITECTURE.md) for
+the system design and [PLAN.md](PLAN.md) for delivery phases.
 
 ## Requirements
 

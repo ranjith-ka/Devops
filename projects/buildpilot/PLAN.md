@@ -19,14 +19,29 @@ local repository from the browser, and receive a structured recommendation.
 - Add one-time agent enrollment and signed requests.
 - Package the agent as a Helm chart with namespace-scoped RBAC.
 - Upload a sanitized source bundle to object storage.
-- Create rootless BuildKit Jobs with persistent and registry caches.
-- Stream logs and support cancellation.
-- Support build-only, OCI download, and registry-push outputs.
+- Accept an immutable base commit plus an optional patch.
+- Run `dotnet restore`, compile, and unit tests in an isolated Kubernetes Job.
+- Parse compiler and TRX output into structured, agent-readable diagnostics.
+- Stream logs and support timeout, cancellation, and superseding older work.
+- Upload test reports and logs before automatic resource cleanup.
 
-Exit criterion: one private repository can be built reliably in one connected
+Exit criterion: an agent can submit a failing .NET patch, receive an actionable
+file-and-line diagnosis, correct it, and pass fast verification in one connected
 cluster without sharing kubeconfig.
 
-## Phase 2: GitHub onboarding
+## Phase 2: full verification and container output
+
+- Add full test, coverage, and Sonar quality-gate stages.
+- Create rootless BuildKit Jobs with persistent and registry caches.
+- Return the immutable image digest, SBOM, provenance, and report links.
+- Deploy by digest into a temporary namespace and run integration tests.
+- Distinguish retryable infrastructure failures from code and policy failures.
+- Package production installation as a versioned Helm chart and signed images.
+
+Exit criterion: a verified .NET change produces a tested immutable image digest
+and complete evidence, and failed quality gates prevent promotion.
+
+## Phase 3: GitHub onboarding
 
 - Register a GitHub App with minimal repository permissions.
 - Add installation callback and repository selection.
@@ -37,7 +52,7 @@ cluster without sharing kubeconfig.
 Exit criterion: onboarding from landing page to first build takes under ten
 minutes and requires no hand-written pipeline file.
 
-## Phase 3: deployment and teams
+## Phase 4: deployment and teams
 
 - Helm and raw Kubernetes deployment plans.
 - Environment promotion, rollout status, and rollback.
@@ -50,4 +65,5 @@ minutes and requires no hand-written pipeline file.
 - General-purpose workflow automation.
 - Arbitrary AI tool execution.
 - Production cluster administration.
-- Replacing GitHub Actions for tests unrelated to container delivery.
+- Replacing GitHub Actions as a general-purpose CI system.
+- Building a new workflow engine, registry, object store, or Sonar replacement.

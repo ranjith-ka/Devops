@@ -1,9 +1,10 @@
 # BuildPilot architecture
 
-BuildPilot is a repository-to-Kubernetes build platform. A user connects a
-repository, installs an outbound-only agent in a cluster, reviews an AI-created
-build plan, and starts a rootless BuildKit build without sharing kubeconfig with
-the control plane.
+BuildPilot is an AI-oriented remote verification platform. A coding agent or
+user submits an immutable source revision and optional patch, and an
+outbound-only cluster agent runs compilation, tests, analysis, container
+building, and integration tests without sharing kubeconfig with the control
+plane. Rootless BuildKit is the image-building worker, not the product boundary.
 
 ## System context
 
@@ -12,14 +13,14 @@ GitHub App/webhooks                 Ollama (development)
         |                                  |
         v                                  v
   +---------------- BuildPilot control plane ----------------+
-  | repository scanner | AI gateway | jobs | audit | web UI   |
+  | verification API | scheduler | results | audit | web UI  |
   +-----------------------------------------------------------+
                             ^
                             | outbound HTTPS: poll, logs, status
                             v
                  +---- customer cluster agent ----+
-                 | Kubernetes API | BuildKit jobs |
-                 | cache PVC      | registry auth |
+                 | .NET Jobs | Sonar | BuildKit   |
+                 | caches | reports | registry    |
                  +-------------------------------+
 ```
 
@@ -46,16 +47,28 @@ internal/store          persistence interfaces and memory implementation
 web                     landing page assets
 ```
 
-## Build state machine
+## Verification state machine
 
 ```text
-queued -> preparing -> building -> exporting -> deploying -> succeeded
-                   \-> failed                \-> failed
-       any active state -> cancelled
+queued -> provisioning -> restoring -> compiling -> testing
+                                                 |         |
+                                                 | fast    | full
+                                                 v         v
+                                           succeeded   analyzing
+                                                          |
+                                                     image_building
+                                                          |
+                                                   integration_testing
+                                                          |
+                                                     succeeded
+
+any active state -> failed | cancelled | superseded | timed_out
 ```
 
-The control plane owns the desired state. The agent reports observed state with
-monotonic sequence numbers so retries do not move a job backwards.
+The control plane and its durable database own desired and recorded state.
+Kubernetes resources are execution state, not the system of record. The agent
+reports observed state with monotonic sequence numbers so retries do not move a
+verification backwards.
 
 ## AI boundary
 
