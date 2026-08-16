@@ -49,13 +49,13 @@ const tutorials = [
     index: "001",
     title: "Kubernetes in Docker with KIND",
     topic: "Local platform engineering",
-    href: `${repo}/tree/main/kind`,
+    href: "/blog/kubernetes-in-docker-with-kind",
   },
   {
     index: "002",
     title: "SPIFFE/SPIRE on Kubernetes",
     topic: "Workload identity",
-    href: `${repo}/blob/main/kind/SPIFFE_SPIRE_TUTORIAL.md`,
+    href: "/blog/spiffe-spire-workload-identity-kind",
   },
   {
     index: "003",
@@ -93,7 +93,7 @@ export default function Home() {
         </a>
         <div className="nav-links">
           <a href="#work">Work</a>
-          <a href="#tutorials">Tutorials</a>
+          <a href="/blog">Blog</a>
           <a href="#services">Services</a>
         </div>
         <a className="nav-cta" href="https://www.linkedin.com/in/ranjith-k-a-05980522/" target="_blank" rel="noreferrer">
@@ -184,7 +184,7 @@ export default function Home() {
         </div>
         <div className="tutorial-list">
           {tutorials.map((tutorial) => (
-            <a href={tutorial.href} target="_blank" rel="noreferrer" className="tutorial-row" key={tutorial.index}>
+            <a href={tutorial.href} className="tutorial-row" key={tutorial.index}>
               <span className="tutorial-index">{tutorial.index}</span>
               <h3>{tutorial.title}</h3>
               <span className="tutorial-topic">{tutorial.topic}</span>
@@ -192,6 +192,7 @@ export default function Home() {
             </a>
           ))}
         </div>
+        <div className="blog-more"><a className="button ghost" href="/blog">Read all Kubernetes articles <span>→</span></a></div>
       </section>
 
       <section className="cta-section">
