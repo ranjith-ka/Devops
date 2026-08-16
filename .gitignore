@@ -54,3 +54,19 @@ coverage/
 *.log
 dist/
 tmp/
+
+# LangChain + Grafana tracing tutorial local artifacts
+tutorials/langchain-grafana-tracing/.env
+tutorials/langchain-grafana-tracing/.env.*
+!tutorials/langchain-grafana-tracing/.env.example
+tutorials/langchain-grafana-tracing/.venv/
+tutorials/langchain-grafana-tracing/venv/
+tutorials/langchain-grafana-tracing/path/to/venv/
+tutorials/langchain-grafana-tracing/__pycache__/
+tutorials/langchain-grafana-tracing/**/*.py[cod]
+tutorials/langchain-grafana-tracing/.pytest_cache/
+tutorials/langchain-grafana-tracing/.mypy_cache/
+tutorials/langchain-grafana-tracing/.ruff_cache/
+tutorials/langchain-grafana-tracing/.coverage
+tutorials/langchain-grafana-tracing/htmlcov/
+tutorials/langchain-grafana-tracing/openevolve_output*/
