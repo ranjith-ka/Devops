@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const repo = "https://github.com/ranjith-ka/Devops";
 
 const services = [
@@ -101,7 +103,7 @@ export default function Home() {
 
       <section className="hero shell" id="top">
         <div className="hero-copy">
-          <p className="eyebrow"><span /> Bengaluru, India · Open to collaboration</p>
+          <p className="eyebrow"><span /> Professional services · Bengaluru, India</p>
           <h1>I build platforms that help engineering teams <em>move with confidence.</em></h1>
           <p className="hero-text">
             Senior Platform &amp; DevOps engineer with 15+ years of experience across Kubernetes,
@@ -112,17 +114,25 @@ export default function Home() {
             <a className="button ghost" href={repo} target="_blank" rel="noreferrer">View GitHub <span>↗</span></a>
           </div>
         </div>
-        <aside className="status-card" aria-label="Current focus">
-          <div className="card-top"><span>Current focus</span><span className="pulse" /></div>
-          <p>AI-native platform engineering</p>
-          <div className="terminal">
-            <span><b>$</b> platform status</span>
-            <span><i>✓</i> Kubernetes foundations</span>
-            <span><i>✓</i> GitOps delivery</span>
-            <span><i>✓</i> AI observability</span>
-            <span><i>→</i> Agentic operations</span>
+        <aside className="profile-card" aria-label="Ranjith K A professional profile">
+          <div className="portrait-wrap">
+            <Image
+              src="https://avatars.githubusercontent.com/u/33622670?v=4"
+              alt="Ranjith K A"
+              fill
+              priority
+              sizes="(max-width: 850px) 430px, 360px"
+            />
+            <span className="available-badge"><i /> Available for select engagements</span>
           </div>
-          <div className="availability"><span>Available for</span><strong>Architecture · Advisory · Build</strong></div>
+          <div className="profile-info">
+            <div><h3>Ranjith K A</h3><p>Platform Engineering &amp; AI Infrastructure</p></div>
+            <span className="profile-monogram">15+</span>
+          </div>
+          <div className="profile-stats">
+            <span><strong>15+ years</strong>Engineering experience</span>
+            <span><strong>3 modes</strong>Advisory · Architecture · Build</span>
+          </div>
         </aside>
       </section>
 
@@ -135,7 +145,7 @@ export default function Home() {
       <section className="section shell" id="services">
         <div className="section-heading">
           <div><p className="kicker">How I can help</p><h2>From infrastructure to<br/><em>engineering leverage.</em></h2></div>
-          <p>I help teams turn complex infrastructure into an understandable, secure and productive internal platform.</p>
+          <p>Professional advisory and hands-on delivery for teams that need a secure, scalable platform—not another layer of operational complexity.</p>
         </div>
         <div className="service-grid">
           {services.map((service) => (
