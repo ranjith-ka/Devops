@@ -15,6 +15,12 @@ For the complete agents curriculum, start with
 [agents-course/README.md](./agents-course/README.md). Lessons are intentionally
 small and should be completed in order.
 
+## Step-by-step course for this LangGraph application
+
+To learn the implemented graph, durable memory, documentation retrieval, Tempo,
+Loki, comparison UI, and extension patterns, start with
+[langgraph-course/README.md](./langgraph-course/README.md).
+
 ## What you will learn
 
 - compose a prompt, model step, and parser with LangChain runnables;
