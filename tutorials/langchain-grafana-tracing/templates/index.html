@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+
+{% block title %}LangChain Tracing - Home{% endblock %}
+
+{% block extra_css %}
+<style>
+    .waterfall-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 18px 0 24px; }
+    .waterfall-panel { min-width: 0; background: #fff; border: 1px solid #dfe3e8; border-radius: 8px; padding: 14px; color: #263238; }
+    .waterfall-title { font-weight: 700; margin-bottom: 4px; }
+    .waterfall-id { font: 11px monospace; color: #607d8b; overflow-wrap: anywhere; margin-bottom: 12px; }
+    .waterfall-axis { position: relative; height: 22px; margin-left: 116px; border-bottom: 1px solid #b0bec5; font-size: 10px; color: #607d8b; }
+    .waterfall-axis span { position: absolute; transform: translateX(-50%); }
+    .waterfall-row { display: grid; grid-template-columns: 108px 1fr; gap: 8px; align-items: center; min-height: 30px; }
+    .waterfall-label { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .waterfall-track { position: relative; height: 19px; background: #f4f6f8; border-left: 1px solid #cfd8dc; }
+    .waterfall-bar { position: absolute; top: 2px; height: 15px; min-width: 3px; border-radius: 3px; background: #667eea; cursor: default; }
+    .waterfall-bar.root { background: #455a64; }
+    .waterfall-bar.error { background: #c62828; }
+    .waterfall-bar:hover { filter: brightness(.85); }
+    .log-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
+    .log-panel { min-width: 0; background: #17212b; color: #d8e2ea; border-radius: 8px; padding: 12px; }
+    .log-panel h5 { color: #fff; margin-bottom: 8px; }
+    .log-entry { display: grid; grid-template-columns: 76px 1fr; gap: 8px; padding: 5px 0; border-bottom: 1px solid #2d3b47; font: 11px monospace; }
+    .log-event { color: #9ecbff; }
+    .source-list { margin-top: 8px; color: #455a64; font-size: 13px; }
+    #compare-report table { width: 100%; border-collapse: collapse; color: #263238; background: #fff; }
+    #compare-report th, #compare-report td { padding: 8px; border: 1px solid #dfe3e8; text-align: left; font-size: 12px; }
+    @media (max-width: 900px) { .waterfall-grid, .log-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="tabs">
+        <button class="tab-button active" onclick="switchTab(event, 'qa')">❓ Question Answering</button>
+        <button class="tab-button" onclick="switchTab(event, 'compare')">📊 Compare Traces</button>
+    </div>
+
+    <!-- Question Answering Tab -->
+    <div id="qa" class="tab-content active">
+        <div class="form-group">
+            <label for="question">Ask a Question:</label>
+            <textarea id="question" placeholder="Enter your question here...">What problem does LangChain solve?</textarea>
+        </div>
+        <button onclick="askQuestion()">Send Question</button>
+        
+        <div id="qa-loading" class="loading">
+            <div class="spinner"></div>
+            <p>Processing your question...</p>
+        </div>
+        
+        <div id="qa-result" class="result">
+            <h3>Answer</h3>
+            <div id="qa-answer"></div>
+            <h3>Trace Information</h3>
+            <div id="qa-trace"></div>
+        </div>
+    </div>
+
+    <!-- Trace Comparison Tab -->
+    <div id="compare" class="tab-content">
+        <div class="grid-2">
+            <div>
+                <div class="form-group">
+                    <label for="trace-a">Trace A ID:</label>
+                    <input type="text" id="trace-a" placeholder="32-character trace ID">
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label for="trace-b">Trace B ID:</label>
+                    <input type="text" id="trace-b" placeholder="32-character trace ID">
+                </div>
+            </div>
+        </div>
+        <button onclick="compareTraces()">Compare Traces</button>
+        
+        <div id="compare-loading" class="loading">
+            <div class="spinner"></div>
+            <p>Comparing traces...</p>
+        </div>
+        
+        <div id="compare-result" class="result">
+            <h3>Comparison Report</h3>
+            <div id="compare-report"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function switchTab(event, tabName) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    // Remove active from all buttons
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected tab
+    document.getElementById(tabName).classList.add('active');
+    event.target.classList.add('active');
+}
+
+async function askQuestion() {
+    const question = document.getElementById('question').value.trim();
+    
+    if (!question) {
+        alert('Please enter a question');
+        return;
+    }
+    
+    const loading = document.getElementById('qa-loading');
+    const result = document.getElementById('qa-result');
+    const answerDiv = document.getElementById('qa-answer');
+    const traceDiv = document.getElementById('qa-trace');
+    
+    loading.classList.add('show');
+    result.classList.remove('show');
+    
+    try {
+        let threadId = localStorage.getItem('langgraph-thread-id');
+        if (!threadId) {
+            threadId = crypto.randomUUID();
+            localStorage.setItem('langgraph-thread-id', threadId);
+        }
+        const response = await makeRequest('/api/question', { question, thread_id: threadId });
+        
+        if (response.success) {
+            answerDiv.textContent = response.answer;
+            const sources = (response.sources || []).map(escapeHtml).join(', ') || 'No matching local documents';
+            traceDiv.innerHTML = `<div class="trace-id">Trace ID: <strong>${response.trace_id}</strong></div>
+                <div class="source-list"><strong>Memory thread:</strong> ${escapeHtml(response.thread_id)}<br><strong>Documentation:</strong> ${sources}</div>`;
+            result.classList.add('show');
+            result.classList.remove('error');
+            result.classList.add('success');
+        } else {
+            result.innerHTML = `<div class="error"><h3>Error</h3><p>${response.error}</p></div>`;
+            result.classList.add('show');
+            result.classList.add('error');
+            result.classList.remove('success');
+        }
+    } catch (error) {
+        result.innerHTML = `<div class="error"><h3>Error</h3><p>${error.message}</p></div>`;
+        result.classList.add('show');
+        result.classList.add('error');
+    } finally {
+        loading.classList.remove('show');
+    }
+}
+
+async function compareTraces() {
+    const traceA = document.getElementById('trace-a').value.trim();
+    const traceB = document.getElementById('trace-b').value.trim();
+    
+    if (!traceA || !traceB) {
+        alert('Please enter both Trace A and Trace B IDs');
+        return;
+    }
+    
+    const loading = document.getElementById('compare-loading');
+    const result = document.getElementById('compare-result');
+    const reportDiv = document.getElementById('compare-report');
+    
+    loading.classList.add('show');
+    result.classList.remove('show');
+    
+    try {
+        const response = await makeRequest('/api/compare', { 
+            trace_a: traceA,
+            trace_b: traceB
+        });
+        
+        if (response.success) {
+            const comparison = response.comparison;
+            let html = '<div class="success">';
+            
+            // Root Cause
+            html += `<h4>Root Cause: ${comparison.root_cause}</h4>`;
+            html += `<p><strong>Recommendation:</strong> ${comparison.recommendation}</p>`;
+            const rootDirection = comparison.root_diff_ms >= 0 ? 'slower' : 'faster';
+            html += `<p><strong>Overall:</strong> Trace B is ${Math.abs(comparison.root_diff_ms).toFixed(2)} ms ${rootDirection} than Trace A.</p>`;
+
+            const sharedDuration = Math.max(
+                comparison.trace_a_waterfall.duration_ms,
+                comparison.trace_b_waterfall.duration_ms,
+                1
+            );
+            html += '<div class="waterfall-grid">';
+            html += renderWaterfall(comparison.trace_a_waterfall, 'Trace A', sharedDuration);
+            html += renderWaterfall(comparison.trace_b_waterfall, 'Trace B', sharedDuration);
+            html += '</div>';
+
+            html += '<h4>Correlated Loki Logs:</h4><div class="log-grid">';
+            html += renderLogs(comparison.trace_a_logs || [], 'Trace A logs');
+            html += renderLogs(comparison.trace_b_logs || [], 'Trace B logs');
+            html += '</div>';
+            
+            // Span Details
+            const spanDetails = comparison.span_details || {};
+            if (Object.keys(spanDetails).length > 0) {
+                html += '<h4>Span Comparisons:</h4>';
+                html += '<table><thead><tr><th>Span</th><th>Trace A</th><th>Trace B</th><th>Delta</th><th>Status A/B</th></tr></thead><tbody>';
+                for (const [name, span] of Object.entries(spanDetails)) {
+                    const delta = span.delta_ms >= 0 ? `+${span.delta_ms.toFixed(2)}` : span.delta_ms.toFixed(2);
+                    html += `<tr><td>${name}</td><td>${span.trace_a_ms.toFixed(2)} ms</td><td>${span.trace_b_ms.toFixed(2)} ms</td><td>${delta} ms</td><td>${span.status_a} / ${span.status_b}</td></tr>`;
+                }
+                html += '</tbody></table>';
+            }
+            
+            html += '</div>';
+            reportDiv.innerHTML = html;
+            result.classList.add('show');
+            result.classList.remove('error');
+            result.classList.add('success');
+        } else {
+            result.innerHTML = `<div class="error"><h3>Error</h3><p>${response.error}</p></div>`;
+            result.classList.add('show');
+            result.classList.add('error');
+            result.classList.remove('success');
+        }
+    } catch (error) {
+        result.innerHTML = `<div class="error"><h3>Error</h3><p>${error.message}</p></div>`;
+        result.classList.add('show');
+        result.classList.add('error');
+    } finally {
+        loading.classList.remove('show');
+    }
+}
+
+function escapeHtml(value) {
+    const element = document.createElement('div');
+    element.textContent = String(value);
+    return element.innerHTML;
+}
+
+function renderWaterfall(trace, label, sharedDuration) {
+    const ticks = [0, 25, 50, 75, 100]
+        .map(percent => `<span style="left:${percent}%">${(sharedDuration * percent / 100).toFixed(0)} ms</span>`)
+        .join('');
+    const rows = trace.spans.map(span => {
+        const left = Math.min(100, span.start_offset_ms / sharedDuration * 100);
+        const width = Math.min(100 - left, span.duration_ms / sharedDuration * 100);
+        const classes = ['waterfall-bar', span.is_root ? 'root' : '', span.status === 'error' ? 'error' : ''].join(' ');
+        const tooltip = `${span.name}: start ${span.start_offset_ms.toFixed(2)} ms, duration ${span.duration_ms.toFixed(2)} ms, status ${span.status}`;
+        return `<div class="waterfall-row">
+            <div class="waterfall-label" title="${escapeHtml(span.name)}">${escapeHtml(span.name)}</div>
+            <div class="waterfall-track"><div class="${classes}" style="left:${left}%;width:${width}%" title="${escapeHtml(tooltip)}"></div></div>
+        </div>`;
+    }).join('');
+    return `<section class="waterfall-panel">
+        <div class="waterfall-title">${label} · ${trace.duration_ms.toFixed(2)} ms</div>
+        <div class="waterfall-id">${escapeHtml(trace.trace_id)}</div>
+        <div class="waterfall-axis">${ticks}</div>
+        ${rows}
+    </section>`;
+}
+
+function renderLogs(logs, label) {
+    if (!logs.length) {
+        return `<section class="log-panel"><h5>${label}</h5><div class="log-entry"><span>—</span><span>No correlated logs found</span></div></section>`;
+    }
+    const entries = logs.map(log => {
+        const time = new Date(Number(log.timestamp) / 1e6).toLocaleTimeString();
+        const detail = [log.node, log.error_type, log.document_count !== undefined ? `${log.document_count} docs` : '']
+            .filter(Boolean).join(' · ');
+        return `<div class="log-entry"><span>${escapeHtml(time)}</span><span><span class="log-event">${escapeHtml(log.event || 'log')}</span>${detail ? ` · ${escapeHtml(detail)}` : ''}</span></div>`;
+    }).join('');
+    return `<section class="log-panel"><h5>${label}</h5>${entries}</section>`;
+}
+
+// Allow Enter key for question submission
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('question').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.ctrlKey) {
+            askQuestion();
+        }
+    });
+});
+</script>
+{% endblock %}
