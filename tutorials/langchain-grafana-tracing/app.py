@@ -1,122 +1,90 @@
-"""Small LangChain pipeline with vendor-neutral OpenTelemetry tracing."""
+"""CLI orchestration and main entry point.
+
+This module handles command-line argument parsing and workflow orchestration
+for the LangChain tracing and trace comparison application.
+"""
 
 from __future__ import annotations
 
 import argparse
-import hashlib
-import os
-import time
-from collections.abc import Callable
-from typing import Any
+import json
 
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnableLambda
+from graph import AgentGraph
+from tempo import fetch_trace_from_tempo
+from trace_analyzer import compare_traces
+from tracing import configure_tracing, get_tracer
 from opentelemetry import trace
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.trace import Status, StatusCode
+
+TRACER = None
 
 
-def configure_tracing() -> TracerProvider:
-    """Configure batching once at the application boundary."""
-    resource = Resource.create(
-        {
-            "service.name": os.getenv("OTEL_SERVICE_NAME", "langchain-tutorial"),
-            "service.version": os.getenv("SERVICE_VERSION", "0.1.0"),
-            "deployment.environment.name": os.getenv(
-                "DEPLOYMENT_ENVIRONMENT", "local"
-            ),
-        }
-    )
-    provider = TracerProvider(resource=resource)
-    provider.add_span_processor(
-        BatchSpanProcessor(
-            OTLPSpanExporter(
-                endpoint=os.getenv(
-                    "OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317"
-                ),
-                insecure=True,
-            )
-        )
-    )
-    trace.set_tracer_provider(provider)
-    return provider
+def run_question_answering(question: str, thread_id: str = "cli") -> None:
+    """Run the LangChain pipeline for question answering."""
+    global TRACER
+    if TRACER is None:
+        configure_tracing()
+        TRACER = get_tracer()
+
+    with TRACER.start_as_current_span("langchain.request") as span:
+        span.set_attribute("app.request.type", "tutorial_question")
+        graph = AgentGraph()
+        try:
+            result = graph.invoke(question, thread_id)
+        finally:
+            graph.close()
+        print(result["answer"])
+        print(f"trace_id={span.get_span_context().trace_id:032x}")
+
+    provider = trace.get_tracer_provider()
+    if hasattr(provider, "force_flush"):
+        provider.force_flush()
 
 
-TRACER = trace.get_tracer("tutorial.langchain")
+def run_trace_comparison(trace_a_id: str, trace_b_id: str) -> None:
+    """Run the trace comparison workflow."""
+    trace_a = fetch_trace_from_tempo(trace_a_id)
+    trace_b = fetch_trace_from_tempo(trace_b_id)
+    result = compare_traces(trace_a, trace_b)
 
-
-# EVOLVE-BLOCK-START
-def traced_step(name: str, operation: str, function: Callable[[Any], Any]):
-    """Wrap one LangChain runnable in a child span."""
-
-    def invoke(value: Any) -> Any:
-        started = time.perf_counter()
-        with TRACER.start_as_current_span(name) as span:
-            span.set_attribute("gen_ai.operation.name", operation)
-            span.set_attribute("langchain.step.name", name)
-            try:
-                result = function(value)
-                span.set_attribute(
-                    "step.duration_ms", (time.perf_counter() - started) * 1000
-                )
-                return result
-            except Exception as error:
-                span.record_exception(error)
-                span.set_status(Status(StatusCode.ERROR, str(error)))
-                raise
-
-    return RunnableLambda(invoke)
-
-
-def fake_model(prompt: Any) -> str:
-    """A free deterministic model substitute, so the lab needs no API key."""
-    time.sleep(0.08)
-    text = prompt.to_string()
-    question = text.rsplit("Human:", maxsplit=1)[-1].strip()
-    if os.getenv("TRACE_CONTENT", "false").lower() == "true":
-        trace.get_current_span().set_attribute("gen_ai.prompt", question[:1000])
-    else:
-        digest = hashlib.sha256(question.encode()).hexdigest()[:12]
-        trace.get_current_span().set_attribute("gen_ai.prompt.sha256", digest)
-    trace.get_current_span().set_attribute("gen_ai.request.model", "tutorial-fake-model")
-    trace.get_current_span().set_attribute("gen_ai.usage.input_tokens", len(text.split()))
-    answer = f"A concise tutorial answer for: {question}"
-    trace.get_current_span().set_attribute("gen_ai.usage.output_tokens", len(answer.split()))
-    return answer
-# EVOLVE-BLOCK-END
-
-
-def build_chain():
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", "You teach LangChain in short, concrete steps."),
-            ("human", "{question}"),
-        ]
-    )
-    return (
-        traced_step("prompt.render", "prompt", prompt.invoke)
-        | traced_step("model.generate", "chat", fake_model)
-        | traced_step("output.parse", "parse", StrOutputParser().invoke)
-    )
+    print("\n=== Trace Comparison Report ===\n")
+    print(json.dumps(result.to_dict(), indent=2))
+    print(f"\nRoot Cause: {result.root_cause}")
+    print(f"Recommendation: {result.recommendation}")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "question", nargs="?", default="What problem does LangChain solve?"
+    """Main entry point."""
+    parser = argparse.ArgumentParser(
+        description="LangChain tracing and trace comparison demo"
     )
+    parser.add_argument(
+        "question",
+        nargs="?",
+        default="What problem does LangChain solve?",
+        help="Question to ask the model",
+    )
+    parser.add_argument(
+        "--compare-trace-a",
+        help="First trace ID for comparison",
+    )
+    parser.add_argument(
+        "--compare-trace-b",
+        help="Second trace ID for comparison",
+    )
+    parser.add_argument("--thread-id", default="cli", help="Conversation memory thread ID")
+
     args = parser.parse_args()
     provider = configure_tracing()
+    global TRACER
+    TRACER = get_tracer()
+
     try:
-        with TRACER.start_as_current_span("langchain.request") as span:
-            span.set_attribute("app.request.type", "tutorial_question")
-            print(build_chain().invoke({"question": args.question}))
-            print(f"trace_id={span.get_span_context().trace_id:032x}")
+        if args.compare_trace_a and args.compare_trace_b:
+            run_trace_comparison(args.compare_trace_a, args.compare_trace_b)
+        else:
+            run_question_answering(args.question, args.thread_id)
     finally:
+        provider.force_flush()
         provider.shutdown()
 
 

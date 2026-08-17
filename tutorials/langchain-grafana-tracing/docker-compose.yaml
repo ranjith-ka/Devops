@@ -1,37 +1,105 @@
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.132.0
-    command: ["--config=/etc/otelcol/config.yaml"]
-    volumes:
-      - ./observability/otel-collector.yaml:/etc/otelcol/config.yaml:ro
+    image: otel/opentelemetry-collector:latest
+    container_name: otel-collector
     ports:
       - "4317:4317"
       - "4318:4318"
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
     depends_on:
       - tempo
+    networks:
+      - tracing
 
   tempo:
-    image: grafana/tempo:3.0.0
-    command: ["-config.file=/etc/tempo.yaml"]
-    volumes:
-      - ./observability/tempo.yaml:/etc/tempo.yaml:ro
-      - tempo-data:/var/tempo
+    image: grafana/tempo:2.5.0
+    platform: linux/amd64
+    container_name: tempo
     ports:
       - "3200:3200"
+    volumes:
+      - ./tempo.yaml:/etc/tempo.yaml
+      - tempo-data:/var/tempo
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    networks:
+      - tracing
+
+  loki:
+    image: grafana/loki:3.5.3
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki.yaml:/etc/loki/local-config.yaml
+      - loki-data:/loki
+    command: [ "-config.file=/etc/loki/local-config.yaml" ]
+    networks:
+      - tracing
 
   grafana:
-    image: grafana/grafana:12.1.0
-    environment:
-      GF_AUTH_ANONYMOUS_ENABLED: "true"
-      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
-      GF_AUTH_DISABLE_LOGIN_FORM: "true"
-    volumes:
-      - ./observability/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
+    image: grafana/grafana:latest
+    container_name: grafana
     ports:
       - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       - tempo
+      - loki
+    networks:
+      - tracing
+
+  langchain-tracing-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: langchain-tracing-ui
+    ports:
+      - "5001:5000"
+    environment:
+      - OTEL_SERVICE_NAME=langchain-tracing
+      - SERVICE_NAME=langchain-tracing
+      - SERVICE_VERSION=1.0.0
+      - DEPLOYMENT_ENVIRONMENT=docker
+      - ENVIRONMENT=docker
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
+      - OTLP_ENDPOINT=otel-collector:4317
+      - TEMPO_ENDPOINT=http://tempo:3200
+      - LOKI_ENDPOINT=http://loki:3100
+      - CHECKPOINT_DB=/data/checkpoints.sqlite
+      - DOCUMENTATION_PATH=/app/docs
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=llama3.2
+      - PYTHONUNBUFFERED=1
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - otel-collector
+      - loki
+    volumes:
+      - app-data:/data
+    networks:
+      - tracing
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
 
 volumes:
-  tempo-data: {}
+  tempo-data:
+  grafana-data:
+  loki-data:
+  app-data:
 
+networks:
+  tracing:
+    driver: bridge

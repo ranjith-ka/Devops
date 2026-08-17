@@ -1,9 +1,9 @@
 # LangChain tracing with Grafana Tempo
 
-This tutorial builds a small LangChain pipeline, sends OpenTelemetry spans through
-an OpenTelemetry Collector, stores them in Grafana Tempo, and explores them in
-Grafana. It starts with a laptop-friendly architecture and ends with a staged
-production design that scales without retaining every expensive span.
+This tutorial builds a stateful LangGraph workflow, retrieves local documentation,
+stores conversation checkpoints in SQLite, sends OpenTelemetry spans to Tempo,
+and sends trace-correlated structured logs to Loki. Grafana and the included UI
+can inspect and compare both signals.
 
 The sample uses a deterministic fake model, so the entire lab works without an
 LLM account or API key. Replace that one function with a provider model after the
@@ -27,14 +27,15 @@ small and should be completed in order.
 ## Architecture
 
 ```text
-Python/LangChain
+Python/LangGraph
   request span
-    ├── prompt.render
-    ├── model.generate  (model and token attributes)
-    └── output.parse
+    ├── graph.node.retrieve_documentation
+    ├── graph.node.generate_answer
+    └── graph.node.persist_memory
           │ OTLP/gRPC
           v
 OpenTelemetry Collector ──OTLP──> Tempo ──query──> Grafana
+Application logs ────────────────> Loki ───query──> Grafana/UI
   memory limit + batches            local disk       Explore
 ```
 
@@ -63,8 +64,8 @@ The command prints a result and a 32-character trace ID. Open
 2. use the TraceQL query `{ resource.service.name = "langchain-tutorial" }`.
 
 Allow a few seconds for the SDK batch exporter, Collector, and Tempo to flush.
-Inspect the waterfall and confirm the request has `prompt.render`,
-`model.generate`, and `output.parse` children.
+Inspect the waterfall and confirm the request has documentation retrieval,
+answer generation, and memory persistence children.
 
 Useful diagnostics:
 
@@ -77,20 +78,25 @@ docker compose down
 `docker compose down` preserves the named Tempo volume. Use
 `docker compose down -v` only when you intentionally want to delete local traces.
 
-## 2. Understand the LangChain code
+## 2. Understand the LangGraph workflow
 
-LangChain runnables use a common `invoke` interface and the `|` operator composes
-them into a pipeline:
+The graph in `graph.py` uses a typed state and explicit nodes:
 
-```python
-chain = prompt_step | model_step | parser_step
-answer = chain.invoke({"question": "What is a runnable?"})
+```text
+START -> retrieve_documentation -> generate_answer -> persist_memory -> END
 ```
 
-In [app.py](./app.py), `traced_step` adapts any callable into a `RunnableLambda`
-and creates a span around it. OpenTelemetry automatically makes each new span a
-child of the currently active span. The root `langchain.request` span therefore
-measures total user-visible latency while the child spans show where time went.
+Each node is wrapped in a stable OpenTelemetry span and emits structured Loki
+events carrying the same trace ID. SQLite checkpoints use `thread_id` to retain
+the last conversation messages across requests and container restarts.
+
+To add a node, define a function returning a partial `AgentState`, register it
+with `builder.add_node`, and connect it using `builder.add_edge` or a conditional
+edge. Wrap it with `traced_node` so Tempo and Loki comparisons include it.
+
+Markdown files under `docs/` are loaded by `DocumentationStore`. The current
+retriever is intentionally local and lexical; it can later be replaced by an
+embedding/vector implementation without changing the graph state contract.
 
 The fake model also records:
 
@@ -255,3 +261,8 @@ raw tenant identifiers metric labels.
 - [Grafana Tempo quick start](https://grafana.com/docs/tempo/latest/docker-example/)
 - [Grafana Tempo architecture](https://grafana.com/docs/tempo/latest/introduction/architecture/)
 - [Plan a Tempo deployment](https://grafana.com/docs/tempo/latest/set-up-for-tracing/setup-tempo/plan/)
+
+
+## Documentation
+
+- [LangGraph Architecture](./docs/langgraph-architecture.md)
