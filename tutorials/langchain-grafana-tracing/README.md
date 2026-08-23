@@ -274,7 +274,61 @@ raw tenant identifiers metric labels.
 - [LangGraph Architecture](./docs/langgraph-architecture.md)
 
 
-## Next milestone: incident-investigation agent
+## 8. Run the true incident-investigation agent
+
+The original `graph.py` remains a deterministic RAG workflow. The separate
+`incident_agent.py` is a true agent loop: the model chooses among Tempo, Loki,
+and trace-comparison tools, observes their results, and decides whether to
+investigate further or return an answer.
+
+Pull a local model with reliable tool-calling support:
+
+```bash
+ollama pull qwen3:8b
+```
+
+Start the observability stack, load the environment, and investigate one trace:
+
+```bash
+docker compose up -d
+set -a; source .env.example; set +a
+
+python incident_agent.py \
+  "Investigate trace 0123456789abcdef0123456789abcdef deeply. Use logs only if the trace evidence requires them." \
+  --thread-id incident-demo \
+  --max-model-calls 6
+```
+
+Compare a baseline and candidate:
+
+```bash
+python incident_agent.py \
+  "Compare baseline trace 0123456789abcdef0123456789abcdef with candidate trace fedcba9876543210fedcba9876543210. Investigate the candidate logs if the comparison shows an error or unexplained regression." \
+  --thread-id comparison-demo
+```
+
+The final output separates evidence, hypothesis, confidence, and next action. The
+command also prints the investigation trace ID. In Grafana, inspect that trace to
+see repeated `agent.model.decide` and `agent.tool.*` spans.
+
+Safety boundaries in this POC:
+
+- all tools are read-only;
+- trace IDs are validated;
+- spans and logs returned to the model are bounded;
+- tool failures become model-readable evidence;
+- model calls are capped at 1–12 per invocation;
+- tool results are treated as untrusted data;
+- prompts and full tool payloads are not added to telemetry attributes.
+
+Run the deterministic agent tests without Tempo, Loki, Grafana, or Ollama:
+
+```bash
+python -m unittest tests.test_incident_agent -v
+```
+
+
+## Incident-agent learning material
 
 The current `graph.py` is intentionally a deterministic RAG workflow. To learn
 how prompt chaining, parallelization, routing, orchestrator-worker,
