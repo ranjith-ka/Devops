@@ -1,8 +1,9 @@
 # LangGraph observability application: step-by-step course
 
 This course teaches the architecture implemented in this repository. It starts
-with graph state and finishes with adding production-ready nodes that appear in
-Tempo waterfalls and Loki logs automatically.
+with graph state, progresses through durable memory and Grafana observability,
+and finishes by showing how to evolve the deterministic workflow into a bounded
+tool-calling incident agent.
 
 ## How to study
 
@@ -26,6 +27,7 @@ Tempo waterfalls and Loki logs automatically.
 | [08](./08-trace-and-log-comparison.md) | Real trace comparison and waterfall UI | [`tempo.py`](../tempo.py), [`trace_analyzer.py`](../trace_analyzer.py) |
 | [09](./09-extending-the-graph.md) | Add tools, routing, validation, and retries | [`graph.py`](../graph.py) |
 | [10](./10-production-roadmap.md) | Scaling, security, retrieval, and storage | Docker and configuration |
+| [11](./11-workflows-and-agents.md) | Workflow patterns, ToolNode, agent loop, state and context | [POC completion plan](../POC-COMPLETION.md) |
 
 ## Architecture you will learn
 
@@ -47,6 +49,8 @@ Every request/node -> Tempo spans + Loki events with the same trace_id
 Two trace IDs      -> comparison API -> waterfall + correlated logs
 ```
 
-The workflow is deliberately deterministic: the application chooses the node
-order. The model generates an answer but does not control graph routing yet.
-Lesson 9 shows where dynamic routing can be added safely.
+The implemented graph is deliberately deterministic: the application chooses
+the node order. The model generates an answer but does not control graph routing
+yet. Lesson 11 explains the exact boundary between workflows and agents and
+defines the next POC milestone: a read-only `agent -> ToolNode -> agent` loop
+over the existing Tempo and Loki functions.
