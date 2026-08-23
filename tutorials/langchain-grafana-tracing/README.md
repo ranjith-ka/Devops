@@ -272,3 +272,16 @@ raw tenant identifiers metric labels.
 ## Documentation
 
 - [LangGraph Architecture](./docs/langgraph-architecture.md)
+
+
+## Next milestone: incident-investigation agent
+
+The current `graph.py` is intentionally a deterministic RAG workflow. To learn
+how prompt chaining, parallelization, routing, orchestrator-worker,
+evaluator-optimizer, and tool-calling agents differ, continue with
+[LangGraph course lesson 11](./langgraph-course/11-workflows-and-agents.md).
+
+To evolve this repository into a bounded agent that dynamically selects Tempo,
+Loki, and trace-comparison tools, follow the
+[POC completion plan](./POC-COMPLETION.md). It includes the implementation order,
+safety boundaries, tests, demo scenario, and acceptance criteria.
