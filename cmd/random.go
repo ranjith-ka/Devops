@@ -133,6 +133,37 @@ var randomCmd = &cobra.Command{
 
 const url = "https://icanhazdadjoke.com/"
 
+// GetRandomJoke fetches a random dad joke for callers such as the CLI, HTTP
+// handlers, and MCP tools.
+func GetRandomJoke(ctx context.Context) (string, error) {
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return "", fmt.Errorf("create joke request: %w", err)
+	}
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("User-Agent", "Devops joke application (https://github.com/ranjith-ka/Devops)")
+
+	response, err := http.DefaultClient.Do(request)
+	if err != nil {
+		return "", fmt.Errorf("fetch joke: %w", err)
+	}
+	defer response.Body.Close()
+
+	if response.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("joke service returned %s", response.Status)
+	}
+
+	var joke RandomJoke
+	if err := json.NewDecoder(response.Body).Decode(&joke); err != nil {
+		return "", fmt.Errorf("decode joke response: %w", err)
+	}
+	if joke.Joke == "" {
+		return "", fmt.Errorf("joke service returned an empty joke")
+	}
+
+	return joke.Joke, nil
+}
+
 // getRandomJoke func use the method getJokeData to get JSON and unmarshal into string to print in the screen
 func getRandomJoke(ctx context.Context) string {
 	// Create span for this function
@@ -401,7 +432,7 @@ func getRandomJokeWithLLMStudio(ctx context.Context) string {
 
 	fmt.Println("Fetching a joke using LLM Studio...")
 	prompt := "Tell me a funny astronaut joke."
-	
+
 	span.SetAttributes(
 		attribute.String("llm.prompt", prompt),
 	)
@@ -417,7 +448,7 @@ func getRandomJokeWithLLMStudio(ctx context.Context) string {
 
 	fmt.Println("Here's a joke for you:")
 	fmt.Println(copilotResponse)
-	
+
 	span.SetAttributes(
 		attribute.String("llm.response", copilotResponse),
 		attribute.Int("llm.response_length", len(copilotResponse)),
