@@ -1,5 +1,23 @@
 # LangGraph Grafana tracing POC: completion plan
 
+## Implementation status
+
+Implemented on this branch:
+
+- [x] `get_trace`, `get_logs`, and `compare_trace_ids` read-only tools;
+- [x] compact, bounded JSON evidence and strict trace-ID validation;
+- [x] `MessagesState -> model -> ToolNode -> model` feedback loop;
+- [x] dynamic stop/tool routing and maximum model-turn protection;
+- [x] SQLite thread checkpoints;
+- [x] model and tool OpenTelemetry spans plus trace-correlated Loki events;
+- [x] deterministic tests proving shallow, deep, and bounded execution paths;
+- [ ] live Ollama verification with a real Tempo trace;
+- [ ] UI display of selected tools and evidence;
+- [ ] adversarial and tool-failure evaluation suite.
+
+The remaining work is validation and productization, not creation of the core
+agent loop.
+
 ## Current state
 
 The repository already demonstrates a strong deterministic observability
@@ -13,15 +31,13 @@ workflow:
 - Tempo trace parsing and trace comparison;
 - a Flask/UI demo, Docker Compose environment, and unit tests.
 
-The current graph does **not** yet let the model choose investigation tools.
-`graph.py` always runs:
+The original educational graph remains deterministic and always runs:
 
 ```text
 retrieve_documentation -> generate_answer -> persist_memory
 ```
 
-The next POC milestone is therefore not more documentation retrieval. It is a
-bounded, read-only tool-calling incident agent.
+The separate `incident_agent.py` now implements the bounded, read-only tool-calling loop while preserving the original workflow for comparison.
 
 ## Target POC
 
@@ -58,7 +74,7 @@ and rejects invalid trace IDs.
 
 ### Milestone 2 — Agent graph
 
-Create `incident_graph.py` using:
+The implemented `incident_agent.py` uses:
 
 - `MessagesState` or a custom extension;
 - `ChatOllama.bind_tools(...)`;

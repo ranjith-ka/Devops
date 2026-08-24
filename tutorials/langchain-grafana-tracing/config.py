@@ -33,6 +33,9 @@ class Config:
     TEMPO_ENDPOINT = os.getenv("TEMPO_ENDPOINT", "http://localhost:3200").rstrip("/")
     LOKI_ENDPOINT = os.getenv("LOKI_ENDPOINT", "http://localhost:3100").rstrip("/")
     CHECKPOINT_DB = os.getenv("CHECKPOINT_DB", "./data/checkpoints.sqlite")
+    INCIDENT_CHECKPOINT_DB = os.getenv(
+        "INCIDENT_CHECKPOINT_DB", "./data/incident-checkpoints.sqlite"
+    )
     DOCUMENTATION_PATH = os.getenv("DOCUMENTATION_PATH", "./docs")
     DOCUMENT_TOP_K = int(os.getenv("DOCUMENT_TOP_K", "3"))
     TRACE_CONTENT = os.getenv("TRACE_CONTENT", "false").lower() == "true"
