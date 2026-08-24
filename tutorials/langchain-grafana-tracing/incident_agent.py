@@ -7,6 +7,7 @@ import os
 import sqlite3
 import time
 from typing import Literal
+from uuid import uuid4
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_ollama import ChatOllama
@@ -74,6 +75,12 @@ class IncidentAgent:
                 response = self._model_with_tools.invoke(
                     [SystemMessage(content=SYSTEM_PROMPT), *state["messages"]]
                 )
+                # Some providers (and deterministic test models) reuse message
+                # IDs. LangGraph treats equal IDs as updates, which can replace
+                # an earlier decision and leave a ToolMessage at the end of the
+                # history. Give every model turn its own event identity so
+                # routing and safety limits always observe the latest decision.
+                response = response.model_copy(update={"id": f"agent-{uuid4()}"})
                 span.set_attribute("agent.tool_call.count", len(response.tool_calls))
                 span.set_attribute("step.duration_ms", (time.perf_counter() - started) * 1000)
                 emit_log(
