@@ -74,6 +74,7 @@ services:
       - TEMPO_ENDPOINT=http://tempo:3200
       - LOKI_ENDPOINT=http://loki:3100
       - CHECKPOINT_DB=/data/checkpoints.sqlite
+      - INCIDENT_CHECKPOINT_DB=/data/incident-checkpoints.sqlite
       - DOCUMENTATION_PATH=/app/docs
       - OLLAMA_BASE_URL=http://host.docker.internal:11434
       - OLLAMA_MODEL=llama3.2

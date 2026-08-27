@@ -23,9 +23,12 @@ COPY tempo.py .
 COPY loki.py .
 COPY documentation.py .
 COPY graph.py .
+COPY incident_tools.py .
+COPY incident_agent.py .
 COPY ui.py .
 COPY app.py .
 COPY templates/ ./templates/
+COPY static/ ./static/
 COPY docs/ ./docs/
 
 # Environment variables

@@ -38,6 +38,11 @@ python app.py --compare-trace-a trace-a --compare-trace-b trace-b
 # 4. Run Web UI (requires OTLP endpoint running)
 python ui.py
 # Open: http://localhost:5000
+
+# Or run the complete stack in Docker
+docker compose up --build
+# TracePilot: http://localhost:5001
+# Grafana:   http://localhost:3000 (admin/admin)
 ```
 
 ## Project Structure
