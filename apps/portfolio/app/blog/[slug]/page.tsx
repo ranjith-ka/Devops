@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPost, posts } from "../posts";
@@ -25,12 +26,13 @@ export default async function ArticlePage({ params }: Props) {
       <header className={`article-hero accent-${post.accent}`}>
         <div className="shell article-hero-inner">
           <div><Link className="back-link" href="/blog">← All field notes</Link><div className="article-meta"><span>{post.category}</span><span>{post.level}</span><span>{post.readTime}</span></div><h1>{post.title}</h1><p>{post.excerpt}</p></div>
-          <div className="article-glyph"><span>{post.category === "KIND" ? "K8s" : "mini"}</span><small>{post.date}</small></div>
+          <div className="article-glyph"><span>{post.category === "KIND" ? "K8s" : post.category === "Minikube" ? "mini" : "OTel"}</span><small>{post.date}</small></div>
         </div>
       </header>
       <article className="article-body shell">
         <aside className="article-aside"><span>In this guide</span>{post.sections.map((section, index) => <a href={`#section-${index + 1}`} key={section.heading}>{String(index + 1).padStart(2, "0")} {section.heading}</a>)}</aside>
         <div className="article-content">
+          {post.image && <figure className="article-screenshot"><Image src={post.image.src} alt={post.image.alt} width={1440} height={1000} priority sizes="(max-width: 850px) calc(100vw - 30px), 760px"/><figcaption>{post.image.caption}</figcaption></figure>}
           {post.sections.map((section, index) => (
             <section id={`section-${index + 1}`} key={section.heading}><span className="section-no">{String(index + 1).padStart(2, "0")}</span><h2>{section.heading}</h2><p>{section.body}</p>{section.code && <pre><code>{section.code}</code></pre>}{section.note && <div className="article-note"><strong>Platform note</strong><p>{section.note}</p></div>}</section>
           ))}

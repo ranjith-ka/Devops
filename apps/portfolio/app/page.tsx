@@ -37,46 +37,52 @@ const projects = [
     href: `${repo}/tree/main/projects/buildpilot`,
   },
   {
-    title: "RAG Documentation Assistant",
-    label: "Retrieval architecture",
-    text: "A practical documentation retrieval assistant covering ingestion, embeddings and grounded responses.",
-    href: `${repo}/tree/main/tutorials/rag-documentation-assistant`,
+    title: "TracePilot",
+    label: "LangGraph · Grafana · OTel",
+    text: "An AI observability copilot for investigating Tempo traces, correlating Loki logs and comparing request regressions.",
+    href: "/blog/langchain-grafana-tracing",
   },
 ];
 
 const tutorials = [
   {
     index: "001",
+    title: "AI observability with LangGraph and Grafana",
+    topic: "Tracing and incident analysis",
+    href: "/blog/langchain-grafana-tracing",
+  },
+  {
+    index: "002",
     title: "Kubernetes in Docker with KIND",
     topic: "Local platform engineering",
     href: "/blog/kubernetes-in-docker-with-kind",
   },
   {
-    index: "002",
+    index: "003",
     title: "SPIFFE/SPIRE on Kubernetes",
     topic: "Workload identity",
     href: "/blog/spiffe-spire-workload-identity-kind",
   },
   {
-    index: "003",
+    index: "004",
     title: ".NET for DevOps engineers",
     topic: "Application fundamentals",
     href: `${repo}/blob/main/tutorials/dotnet/DOTNET_FOR_DEVOPS.md`,
   },
   {
-    index: "004",
+    index: "005",
     title: "PostgreSQL learning path",
     topic: "Data foundations",
     href: `${repo}/tree/main/tutorials/postgreSQL`,
   },
   {
-    index: "005",
+    index: "006",
     title: "Go bootcamp exercises",
     topic: "Platform tooling",
     href: `${repo}/tree/main/tutorials/golangbootcamp`,
   },
   {
-    index: "006",
+    index: "007",
     title: "Python practical notes",
     topic: "Automation basics",
     href: `${repo}/tree/main/tutorials/python`,
@@ -192,7 +198,7 @@ export default function Home() {
             </a>
           ))}
         </div>
-        <div className="blog-more"><a className="button ghost" href="/blog">Read all Kubernetes articles <span>→</span></a></div>
+        <div className="blog-more"><a className="button ghost" href="/blog">Read all platform articles <span>→</span></a></div>
       </section>
 
       <section className="cta-section">
