@@ -38,6 +38,10 @@ apps/web/node_modules/
 apps/web/.next/
 apps/web/out/
 apps/web/.turbo/
+apps/web/*.tsbuildinfo
+# Application source helpers must be committed despite the generic lib/ rule.
+!apps/web/lib/
+!apps/web/lib/*.ts
 apps/web/.env.local
 apps/web/.env.development.local
 apps/web/.env.test.local

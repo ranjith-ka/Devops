@@ -91,6 +91,15 @@ override. Changes to staging HelmRelease YAML are also applied automatically by
 `devops-staging`. Reusing the same image tag, including `latest`, does not change
 the Git artifact; use a new immutable tag to demonstrate a version upgrade.
 
+## Onboard another application through the UI
+
+Run `npm ci --prefix apps/web` and `make flux-ui` from the repository root, then
+open http://localhost:3100/platform-onboarding. Configure the application, review
+the generated files, and download the ZIP. Follow its `ONBOARDING.md` to add the
+files and resource entry to a PR. Flux deploys the application after merge when
+`make flux-app` has enabled staging reconciliation. See the
+[web app instructions](../../apps/web/README.md) for the supported image template.
+
 ## Optional exercises
 
 - [01: Installation](Tutorials/01_Install_Flux.md)
