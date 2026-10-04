@@ -1,36 +1,32 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: prd-app
   namespace: default
 spec:
-  chart:
-    spec:
-      chart: ./charts/dev
-      reconcileStrategy: Revision ## ChartVersion ## Revision
-      sourceRef:
-        kind: GitRepository
-        name: devops
-        namespace: default
-      valuesFiles:
-        - ./charts/dev/values.yaml
-        - ./minikube/dev/prd.yaml
+  chartRef:
+    kind: ExternalArtifact
+    name: prd-chart
   interval: 1m0s
   releaseName: prd-dev
 
   postRenderers:
     # Instruct helm-controller to use built-in "kustomize" post renderer.
     - kustomize:
-        patchesStrategicMerge:
-          - kind: Deployment
-            apiVersion: apps/v1
-            metadata:
+        patches:
+          - target:
+              kind: Deployment
               name: prd-dev
-            spec:
-              template:
-                spec:
-                  tolerations:
-                    - key: "workload-type"
-                      operator: "Equal"
-                      value: "cluster-services"
-                      effect: "NoSchedule"
+            patch: |
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: prd-dev
+              spec:
+                template:
+                  spec:
+                    tolerations:
+                      - key: workload-type
+                        operator: Equal
+                        value: cluster-services
+                        effect: NoSchedule

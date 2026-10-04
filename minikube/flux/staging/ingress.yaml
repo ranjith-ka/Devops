@@ -1,5 +1,5 @@
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: ingress
@@ -27,7 +27,12 @@ spec:
             prometheus.io/scrape: "true"
             prometheus.io/port: "10254"
       ingressClassResource:
-        name: dev-nginx
+        name: nginx
+      # kind exposes the NodePort through the local host's ports 80 and 443.
+      publishService:
+        enabled: false
+      extraArgs:
+        publish-status-address: "127.0.0.1"
       resources:
         limits:
           cpu: 250m
@@ -45,7 +50,7 @@ spec:
           http: 32080
           https: 31443
           tcp:
-            2443: 32443
-            27017: 31697
+            "2443": 32443
+            "27017": 31697
     tcp:
-      27017: "default/mongo:27017"
+      "27017": "default/mongo:27017"

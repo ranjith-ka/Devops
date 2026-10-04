@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - source.yaml
+  - artifact-generator.yaml
+  - canary-app.yaml
+  - prd-app.yaml
+  - ingress.yaml

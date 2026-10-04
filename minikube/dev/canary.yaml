@@ -22,5 +22,5 @@ ingress:
   hosts:
     - host: awesome-http.example.com
       paths:
-        - path: /dev(/|$)(.*)
+        - path: /dev
           pathType: Prefix

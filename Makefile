@@ -188,8 +188,10 @@ delete-vault:
 	@helm delete vault-operator vault-secrets-webhook  -n vault-infra
 	@kubectl delete namespace vault-infra
 
+# Requires Flux CLI v2.7.2+ for ArtifactGenerator support via source-watcher.
+.PHONY: flux
 flux:
-	@flux install --components-extra=image-reflector-controller,image-automation-controller
+	@flux install --components-extra=image-reflector-controller,image-automation-controller,source-watcher
 
 openmeta-deps:
 	@kubectl create secret generic mysql-secrets --from-literal=openmetadata-mysql-password=openmetadata_password

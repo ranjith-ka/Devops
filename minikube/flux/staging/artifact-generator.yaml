@@ -1,0 +1,25 @@
+apiVersion: source.extensions.fluxcd.io/v1beta1
+kind: ArtifactGenerator
+metadata:
+  name: devops-charts
+  namespace: default
+spec:
+  sources:
+    - alias: repo
+      kind: GitRepository
+      name: devops
+  artifacts:
+    - name: canary-chart
+      copy:
+        - from: "@repo/charts/dev/**"
+          to: "@artifact/dev/"
+        - from: "@repo/minikube/dev/canary.yaml"
+          to: "@artifact/dev/values.yaml"
+          strategy: Merge
+    - name: prd-chart
+      copy:
+        - from: "@repo/charts/dev/**"
+          to: "@artifact/dev/"
+        - from: "@repo/minikube/dev/prd.yaml"
+          to: "@artifact/dev/values.yaml"
+          strategy: Merge
