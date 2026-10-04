@@ -15,6 +15,72 @@ in `flux-system`.
 References: [ArtifactGenerator](https://fluxcd.io/flux/components/source/artifactgenerators/),
 [Helm chart references](https://fluxcd.io/flux/components/helm/helmreleases/#chart-reference).
 
+## Architecture
+
+```mermaid
+flowchart TB
+    PR["Commit / merge PR into main"] --> Repo["GitHub: ranjith-ka/Devops"]
+
+    subgraph Flux["Flux controllers — flux-system"]
+        SC["source-controller"]
+        KC["kustomize-controller"]
+        SW["source-watcher"]
+        HC["helm-controller"]
+    end
+
+    Repo -->|"Poll every 1 minute"| SC
+    SC --> Git["GitRepository/devops"]
+
+    Git -->|"staging manifests"| KC
+    Sync["Kustomization/devops-staging"] --> KC
+    KC -->|"Apply from Git"| Generator["ArtifactGenerator/devops-charts"]
+    KC --> CanaryHR["HelmRelease/canary-app"]
+    KC --> ProdHR["HelmRelease/prd-app"]
+    KC --> IngressHR["HelmRelease/ingress"]
+
+    Git -->|"Chart + environment values"| SW
+    Generator --> SW
+    SW -->|"charts/dev + canary.yaml"| CanaryArtifact["ExternalArtifact/canary-chart"]
+    SW -->|"charts/dev + prd.yaml"| ProdArtifact["ExternalArtifact/prd-chart"]
+
+    CanaryArtifact --> CanaryHR
+    ProdArtifact --> ProdHR
+    CanaryHR --> HC
+    ProdHR --> HC
+    IngressHR --> HC
+
+    subgraph Runtime["kind cluster — default namespace"]
+        Canary["Deployment/canary-dev"]
+        Prod["Deployment/prd-dev"]
+        Nginx["NGINX ingress"]
+        CanarySvc["Service/canary-dev"]
+        ProdSvc["Service/prd-dev"]
+        CanaryPods["Canary pods"]
+        ProdPods["Production pods"]
+
+        Canary -->|"Pod template changes"| CanaryPods
+        Prod -->|"Pod template changes"| ProdPods
+        CanarySvc --> CanaryPods
+        ProdSvc --> ProdPods
+        Nginx -->|"testing: always"| CanarySvc
+        Nginx -->|"testing: never"| ProdSvc
+    end
+
+    HC -->|"Install / upgrade"| Canary
+    HC -->|"Install / upgrade"| Prod
+    HC -->|"Install / upgrade"| Nginx
+
+    Client["localhost/dev<br/>Host: awesome-http.example.com"] -->|"kind port mapping"| Nginx
+```
+
+A canary image version change updates the canary artifact, triggers its Helm
+upgrade, and replaces canary pods when the pod template changes. Production's
+artifact stays unchanged. Without the routing header, NGINX sends approximately
+30% of requests to canary according to the configured weight.
+
+The automatic staging-manifest path becomes active after merging this setup into
+the watched branch and running `make flux-app` once.
+
 ## 1. Install and inspect
 
 Follow the [lab README](../Readme.md) to run `make flux` and apply the staging
@@ -46,10 +112,16 @@ helm list -n default
 ```
 
 The generated charts merge base values with the environment values in that order.
-The canary HelmRelease also retains its existing inline `spec.values`; those override
-the generated values. In particular, its inline image tag remains `0.0.1`.
-To practise image changes through the values file, remove the inline image override
-first. For the isolation exercise below, use `replicaCount`, which has no inline override.
+Canary image settings come from `minikube/dev/canary.yaml`; production image settings
+come from `minikube/dev/prd.yaml`. Neither HelmRelease overrides the image settings.
+Canary still has inline ingress, probe and metrics settings which take precedence
+for those fields. Use `image.tag` or `replicaCount` for the automatic upgrade exercise.
+
+To upgrade an image, set `image.tag` to an existing immutable tag in the appropriate
+values file, commit and merge into the watched branch. Source-watcher generates a
+new artifact, Helm-controller upgrades that release, and Kubernetes rolls out pods
+if their template changes. Pushing a new image under an unchanged `latest` tag does
+not change the Git content or trigger this flow.
 
 ## 3. Practise independent updates
 
@@ -105,7 +177,19 @@ cleans up the old generated HelmChart. When applying to an existing HelmRelease,
 confirm that `spec.chart` has been removed; the two fields cannot coexist. If another
 manager created it, remove the old field in that manager's configuration before applying.
 
-This lab applies Flux resources with kubectl. Git supplies chart and values content;
-changes to the Flux resource YAML itself require another `kubectl apply -k` unless
-you separately configure a Flux Kustomization to manage these resources from Git.
+After merging this setup into the watched branch, run `make flux-app` once. It
+bootstraps the source and `Kustomization/devops-staging`, which manages the staging
+Flux resources from Git. Future staging manifest edits no longer require manual
+kubectl apply. The sync manifest lives outside the managed staging directory.
+
+```bash
+flux reconcile kustomization devops-staging -n default --with-source
+flux get kustomizations -n default
+```
+
+For this upgrade, removing the canary HelmRelease's inline image settings allows
+the generated chart's environment values to control its image. Review the canary
+values file before merging; it currently selects `latest` with `pullPolicy: Always`.
+The chart's random `rollme` annotation also causes pod replacement on Helm upgrades
+while Chart.yaml's `appVersion` is `latest`, even for changes unrelated to the image.
 Notifications and image automation remain separate exercises.

@@ -22,22 +22,25 @@ make flux
 flux check
 kubectl -n flux-system get deployment source-watcher
 kubectl get crd artifactgenerators.source.extensions.fluxcd.io
-kubectl apply -k minikube/flux/staging
+make flux-app
 ```
 
 The source uses public HTTPS, so no Git secret is needed for this read-only lab.
-It reads the remote `main` branch: local chart and values edits only take effect
-once committed and pushed there. For a fork, change the URL and branch in
+It reads the remote `main` branch: merge this setup into `main` before running
+`make flux-app`. Local edits only take effect once committed and pushed there. For a fork, change the URL and branch in
 `staging/source.yaml`. For private Git or image automation, configure SSH/token
 credentials separately; see tutorial 01 and 05.
 
-Use `-k`, which selects the application resources listed in `staging/kustomization.yaml`.
-Notification and image automation examples are optional and are not included.
+`make flux-app` bootstraps the source and `Kustomization/devops-staging`. Flux then
+applies the resources selected by `staging/kustomization.yaml` from Git, including
+the HelmReleases and ArtifactGenerator. Notification and image automation examples
+are optional and are not included.
 
 ```bash
 flux reconcile source git devops -n default
 kubectl -n default wait --for=condition=Ready gitrepository/devops --timeout=2m
-kubectl -n default wait --for=condition=Ready artifactgenerator/devops-charts --timeout=2m
+kubectl -n default wait --for=condition=Ready kustomization/devops-staging --timeout=3m
+kubectl -n default get artifactgenerator devops-charts
 kubectl -n default get externalartifacts
 flux get helmreleases -n default
 kubectl -n default get pods,svc,ingress
@@ -68,6 +71,25 @@ requests to canary; a small sample will not necessarily match that percentage.
 Read [tutorial 06](Tutorials/06_source_watcher.md) for the change-isolation exercise,
 troubleshooting and migration details. Earlier tutorials introduce the other controllers
 and include historical API examples; the staging manifests use current stable APIs.
+
+## Upgrade an application image from Git
+
+Edit `image.tag` in `minikube/dev/canary.yaml` or `minikube/dev/prd.yaml` to an
+existing image tag, then commit and merge into `main`. Source-watcher regenerates
+that release's artifact and Helm-controller upgrades the release. A changed image
+in the Deployment pod template rolls out replacement pods.
+
+```bash
+# Optional: reconcile immediately instead of waiting for the polling interval.
+flux reconcile kustomization devops-staging -n default --with-source
+flux get helmreleases -n default
+kubectl get pods -n default -w
+```
+
+Canary image settings come from the values file, with no inline HelmRelease image
+override. Changes to staging HelmRelease YAML are also applied automatically by
+`devops-staging`. Reusing the same image tag, including `latest`, does not change
+the Git artifact; use a new immutable tag to demonstrate a version upgrade.
 
 ## Optional exercises
 

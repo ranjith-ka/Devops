@@ -193,6 +193,12 @@ delete-vault:
 flux:
 	@flux install --components-extra=image-reflector-controller,image-automation-controller,source-watcher
 
+# Bootstrap the Git source and let Flux manage staging manifests from its branch.
+.PHONY: flux-app
+flux-app:
+	@kubectl apply -f minikube/flux/staging/source.yaml
+	@kubectl apply -f minikube/flux/sync.yaml
+
 openmeta-deps:
 	@kubectl create secret generic mysql-secrets --from-literal=openmetadata-mysql-password=openmetadata_password
 	@kubectl create secret generic airflow-secrets --from-literal=openmetadata-airflow-password=admin

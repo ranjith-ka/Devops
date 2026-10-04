@@ -1,6 +1,7 @@
 image:
   repository: ranjithka/canary # {"$imagepolicy": "default:app:name"}
   tag: latest # {"$imagepolicy": "default:app:tag"}
+  pullPolicy: Always
 
 podAnnotations:
   prometheus.io/path: "/metrics"
