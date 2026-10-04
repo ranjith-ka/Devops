@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test:onboarding": "node --test scripts/test-onboarding.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

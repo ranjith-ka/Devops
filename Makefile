@@ -199,6 +199,10 @@ flux-app:
 	@kubectl apply -f minikube/flux/staging/source.yaml
 	@kubectl apply -f minikube/flux/sync.yaml
 
+.PHONY: flux-ui
+flux-ui:
+	@npm --prefix apps/web run dev -- --hostname 127.0.0.1 --port 3100
+
 openmeta-deps:
 	@kubectl create secret generic mysql-secrets --from-literal=openmetadata-mysql-password=openmetadata_password
 	@kubectl create secret generic airflow-secrets --from-literal=openmetadata-airflow-password=admin

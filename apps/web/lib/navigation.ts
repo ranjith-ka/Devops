@@ -1,0 +1,16 @@
+export const navigation = [
+  { label: 'Overview', href: '/' },
+  { label: 'Application onboarding', href: '/platform-onboarding' },
+  { label: 'Dashboard', href: '/dashboard' },
+  { label: 'Repositories', href: '/repository-overview' },
+  { label: 'Pipeline explorer', href: '/pipeline-explorer' },
+  { label: 'Deployment history', href: '/deployment-history' },
+  { label: 'Deployment timeline', href: '/deployment-timeline' },
+  { label: 'Build analytics', href: '/build-analytics' },
+  { label: 'Logs', href: '/logs-viewer' },
+  { label: 'Security', href: '/security-dashboard' },
+  { label: 'Runners', href: '/runner-dashboard' },
+  { label: 'Pipeline generator', href: '/pipeline-generator' },
+  { label: 'AI assistant', href: '/ai-assistant' },
+  { label: 'YouTube automation', href: '/youtube-automation' },
+];
