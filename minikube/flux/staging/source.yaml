@@ -1,5 +1,5 @@
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: devops
@@ -8,9 +8,7 @@ spec:
   interval: 1m0s
   ref:
     branch: main
-  secretRef:
-    name: git-secrets
-  url: ssh://git@github.com/ranjith-ka/Devops
+  url: https://github.com/ranjith-ka/Devops
   ignore: |
     # exclude all
     /*
@@ -20,7 +18,7 @@ spec:
   
 ---
 ### Install Nginx Source 
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: ingress-nginx

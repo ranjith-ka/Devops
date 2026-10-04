@@ -1,20 +1,12 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: canary-app
   namespace: default
 spec:
-  chart:
-    spec:
-      chart: ./charts/dev
-      reconcileStrategy: ChartVersion
-      sourceRef:
-        kind: GitRepository
-        name: devops
-        namespace: default
-      valuesFiles:
-        - ./charts/dev/values.yaml
-        - ./minikube/dev/canary.yaml
+  chartRef:
+    kind: ExternalArtifact
+    name: canary-chart
   interval: 10m0s
   releaseName: canary-dev
   values:
@@ -31,7 +23,7 @@ spec:
       hosts:
       - host: awesome-http.example.com
         paths:
-        - path: /dev(/|$)(.*)
+        - path: /dev
           pathType: Prefix
     livenessProbe:
       enabled: true

@@ -10,6 +10,12 @@ Install Binary:
 
 `brew install fluxcd/tap/flux`
 
+For the source-watcher lab, use a current stable Flux CLI (minimum v2.7.2).
+Check with `flux --version`. On an existing local cluster, run `make flux` from
+the repository root to install the controllers including source-watcher and image
+automation, then run `flux check`. Follow [tutorial 06](06_source_watcher.md) to
+deploy this repository's existing canary and production applications.
+
 ### Install/Bootstrap Flux
 ### Just a default bootstrap, execute and see the fun !! delete the repo in github if not required anymore
 
@@ -19,6 +25,7 @@ flux bootstrap github \
   --repository=infra-fleet \
   --branch=main \
   --path=./minikube/flux/flux-system \
+  --components-extra=source-watcher,image-reflector-controller,image-automation-controller \
   --personal
 ```
 
@@ -38,6 +45,7 @@ flux bootstrap github \
 flux bootstrap git \
   --url=ssh://git@github.com/ranjith-ka/Devops \
   --branch=main \
+  --components-extra=source-watcher,image-reflector-controller,image-automation-controller \
   --path=./minikube/flux/flux-system
 ```
 
