@@ -604,3 +604,7 @@ skaffold dev --module canary
 - Web scaffold: [apps/web/README.md](apps/web/README.md)
 - Inference scaffold: [services/inference/README.md](services/inference/README.md)
 - Local deployment guide: [product/ai-cicd-platform/local-deployment.md](product/ai-cicd-platform/local-deployment.md)
+
+## Dotnet
+
+https://learn.microsoft.com/en-us/dotnet/csharp/methods
